@@ -1,339 +1,795 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Колесо удвоения — ШАГАЙ ДОМА</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Колесо Удачи — Шагай Дома</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --red:#CF2C02; --yellow:#FFBA08; --orange:#E85D04; --white:#FFFFFF; --gray:#D9D9D9;
-    --bg:#fff; --fg:#1b1b1b;
+  :root {
+    --coral: #FF6B6B;
+    --peach: #FF9A76;
+    --yellow: #FFD93D;
+    --mint: #6BCB77;
+    --sky: #4D96FF;
+    --purple: #C77DFF;
+    --pink: #FF6FB5;
+    --gold: #FFD700;
+    --bg: #FFF5F0;
+    --dark: #2D2D2D;
   }
-  *{box-sizing:border-box}
-  body{
-    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    color:var(--fg); background:var(--bg); display:flex; min-height:100svh; align-items:center; justify-content:center;
-  }
-  .wrap{width:min(980px,92vw); padding:20px; display:grid; gap:20px; grid-template-columns: 1fr; }
-  .card{
-    background:#fff; border:1px solid var(--gray); border-radius:20px; padding:20px;
-    box-shadow:0 8px 30px rgba(0,0,0,.06);
-  }
-  .title{
-    display:flex; align-items:center; gap:12px; margin:0 0 8px 0; font-weight:800; letter-spacing:.2px;
-  }
-  .subtitle{margin:0 0 16px 0; color:#555}
-  .grid{display:grid; gap:20px; grid-template-columns: 1fr; }
-  @media (min-width: 860px){
-    .grid{grid-template-columns: 1.1fr .9fr;}
-  }
-  .wheel-wrap{position:relative; aspect-ratio:1/1; max-width:560px; margin-inline:auto;}
-  canvas{width:100%; height:100%;}
-  .pointer{
-    position:absolute; inset:auto 50% calc(100% + 8px) auto; translate:-50% 0;
-    width:0; height:0; border-left:16px solid transparent; border-right:16px solid transparent;
-    border-bottom:26px solid var(--red); filter:drop-shadow(0 2px 0 rgba(0,0,0,.15));
-  }
-  .btns{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-  button{
-    appearance:none; border:none; border-radius:14px; padding:14px 20px; font-weight:700; cursor:pointer;
-    background:var(--red); color:#fff; box-shadow:0 6px 16px rgba(207,44,2,.28); transition:.2s;
-  }
-  button:hover{transform:translateY(-1px)}
-  button[disabled]{opacity:.6; cursor:not-allowed; transform:none}
-  .pill{
-    background:var(--yellow); color:#000; font-weight:700; border-radius:999px; padding:6px 10px; font-size:12px;
-  }
-  .result{
-    margin-top:12px; font-size:18px; font-weight:700; min-height:1.6em;
-  }
-  .legend{display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:10px; margin-top:10px;}
-  .legend .item{display:flex; align-items:center; gap:8px; font-size:14px}
-  .swatch{width:14px; height:14px; border-radius:4px; border:1px solid rgba(0,0,0,.08)}
-  .note{font-size:12px; color:#666}
-  .brandbar{height:6px; background:linear-gradient(90deg, var(--red), var(--orange), var(--yellow))}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+font-family: ‘Nunito’, sans-serif;
+background: var(–bg);
+min-height: 100vh;
+overflow-x: hidden;
+background-image:
+radial-gradient(circle at 10% 20%, rgba(255,107,107,0.08) 0%, transparent 50%),
+radial-gradient(circle at 90% 80%, rgba(77,150,255,0.08) 0%, transparent 50%),
+radial-gradient(circle at 50% 50%, rgba(255,217,61,0.05) 0%, transparent 70%);
+}
+
+.confetti-piece {
+position: fixed;
+width: 10px;
+height: 10px;
+top: -20px;
+opacity: 0;
+pointer-events: none;
+z-index: 9999;
+border-radius: 2px;
+}
+
+header {
+text-align: center;
+padding: 28px 20px 10px;
+}
+
+.logo {
+font-family: ‘Pacifico’, cursive;
+font-size: clamp(22px, 5vw, 34px);
+color: var(–coral);
+letter-spacing: 1px;
+text-shadow: 2px 2px 0 rgba(255,107,107,0.2);
+}
+.logo span { color: var(–peach); }
+
+.subtitle {
+font-size: clamp(13px, 3vw, 16px);
+color: #888;
+margin-top: 4px;
+font-weight: 600;
+}
+
+.spins-bar {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 8px;
+margin: 18px auto 0;
+padding: 12px 22px;
+background: white;
+border-radius: 50px;
+width: fit-content;
+box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+font-weight: 800;
+font-size: 15px;
+color: var(–dark);
+}
+.spin-dot {
+width: 14px; height: 14px;
+border-radius: 50%;
+background: var(–coral);
+transition: all 0.4s;
+}
+.spin-dot.used {
+background: #ddd;
+transform: scale(0.8);
+}
+.spins-label { color: #aaa; font-size: 13px; font-weight: 700; margin-right: 4px; }
+
+.main-area {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 10px 20px 40px;
+gap: 0;
+position: relative;
+}
+
+/* Tagline above wheel */
+.tagline {
+text-align: center;
+margin-bottom: 16px;
+}
+.tagline h1 {
+font-size: clamp(20px, 5vw, 30px);
+font-weight: 900;
+color: var(–dark);
+line-height: 1.2;
+}
+.tagline h1 em {
+font-style: normal;
+color: var(–coral);
+}
+.tagline p {
+font-size: clamp(13px, 3vw, 15px);
+color: #999;
+margin-top: 6px;
+font-weight: 600;
+}
+
+/* FREE PASS highlight */
+.free-pass-banner {
+background: linear-gradient(135deg, #FFD93D, #FF9A76);
+border-radius: 16px;
+padding: 10px 24px;
+margin-bottom: 18px;
+text-align: center;
+box-shadow: 0 6px 24px rgba(255,154,118,0.35);
+animation: pulse-banner 2s ease-in-out infinite;
+}
+.free-pass-banner .fp-label { font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.85); letter-spacing: 2px; text-transform: uppercase; }
+.free-pass-banner .fp-main { font-size: clamp(14px, 4vw, 18px); font-weight: 900; color: white; }
+.free-pass-banner .fp-sub { font-size: 12px; color: rgba(255,255,255,0.9); font-weight: 700; }
+@keyframes pulse-banner {
+0%, 100% { box-shadow: 0 6px 24px rgba(255,154,118,0.35); transform: scale(1); }
+50% { box-shadow: 0 8px 32px rgba(255,154,118,0.55); transform: scale(1.02); }
+}
+
+/* Wheel container */
+.wheel-wrap {
+position: relative;
+width: min(380px, 90vw);
+height: min(380px, 90vw);
+}
+
+.wheel-glow {
+position: absolute;
+inset: -20px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(255,154,118,0.2) 0%, transparent 70%);
+animation: glow-pulse 3s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+0%,100% { opacity: 0.6; transform: scale(1); }
+50% { opacity: 1; transform: scale(1.05); }
+}
+
+canvas#wheel {
+width: 100%;
+height: 100%;
+border-radius: 50%;
+box-shadow: 0 12px 60px rgba(0,0,0,0.18), 0 0 0 6px white, 0 0 0 10px rgba(255,107,107,0.2);
+display: block;
+}
+
+/* Pointer */
+.pointer {
+position: absolute;
+top: -18px;
+left: 50%;
+transform: translateX(-50%);
+width: 0;
+height: 0;
+border-left: 16px solid transparent;
+border-right: 16px solid transparent;
+border-top: 36px solid var(–coral);
+filter: drop-shadow(0 4px 8px rgba(255,107,107,0.5));
+z-index: 10;
+}
+.pointer::after {
+content: ‘’;
+position: absolute;
+top: -40px;
+left: -8px;
+width: 16px;
+height: 16px;
+background: var(–coral);
+border-radius: 50%;
+}
+
+/* Center button */
+.center-btn {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 70px; height: 70px;
+border-radius: 50%;
+background: white;
+border: none;
+cursor: pointer;
+box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+z-index: 10;
+transition: transform 0.15s, box-shadow 0.15s;
+font-family: ‘Nunito’, sans-serif;
+}
+.center-btn:hover { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+.center-btn:active { transform: translate(-50%, -50%) scale(0.95); }
+.center-btn .spin-icon { font-size: 24px; }
+.center-btn .spin-txt { font-size: 10px; font-weight: 900; color: var(–coral); letter-spacing: 0.5px; }
+.center-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Spin button below */
+.spin-btn {
+margin-top: 24px;
+background: linear-gradient(135deg, var(–coral), var(–peach));
+color: white;
+border: none;
+border-radius: 50px;
+padding: 16px 50px;
+font-family: ‘Nunito’, sans-serif;
+font-size: 18px;
+font-weight: 900;
+cursor: pointer;
+box-shadow: 0 8px 30px rgba(255,107,107,0.4);
+transition: all 0.2s;
+letter-spacing: 0.5px;
+}
+.spin-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(255,107,107,0.5); }
+.spin-btn:active { transform: translateY(0); }
+.spin-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Result modal */
+.modal-bg {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.55);
+backdrop-filter: blur(6px);
+z-index: 1000;
+justify-content: center;
+align-items: center;
+padding: 20px;
+}
+.modal-bg.show { display: flex; }
+
+.modal {
+background: white;
+border-radius: 28px;
+padding: 36px 32px;
+max-width: 400px;
+width: 100%;
+text-align: center;
+box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+animation: modal-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+position: relative;
+overflow: hidden;
+}
+@keyframes modal-in {
+from { opacity: 0; transform: scale(0.7) translateY(30px); }
+to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-ribbon {
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 6px;
+background: linear-gradient(90deg, var(–coral), var(–yellow), var(–mint), var(–sky));
+}
+
+.modal-emoji { font-size: 56px; margin-bottom: 8px; display: block; }
+.modal-label { font-size: 11px; font-weight: 800; color: #bbb; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.modal-prize { font-size: clamp(20px, 5vw, 26px); font-weight: 900; color: var(–dark); line-height: 1.2; margin-bottom: 12px; }
+.modal-promo {
+background: linear-gradient(135deg, #FFF3E0, #FFE0CC);
+border: 2px dashed var(–peach);
+border-radius: 14px;
+padding: 12px 18px;
+font-size: 22px;
+font-weight: 900;
+color: var(–coral);
+letter-spacing: 3px;
+margin: 14px 0;
+cursor: pointer;
+transition: all 0.2s;
+}
+.modal-promo:hover { background: linear-gradient(135deg, #FFE0CC, #FFD0B0); transform: scale(1.02); }
+.modal-promo .promo-hint { font-size: 11px; color: #aaa; font-weight: 600; letter-spacing: 0; display: block; margin-top: 2px; }
+
+.modal-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 16px; font-weight: 600; }
+.modal-ad {
+background: linear-gradient(135deg, #FFF5F0, #FFE8E0);
+border-radius: 16px;
+padding: 16px;
+margin: 14px 0;
+font-size: 13px;
+color: #555;
+line-height: 1.6;
+font-weight: 600;
+text-align: left;
+}
+.modal-ad strong { color: var(–coral); }
+
+.modal-close {
+background: linear-gradient(135deg, var(–coral), var(–peach));
+color: white;
+border: none;
+border-radius: 50px;
+padding: 14px 40px;
+font-family: ‘Nunito’, sans-serif;
+font-size: 16px;
+font-weight: 900;
+cursor: pointer;
+width: 100%;
+margin-top: 8px;
+box-shadow: 0 6px 20px rgba(255,107,107,0.35);
+transition: all 0.2s;
+}
+.modal-close:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,107,107,0.45); }
+
+.modal-close-link {
+display: block;
+margin-top: 12px;
+font-size: 13px;
+color: #bbb;
+cursor: pointer;
+font-weight: 600;
+}
+.modal-close-link:hover { color: #999; }
+
+/* Final modal special */
+.modal.final .modal-prize { color: var(–coral); }
+.stars-bg {
+position: absolute;
+inset: 0;
+pointer-events: none;
+overflow: hidden;
+}
+.star {
+position: absolute;
+font-size: 20px;
+opacity: 0.15;
+animation: float-star 4s ease-in-out infinite;
+}
+@keyframes float-star {
+0%, 100% { transform: translateY(0) rotate(0deg); }
+50% { transform: translateY(-12px) rotate(180deg); }
+}
+
+/* No spins state */
+.no-spins {
+text-align: center;
+padding: 20px;
+display: none;
+}
+.no-spins h2 { font-size: 20px; font-weight: 900; color: var(–dark); margin-bottom: 8px; }
+.no-spins p { font-size: 14px; color: #888; }
+
+@media (max-width: 480px) {
+.modal { padding: 28px 20px; }
+.spin-btn { padding: 14px 36px; font-size: 16px; }
+}
 </style>
+
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="title">🎡 Колесо удвоения</div>
-      <p class="subtitle">Крути колесо и смотри, что достанется: <span class="pill">УДВОЕНИЕ</span>, бонусы и подарки. Всё на мягкой удаче — как наши тренировки 😊</p>
-      <div class="grid">
-        <!-- WHEEL -->
-        <div class="wheel-wrap">
-          <div class="pointer" aria-hidden="true"></div>
-          <canvas id="wheel" width="900" height="900" aria-label="Колесо призов"></canvas>
-        </div>
 
-        <!-- Controls -->
-        <div>
-          <div class="btns">
-            <button id="spinBtn">Крутить</button>
-            <button id="resetBtn" style="background:var(--orange)">Сбросить</button>
-            <span class="note">Можно зафиксировать приз: параметр URL <code>?prize=УДВОЕНИЕ</code></span>
-          </div>
-          <div class="result" id="result"></div>
+<header>
+  <div class="logo">Шагай<span>Дома</span> 🚶‍♀️</div>
+  <div class="subtitle">Клуб ходьбы для стройности и здоровья</div>
+  <div class="spins-bar">
+    <span class="spins-label">Осталось вращений:</span>
+    <div class="spin-dot" id="d1"></div>
+    <div class="spin-dot" id="d2"></div>
+    <div class="spin-dot" id="d3"></div>
+    <div class="spin-dot" id="d4"></div>
+    <div class="spin-dot" id="d5"></div>
+  </div>
+</header>
 
-          <h3 style="margin:18px 0 8px 0">Призы на колесе</h3>
-          <div class="legend" id="legend"></div>
-          <p class="note">Редактируйте состав и шансы в массиве <code>SEGMENTS</code> ниже. Повторяющийся приз = выше шанс.</p>
-        </div>
-      </div>
-    </div>
-    <div class="brandbar" aria-hidden="true"></div>
+<div class="main-area">
+  <div class="tagline">
+    <h1>Крути колесо и<br>выигрывай призы <em>бесплатно!</em></h1>
+    <p>5 попыток · Каждое вращение — шанс на подарок</p>
   </div>
 
+  <div class="free-pass-banner">
+    <div class="fp-label">🏆 Главный приз</div>
+    <div class="fp-main">🎁 Бесплатный абонемент</div>
+    <div class="fp-sub">Можешь выиграть прямо сейчас!</div>
+  </div>
+
+  <div class="wheel-wrap">
+    <div class="wheel-glow"></div>
+    <canvas id="wheel" width="500" height="500"></canvas>
+    <div class="pointer"></div>
+    <button class="center-btn" id="centerBtn" onclick="spin()">
+      <span class="spin-icon">🍀</span>
+      <span class="spin-txt">КРУТИ!</span>
+    </button>
+  </div>
+
+<button class="spin-btn" id="spinBtn" onclick="spin()">🎯 Крутить колесо!</button>
+
+</div>
+
+<!-- Result Modal -->
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal">
+    <div class="modal-ribbon"></div>
+    <div class="stars-bg" id="modalStars"></div>
+    <span class="modal-emoji" id="modalEmoji"></span>
+    <div class="modal-label" id="modalLabel"></div>
+    <div class="modal-prize" id="modalPrize"></div>
+    <div class="modal-promo" id="modalPromo" style="display:none">
+      <span id="promoCode"></span>
+      <span class="promo-hint">👆 Нажми, чтобы скопировать</span>
+    </div>
+    <div class="modal-desc" id="modalDesc"></div>
+    <div class="modal-ad" id="modalAd"></div>
+    <button class="modal-close" id="modalClose" onclick="closeModal()"></button>
+    <span class="modal-close-link" onclick="closeModal()">Закрыть</span>
+  </div>
+</div>
+
 <script>
-/* ========= НАСТРОЙКИ ========= */
-// Сегменты: label — подпись, color — цвет сектора (брендовая палитра).
-// Повторите объект, чтобы увеличить шанс выпадения (вес).
-const SEGMENTS = [
-  { label: "УДВОЕНИЕ", color: "#CF2C02" },        // главный приз
-  { label: "+7 дней доступа", color: "#FFBA08" },
-  { label: "−50% на 1 мес", color: "#E85D04" },
-  { label: "Промокод −20%", color: "#CF2C02" },
-  { label: "Видео в подарок", color: "#FFBA08" },
-  { label: "Попробуй снова", color: "#D9D9D9" },
-  { label: "Промокод −15%", color: "#E85D04" },
-  { label: "УДВОЕНИЕ", color: "#CF2C02" },        // дублируем для веса
-  { label: "+3 дня доступа", color: "#FFBA08" },
-  { label: "Промо-тренировка", color: "#E85D04" },
-  { label: "Попробуй снова", color: "#D9D9D9" },
-  { label: "Стикер-пак", color: "#FFBA08" }
+// ─── SEGMENTS ───────────────────────────────────────────────────────────────
+const segments = [
+  {
+    label: "Скидка\n20%",
+    emoji: "🏷️",
+    color: "#FF6B6B",
+    textColor: "#fff",
+    prize: "Скидка 20% на абонемент!",
+    promo: "ШАГАЙ20",
+    desc: "Твой промокод на 20% скидку активен 48 часов. Введи его при оформлении любого абонемента.",
+    weight: 30,
+    isFinalPrize: true,
+  },
+  {
+    label: "Меню\nклуба",
+    emoji: "📋",
+    color: "#4D96FF",
+    textColor: "#fff",
+    prize: "Меню клуба — PDF гид!",
+    desc: "Ты получаешь полное меню клуба со всеми тренировками, расписанием и форматами занятий. Скачай и изучи — тебя ждёт много интересного!",
+    weight: 25,
+  },
+  {
+    label: "Бесплатная\nтренировка",
+    emoji: "🎽",
+    color: "#6BCB77",
+    textColor: "#fff",
+    prize: "Бесплатная тренировка!",
+    desc: "Ты выиграла одну бесплатную тренировку в клубе Шагай Дома. Это твой первый шаг к стройности и здоровью!",
+    weight: 22,
+  },
+  {
+    label: "✨ Бесплатный\nАбонемент",
+    emoji: "🏆",
+    color: "#FFD700",
+    textColor: "#5B3A00",
+    prize: "🏆 Бесплатный Абонемент!",
+    desc: "Невероятно! Ты выиграла бесплатный абонемент в клуб Шагай Дома! Напиши нам в директ или на почту, чтобы активировать подарок.",
+    weight: 3,
+    isJackpot: true,
+  },
+  {
+    label: "Секретный\nтариф 🕵️",
+    emoji: "🕵️",
+    color: "#C77DFF",
+    textColor: "#fff",
+    prize: "Секретный тариф — 1 месяц!",
+    desc: "Ты открыла эксклюзивный тариф, которого нет в открытой продаже! Специальные условия на 1 месяц — только для победителей колеса удачи. Свяжись с нами для активации.",
+    weight: 10,
+  },
+  {
+    label: "Секретный\nтариф НАВСЕГДА 🔑",
+    emoji: "🔑",
+    color: "#FF6FB5",
+    textColor: "#fff",
+    prize: "Секретный тариф НАВСЕГДА!",
+    desc: "Поздравляем! Ты выиграла уникальный тариф, которого нет в продаже — доступ к клубу навсегда на специальных условиях! Только для победителей колеса. Напиши нам для активации.",
+    weight: 10,
+  },
 ];
 
-// Длительность и физика вращения
-const SPIN_TURNS_MIN = 4;      // минимальное число полных оборотов
-const SPIN_TURNS_MAX = 6;      // максимальное число полных оборотов
-const SPIN_MS = 4500;          // длительность анимации (мс)
-const POINTER_OFFSET_DEG = 0;  // указатель сверху — 0°, можно чуть сместить при желании
+// ─── ADs shown after each spin ──────────────────────────────────────────────
+const spinAds = [
+  `<strong>Шагай Дома</strong> — это больше, чем фитнес. Это сообщество <strong>10 000 женщин</strong> со всего мира, которые худеют на шагах каждый день. Твой путь начинается здесь! 🌍`,
+  `Уже <strong>10 000 шагательниц</strong> из разных уголков планеты занимаются с нами и видят результат. Ты тоже можешь! Каждый шаг — это шаг к своей лучшей версии. 💃`,
+  `В клубе <strong>Шагай Дома</strong> тебя ждут десятки тренировок, тёплое сообщество и тренеры, которые верят в тебя. <strong>10 000 женщин</strong> уже в пути — присоединяйся! 🚶‍♀️✨`,
+  `Ты знала, что ходьба — один из самых эффективных способов похудеть? Наши <strong>10 000 шагательниц</strong> подтверждают это каждый день! <strong>Шагай Дома</strong> — и результаты не заставят ждать. 🎯`,
+];
 
-/* ========= ВСПОМОГАТЕЛЬНЫЕ ========= */
-const wheel = document.getElementById('wheel');
-const ctx = wheel.getContext('2d');
-const spinBtn = document.getElementById('spinBtn');
-const resetBtn = document.getElementById('resetBtn');
-const resultEl = document.getElementById('result');
-const legendEl = document.getElementById('legend');
+// Final spin AD (guaranteed promo)
+const finalAd = `🎉 Это не просто скидка — это твой <strong>билет в клуб мечты!</strong><br><br>
+<strong>Шагай Дома</strong> — это <strong>10 000 женщин</strong> из России, Украины, Казахстана, Германии, США и многих других стран, которые уже активно худеют на шагах прямо дома.<br><br>
+С нами ты получишь:<br>
+🚶‍♀️ Десятки тренировок на любой уровень<br>
+💪 Поддержку тёплого женского сообщества<br>
+📈 Реальный результат уже через 2–3 недели<br><br>
+<strong>Применяй промокод прямо сейчас — он действует 48 часов!</strong>`;
 
-let angle = 0;           // текущий угол (рад)
-let spinning = false;    // флаг анимации
-let lastPrize = null;
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let spinsLeft = 5;
+let isSpinning = false;
+let currentRotation = 0;
+let spinCount = 0;
 
-/* Легенда */
-function renderLegend(){
-  legendEl.innerHTML = '';
-  SEGMENTS.forEach((s, i)=>{
-    const div = document.createElement('div');
-    div.className = 'item';
-    div.innerHTML = `<span class="swatch" style="background:${s.color}"></span><span>${i+1}. ${s.label}</span>`;
-    legendEl.appendChild(div);
+// ─── BUILD WEIGHTED POOL ─────────────────────────────────────────────────────
+function buildPool() {
+  const pool = [];
+  segments.forEach((seg, i) => {
+    for (let j = 0; j < seg.weight; j++) pool.push(i);
   });
+  return pool;
 }
 
-/* Рисуем сегменты + текст */
-function drawWheel(){
-  const { width, height } = wheel;
-  const cx = width/2, cy = height/2;
-  const r = Math.min(cx, cy) - 8;
-  ctx.clearRect(0,0,width,height);
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(angle);
+function pickSegment() {
+  // Final spin: always give promo (index 0)
+  if (spinsLeft === 1) return 0;
+  const pool = buildPool();
+  // No jackpot on first 3 spins to build tension
+  const jackpotIdx = segments.findIndex(s => s.isJackpot);
+  const filteredPool = spinsLeft > 2 ? pool.filter(i => i !== jackpotIdx) : pool;
+  return filteredPool[Math.floor(Math.random() * filteredPool.length)];
+}
 
-  const n = SEGMENTS.length;
-  const slice = 2*Math.PI / n;
+// ─── CANVAS DRAW ─────────────────────────────────────────────────────────────
+const canvas = document.getElementById('wheel');
+const ctx = canvas.getContext('2d');
+const cx = canvas.width / 2;
+const cy = canvas.height / 2;
+const R = cx - 10;
 
-  ctx.font = "bold 28px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
+function drawWheel(rotation) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const n = segments.length;
+  const arc = (2 * Math.PI) / n;
 
-  for(let i=0;i<n;i++){
-    // сектор
+  segments.forEach((seg, i) => {
+    const start = rotation + i * arc - Math.PI / 2 - arc / 2;
+    const end = start + arc;
+
+    // Segment fill
     ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.fillStyle = SEGMENTS[i].color;
-    ctx.arc(0,0, r, i*slice, (i+1)*slice);
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, R, start, end);
     ctx.closePath();
+
+    // Gradient fill
+    const grd = ctx.createRadialGradient(cx, cy, R * 0.2, cx, cy, R);
+    grd.addColorStop(0, lightenColor(seg.color, 30));
+    grd.addColorStop(1, seg.color);
+    ctx.fillStyle = grd;
     ctx.fill();
 
-    // разделитель
-    ctx.strokeStyle = "rgba(255,255,255,.9)";
+    // Segment border
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
     ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(0,0, r, i*slice, (i+1)*slice);
     ctx.stroke();
 
-    // текст
+    // Emoji
+    const emojiAngle = start + arc / 2;
+    const emojiR = R * 0.78;
+    const ex = cx + emojiR * Math.cos(emojiAngle);
+    const ey = cy + emojiR * Math.sin(emojiAngle);
     ctx.save();
-    const theta = i*slice + slice/2;
-    ctx.rotate(theta);
-    ctx.fillStyle = "#000";
-    const text = SEGMENTS[i].label;
-    // подложка для контраста на светлых секторах
-    // не рисуем отдельную подложку, используем лёгкую тень
-    ctx.shadowColor = "rgba(0,0,0,.15)";
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetY = 0;
-    wrapText(ctx, text, 0, -r*0.62, r*0.42, 30);
+    ctx.translate(ex, ey);
+    ctx.rotate(emojiAngle + Math.PI / 2);
+    ctx.font = `${R * 0.09}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(seg.emoji, 0, 0);
     ctx.restore();
-  }
 
-  // центр
-  ctx.fillStyle = "#fff";
+    // Text
+    const textAngle = start + arc / 2;
+    const textR = R * 0.52;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(textAngle + Math.PI / 2);
+    ctx.font = `bold ${Math.max(11, R * 0.062)}px 'Nunito', sans-serif`;
+    ctx.fillStyle = seg.textColor;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.15)';
+    ctx.shadowBlur = 4;
+    const lines = seg.label.split('\n');
+    const lineH = Math.max(14, R * 0.075);
+    lines.forEach((line, li) => {
+      ctx.fillText(line, 0, textR + (li - (lines.length - 1) / 2) * lineH);
+    });
+    ctx.restore();
+  });
+
+  // Outer ring
   ctx.beginPath();
-  ctx.arc(0,0, r*0.18, 0, 2*Math.PI);
-  ctx.fill();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "#D9D9D9";
+  ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+  ctx.lineWidth = 4;
   ctx.stroke();
 
-  // центр-кнопка визуальная
-  ctx.fillStyle = "#CF2C02";
+  // Center circle
   ctx.beginPath();
-  ctx.arc(0,0, r*0.11, 0, 2*Math.PI);
+  ctx.arc(cx, cy, 38, 0, 2 * Math.PI);
+  ctx.fillStyle = 'white';
   ctx.fill();
-  ctx.restore();
+  ctx.strokeStyle = 'rgba(255,107,107,0.2)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
 }
 
-/* Перенос слов по ширине */
-function wrapText(ctx, text, x, y, maxWidth, lineHeight){
-  const words = text.split(' ');
-  let line = '';
-  const lines = [];
-  for (let n = 0; n < words.length; n++) {
-    const testLine = line + words[n] + ' ';
-    const metrics = ctx.measureText(testLine);
-    if (metrics.width > maxWidth && n > 0) {
-      lines.push(line.trim());
-      line = words[n] + ' ';
-    } else {
-      line = testLine;
-    }
-  }
-  lines.push(line.trim());
-  const startY = y - (lines.length-1)*lineHeight/2;
-  lines.forEach((ln, i)=> ctx.fillText(ln, x, startY + i*lineHeight));
+function lightenColor(hex, amount) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgb(${Math.min(255, r + amount)}, ${Math.min(255, g + amount)}, ${Math.min(255, b + amount)})`;
 }
 
-/* easing (easeOutCubic) */
-function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
+drawWheel(currentRotation);
 
-/* Определение сегмента по углу */
-function pickByAngle(rad){
-  const n = SEGMENTS.length;
-  // преобразуем текущий абсолютный угол в сектор указателя
-  // указатель на 12 часов => угол  -angle  (+смещение)
-  const pointerRad = ( ( -angle ) + deg2rad(POINTER_OFFSET_DEG) ) % (2*Math.PI);
-  let a = pointerRad;
-  if (a < 0) a += 2*Math.PI;
-  const slice = 2*Math.PI / n;
-  // сектор нумеруется с 0 по часовой стрелке, но мы рисуем с 0 рад вправо — корректируем
-  const idx = Math.floor(a / slice);
-  // визуально указатель «смотрит» на верх, но наш ноль в Canvas по оси X,
-  // мы уже сдвинули поворотом — формула выше выдаёт корректный индекс
-  return (n - idx) % n; // инвертируем, чтобы совпасть с направлением
-}
+// ─── SPIN ─────────────────────────────────────────────────────────────────────
+function spin() {
+  if (isSpinning || spinsLeft <= 0) return;
+  isSpinning = true;
+  document.getElementById('spinBtn').disabled = true;
+  document.getElementById('centerBtn').disabled = true;
 
-/* Угол для нужного приза (фиксация результата) */
-function angleForPrize(label){
-  const n = SEGMENTS.length;
-  const sliceDeg = 360 / n;
-  // найдём все индексы с таким лейблом (если повторяется)
-  const indices = [];
-  SEGMENTS.forEach((s,i)=>{ if(s.label === label) indices.push(i); });
-  if(!indices.length) return null;
-  const idx = indices[Math.floor(Math.random()*indices.length)];
-  // Чтобы указатель попал в сектор idx, конечный угол должен поставить центр этого сектора под указатель
-  const targetCenterDeg = idx*sliceDeg + sliceDeg/2;
-  // Наш указатель сверху (0°), а колесо вращаем по часовой — значит, конечный угол = targetCenterDeg (в рад) со знаком +
-  const targetRad = deg2rad(targetCenterDeg);
-  return targetRad;
-}
+  const targetIdx = pickSegment();
+  const n = segments.length;
+  const arc = (2 * Math.PI) / n;
 
-function deg2rad(d){ return d*Math.PI/180; }
-function rad2deg(r){ return r*180/Math.PI; }
+  // Calculate rotation to land on targetIdx
+  // Pointer is at top (rotation=0 means segment 0 is at top)
+  // We want targetIdx segment to be under pointer
+  const targetAngle = -(targetIdx * arc); // angle of segment center relative to 0
+  const extraSpins = (4 + Math.floor(Math.random() * 4)) * 2 * Math.PI;
+  const randomOffset = (Math.random() - 0.5) * arc * 0.6;
+  const finalRotation = currentRotation + extraSpins + targetAngle - currentRotation % (2 * Math.PI) + randomOffset;
 
-/* Основной спин */
-function spin(forcePrize=null){
-  if(spinning) return;
-  spinning = true;
-  spinBtn.disabled = true;
-  resultEl.textContent = "Крутим…";
-
-  const n = SEGMENTS.length;
-  const slice = 2*Math.PI / n;
-
-  // Кол-во оборотов
-  const turns = rand(SPIN_TURNS_MIN, SPIN_TURNS_MAX);
-  let targetAngle;
-
-  if(forcePrize){
-    const prizeAngle = angleForPrize(forcePrize);
-    if(prizeAngle !== null){
-      // итоговый угол = текущий + целевой под указатель + несколько оборотов
-      targetAngle = angle + (turns * 2*Math.PI) + prizeAngle;
-    }else{
-      // если нет такого приза — крутим случайно
-      targetAngle = angle + (turns * 2*Math.PI) + Math.random() * 2*Math.PI;
-    }
-  }else{
-    targetAngle = angle + (turns * 2*Math.PI) + Math.random() * 2*Math.PI;
-  }
-
+  // Normalize
+  const fullFinal = finalRotation + 2 * Math.PI * 5; // ensure enough spin
+  const duration = 4000 + Math.random() * 1500;
   const start = performance.now();
-  const duration = SPIN_MS;
+  const startRot = currentRotation;
 
-  function frame(now){
-    const t = Math.min(1, (now - start)/duration);
-    const eased = easeOut(t);
-    angle = angle + (targetAngle - angle) * eased;
-    drawWheel();
+  function easeOut(t) {
+    return 1 - Math.pow(1 - t, 4);
+  }
 
-    if(t < 1){
-      requestAnimationFrame(frame);
-    }else{
-      // финальная фиксация
-      angle = targetAngle % (2*Math.PI);
-      drawWheel();
-      const idx = pickByAngle(angle);
-      lastPrize = SEGMENTS[idx].label;
-      resultEl.textContent = `🎉 Ваш приз: ${lastPrize}`;
-      spinning = false;
-      spinBtn.disabled = false;
+  function animate(now) {
+    const elapsed = now - start;
+    const t = Math.min(elapsed / duration, 1);
+    const rot = startRot + (fullFinal - startRot) * easeOut(t);
+    currentRotation = rot;
+    drawWheel(rot);
+
+    if (t < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      isSpinning = false;
+      spinCount++;
+      spinsLeft--;
+      updateDots();
+      currentRotation = rot % (2 * Math.PI);
+      showResult(targetIdx);
+      if (spinsLeft > 0) {
+        document.getElementById('spinBtn').disabled = false;
+        document.getElementById('centerBtn').disabled = false;
+      }
     }
   }
-  requestAnimationFrame(frame);
+
+  requestAnimationFrame(animate);
 }
 
-function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
-
-/* Сброс */
-function resetWheel(){
-  if(spinning) return;
-  angle = 0;
-  lastPrize = null;
-  resultEl.textContent = "";
-  drawWheel();
+function updateDots() {
+  const used = 5 - spinsLeft;
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('d' + i);
+    if (i <= used) dot.classList.add('used');
+  }
 }
 
-/* Инициализация */
-renderLegend();
-drawWheel();
+// ─── MODAL ────────────────────────────────────────────────────────────────────
+function showResult(idx) {
+  const seg = segments[idx];
+  const isFinal = spinsLeft === 0;
 
-/* Управление */
-spinBtn.addEventListener('click', ()=>{
-  const url = new URL(location.href);
-  const qp = url.searchParams.get('prize');
-  const forceAttr = document.body.getAttribute('data-force-prize');
-  const forcePrize = forceAttr || qp || null;
-  spin(forcePrize);
-});
-resetBtn.addEventListener('click', resetWheel);
+  document.getElementById('modalEmoji').textContent = seg.emoji;
+  document.getElementById('modalLabel').textContent = isFinal ? '🎊 Последнее вращение — твой подарок!' : '🎉 Поздравляем!';
+  document.getElementById('modalPrize').textContent = isFinal ? '🏷️ Скидка 20% на абонемент!' : seg.prize;
 
-/* Поддержка data-force-prize (можно задать в разметке) */
-// <body data-force-prize="УДВОЕНИЕ">
+  // Promo code
+  const promoEl = document.getElementById('modalPromo');
+  const promoCode = document.getElementById('promoCode');
+  if (isFinal || seg.promo) {
+    promoEl.style.display = 'block';
+    promoCode.textContent = isFinal ? 'ШАГАЙ20' : seg.promo;
+    promoEl.onclick = () => {
+      navigator.clipboard.writeText(isFinal ? 'ШАГАЙ20' : seg.promo).catch(() => {});
+      promoCode.textContent = '✅ Скопировано!';
+      setTimeout(() => { promoCode.textContent = isFinal ? 'ШАГАЙ20' : seg.promo; }, 2000);
+    };
+  } else {
+    promoEl.style.display = 'none';
+  }
+
+  document.getElementById('modalDesc').textContent = isFinal
+    ? 'Твой промокод на 20% скидку активен 48 часов. Введи его при оформлении любого абонемента.'
+    : seg.desc;
+
+  const adEl = document.getElementById('modalAd');
+  adEl.innerHTML = isFinal ? finalAd : spinAds[(spinCount - 1) % spinAds.length];
+
+  const btn = document.getElementById('modalClose');
+  if (isFinal) {
+    btn.textContent = '🚀 Хочу попасть в клуб!';
+  } else if (spinsLeft > 0) {
+    btn.textContent = `Отлично! Ещё ${spinsLeft} вращени${spinsLeft === 1 ? 'е' : 'я'} 🎯`;
+  } else {
+    btn.textContent = '✨ Получить приз!';
+  }
+
+  const modal = document.getElementById('modal');
+  modal.className = 'modal' + (seg.isJackpot ? ' final' : '');
+
+  // Stars for jackpot
+  const starsEl = document.getElementById('modalStars');
+  starsEl.innerHTML = '';
+  if (seg.isJackpot || isFinal) {
+    const starChars = ['⭐','✨','🌟','💫'];
+    for (let i = 0; i < 8; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.textContent = starChars[i % starChars.length];
+      s.style.left = (10 + Math.random() * 80) + '%';
+      s.style.top = (10 + Math.random() * 80) + '%';
+      s.style.animationDelay = (Math.random() * 3) + 's';
+      s.style.animationDuration = (3 + Math.random() * 2) + 's';
+      starsEl.appendChild(s);
+    }
+  }
+
+  document.getElementById('modalBg').classList.add('show');
+
+  if (seg.isJackpot || isFinal) launchConfetti();
+}
+
+function closeModal() {
+  document.getElementById('modalBg').classList.remove('show');
+  if (spinsLeft === 0) {
+    document.getElementById('spinBtn').style.display = 'none';
+  }
+}
+
+// ─── CONFETTI ─────────────────────────────────────────────────────────────────
+function launchConfetti() {
+  const colors = ['#FF6B6B','#FFD93D','#6BCB77','#4D96FF','#FF6FB5','#C77DFF','#FF9A76'];
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      el.style.width = el.style.height = (6 + Math.random() * 8) + 'px';
+      el.style.transform = `rotate(${Math.random() * 360}deg)`;
+      document.body.appendChild(el);
+      el.animate([
+        { top: '-20px', opacity: 1, transform: `rotate(0deg) translateX(0)` },
+        { top: '110vh', opacity: 0, transform: `rotate(${360 + Math.random() * 360}deg) translateX(${(Math.random() - 0.5) * 200}px)` }
+      ], {
+        duration: 2500 + Math.random() * 1500,
+        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        fill: 'forwards'
+      }).onfinish = () => el.remove();
+    }, i * 40);
+  }
+}
 </script>
+
 </body>
 </html>
