@@ -3,791 +3,672 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Колесо Удачи — Шагай Дома</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --coral: #FF6B6B;
-    --peach: #FF9A76;
-    --yellow: #FFD93D;
-    --mint: #6BCB77;
-    --sky: #4D96FF;
-    --purple: #C77DFF;
-    --pink: #FF6FB5;
-    --gold: #FFD700;
-    --bg: #FFF5F0;
-    --dark: #2D2D2D;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
+:root {
+  --red: #E8192C;
+  --red2: #C01020;
+  --red3: #FF4D5E;
+  --pale: #FFF0F1;
+  --gold: #F5A623;
+  --dark: #1A1A2E;
+  --mid: #666;
+  --white: #fff;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body {
-font-family: ‘Nunito’, sans-serif;
-background: var(–bg);
-min-height: 100vh;
-overflow-x: hidden;
-background-image:
-radial-gradient(circle at 10% 20%, rgba(255,107,107,0.08) 0%, transparent 50%),
-radial-gradient(circle at 90% 80%, rgba(77,150,255,0.08) 0%, transparent 50%),
-radial-gradient(circle at 50% 50%, rgba(255,217,61,0.05) 0%, transparent 70%);
+  font-family:'Nunito',sans-serif;
+  background:#F8F4F4;
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center;
+  overflow-x:hidden;
 }
 
-.confetti-piece {
-position: fixed;
-width: 10px;
-height: 10px;
-top: -20px;
-opacity: 0;
-pointer-events: none;
-z-index: 9999;
-border-radius: 2px;
-}
+/* blobs */
+.blob { position:fixed; border-radius:50%; filter:blur(90px); opacity:.08; pointer-events:none; z-index:0; }
+.b1 { width:500px; height:500px; background:var(–red); top:-140px; right:-120px; }
+.b2 { width:420px; height:420px; background:var(–gold); bottom:-100px; left:-100px; }
 
+/* header */
 header {
-text-align: center;
-padding: 28px 20px 10px;
+width:100%; max-width:460px;
+padding:26px 22px 0;
+text-align:center; position:relative; z-index:1;
+}
+.logo { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:3px; }
+.logo-ico {
+width:40px; height:40px;
+background:linear-gradient(135deg,var(–red),var(–red3));
+border-radius:11px; display:flex; align-items:center; justify-content:center;
+font-size:20px; box-shadow:0 4px 14px rgba(232,25,44,.3);
+}
+.logo-name { font-family:‘Unbounded’,sans-serif; font-size:19px; font-weight:900; color:var(–dark); }
+.logo-name span { color:var(–red); }
+.logo-sub { font-size:12px; color:#aaa; font-weight:700; }
+
+/* spins */
+.spins {
+margin:16px auto 0;
+display:flex; align-items:center; gap:10px;
+background:white; border-radius:50px; padding:9px 18px;
+width:fit-content; box-shadow:0 2px 14px rgba(0,0,0,.06);
+}
+.spins-lbl { font-size:12px; font-weight:800; color:#bbb; }
+.dots { display:flex; gap:6px; }
+.dot {
+width:11px; height:11px; border-radius:50%;
+background:var(–red); box-shadow:0 2px 5px rgba(232,25,44,.35);
+transition:all .4s cubic-bezier(.34,1.56,.64,1);
+}
+.dot.off { background:#E0E0E0; box-shadow:none; transform:scale(.7); }
+
+/* main */
+main {
+width:100%; max-width:460px;
+padding:16px 18px 50px;
+display:flex; flex-direction:column; align-items:center;
+position:relative; z-index:1;
 }
 
-.logo {
-font-family: ‘Pacifico’, cursive;
-font-size: clamp(22px, 5vw, 34px);
-color: var(–coral);
-letter-spacing: 1px;
-text-shadow: 2px 2px 0 rgba(255,107,107,0.2);
+.headline { text-align:center; margin-bottom:14px; }
+.headline h1 {
+font-family:‘Unbounded’,sans-serif;
+font-size:clamp(15px,4.2vw,20px);
+font-weight:900; color:var(–dark); line-height:1.3;
 }
-.logo span { color: var(–peach); }
+.headline h1 em { font-style:normal; color:var(–red); }
+.headline p { font-size:12px; color:#bbb; font-weight:700; margin-top:5px; }
 
-.subtitle {
-font-size: clamp(13px, 3vw, 16px);
-color: #888;
-margin-top: 4px;
-font-weight: 600;
+/* jackpot banner */
+.jbanner {
+width:100%;
+background:linear-gradient(135deg,var(–red) 0%,#FF5C35 100%);
+border-radius:16px; padding:13px 16px;
+display:flex; align-items:center; gap:13px;
+margin-bottom:20px;
+box-shadow:0 8px 26px rgba(232,25,44,.28);
+overflow:hidden; position:relative;
 }
+.jbanner::after {
+content:’’; position:absolute; top:-25px; right:-15px;
+width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,.07);
+}
+.jico { font-size:36px; flex-shrink:0; animation:jbounce 2.5s ease-in-out infinite; }
+@keyframes jbounce { 0%,100%{transform:rotate(-6deg) scale(1)} 50%{transform:rotate(6deg) scale(1.1)} }
+.jlbl { font-size:10px; font-weight:800; color:rgba(255,255,255,.7); letter-spacing:1.8px; text-transform:uppercase; }
+.jmain { font-family:‘Unbounded’,sans-serif; font-size:clamp(13px,3.8vw,16px); font-weight:900; color:white; line-height:1.2; }
+.jsub { font-size:11px; color:rgba(255,255,255,.8); font-weight:700; margin-top:2px; }
 
-.spins-bar {
-display: flex;
-justify-content: center;
-align-items: center;
-gap: 8px;
-margin: 18px auto 0;
-padding: 12px 22px;
-background: white;
-border-radius: 50px;
-width: fit-content;
-box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-font-weight: 800;
-font-size: 15px;
-color: var(–dark);
-}
-.spin-dot {
-width: 14px; height: 14px;
-border-radius: 50%;
-background: var(–coral);
-transition: all 0.4s;
-}
-.spin-dot.used {
-background: #ddd;
-transform: scale(0.8);
-}
-.spins-label { color: #aaa; font-size: 13px; font-weight: 700; margin-right: 4px; }
-
-.main-area {
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 10px 20px 40px;
-gap: 0;
-position: relative;
-}
-
-/* Tagline above wheel */
-.tagline {
-text-align: center;
-margin-bottom: 16px;
-}
-.tagline h1 {
-font-size: clamp(20px, 5vw, 30px);
-font-weight: 900;
-color: var(–dark);
-line-height: 1.2;
-}
-.tagline h1 em {
-font-style: normal;
-color: var(–coral);
-}
-.tagline p {
-font-size: clamp(13px, 3vw, 15px);
-color: #999;
-margin-top: 6px;
-font-weight: 600;
-}
-
-/* FREE PASS highlight */
-.free-pass-banner {
-background: linear-gradient(135deg, #FFD93D, #FF9A76);
-border-radius: 16px;
-padding: 10px 24px;
-margin-bottom: 18px;
-text-align: center;
-box-shadow: 0 6px 24px rgba(255,154,118,0.35);
-animation: pulse-banner 2s ease-in-out infinite;
-}
-.free-pass-banner .fp-label { font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.85); letter-spacing: 2px; text-transform: uppercase; }
-.free-pass-banner .fp-main { font-size: clamp(14px, 4vw, 18px); font-weight: 900; color: white; }
-.free-pass-banner .fp-sub { font-size: 12px; color: rgba(255,255,255,0.9); font-weight: 700; }
-@keyframes pulse-banner {
-0%, 100% { box-shadow: 0 6px 24px rgba(255,154,118,0.35); transform: scale(1); }
-50% { box-shadow: 0 8px 32px rgba(255,154,118,0.55); transform: scale(1.02); }
-}
-
-/* Wheel container */
+/* wheel */
 .wheel-wrap {
-position: relative;
-width: min(380px, 90vw);
-height: min(380px, 90vw);
+position:relative;
+width:min(330px,86vw);
+height:min(330px,86vw);
+margin-bottom:20px;
+}
+canvas#wc {
+width:100%; height:100%;
+border-radius:50%; display:block;
+box-shadow:0 0 0 5px white, 0 0 0 9px rgba(232,25,44,.13), 0 18px 50px rgba(0,0,0,.14);
+}
+/* pointer */
+.ptr {
+position:absolute; top:-4px; left:50%; transform:translateX(-50%);
+z-index:10; display:flex; flex-direction:column; align-items:center;
+}
+.ptr-ball {
+width:17px; height:17px; background:var(–red); border-radius:50%;
+border:3px solid white; box-shadow:0 3px 9px rgba(232,25,44,.45);
+}
+.ptr-tri {
+width:0; height:0;
+border-left:9px solid transparent; border-right:9px solid transparent;
+border-top:20px solid var(–red);
+filter:drop-shadow(0 3px 4px rgba(232,25,44,.35));
+margin-top:-2px;
+}
+/* center btn */
+.cbtn {
+position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+width:60px; height:60px; border-radius:50%; background:white;
+border:3px solid rgba(232,25,44,.12); cursor:pointer;
+display:flex; flex-direction:column; align-items:center; justify-content:center;
+z-index:10; box-shadow:0 4px 18px rgba(0,0,0,.1);
+transition:transform .2s,box-shadow .2s; font-family:‘Nunito’,sans-serif;
+}
+.cbtn:hover { transform:translate(-50%,-50%) scale(1.1); }
+.cbtn:active { transform:translate(-50%,-50%) scale(.92); }
+.cbtn:disabled { opacity:.4; cursor:not-allowed; }
+.cbtn .ci { font-size:23px; }
+.cbtn .ct { font-size:9px; font-weight:900; color:var(–red); letter-spacing:.5px; margin-top:1px; }
+
+/* spin btn */
+.spinbtn {
+width:100%; max-width:300px;
+background:linear-gradient(135deg,var(–red),#FF5C35);
+color:white; border:none; border-radius:14px;
+padding:16px 22px;
+font-family:‘Unbounded’,sans-serif; font-size:14px; font-weight:700;
+cursor:pointer; letter-spacing:.3px;
+box-shadow:0 8px 26px rgba(232,25,44,.36);
+transition:all .2s; position:relative; overflow:hidden;
+}
+.spinbtn::before {
+content:’’; position:absolute; top:0; left:-100%;
+width:60%; height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+animation:shine 3s ease-in-out infinite;
+}
+@keyframes shine { 0%{left:-100%} 40%,100%{left:150%} }
+.spinbtn:hover { transform:translateY(-3px); box-shadow:0 12px 34px rgba(232,25,44,.44); }
+.spinbtn:active { transform:translateY(1px); }
+.spinbtn:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+.done-msg { display:none; margin-top:12px; font-size:13px; color:#bbb; font-weight:700; text-align:center; }
+
+/* ── OVERLAY ── */
+.overlay {
+display:none; position:fixed; inset:0;
+background:rgba(12,5,7,.6); backdrop-filter:blur(8px);
+z-index:100; justify-content:center; align-items:flex-end;
+}
+.overlay.show { display:flex; }
+.sheet {
+background:white; border-radius:26px 26px 0 0;
+width:100%; max-width:460px;
+max-height:88vh; overflow-y:auto;
+animation:shup .38s cubic-bezier(.34,1.3,.64,1);
+padding-bottom:env(safe-area-inset-bottom,20px);
+}
+@keyframes shup { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
+.handle { width:36px; height:4px; background:#EBEBEB; border-radius:2px; margin:13px auto 0; }
+.si { padding:16px 20px 24px; }
+
+.m-emoji { font-size:54px; text-align:center; display:block; margin-bottom:5px; }
+.m-tag {
+display:inline-block; background:var(–pale); color:var(–red);
+font-size:10px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase;
+padding:4px 12px; border-radius:50px; margin-bottom:7px;
+}
+.m-title { font-family:‘Unbounded’,sans-serif; font-size:clamp(16px,4.5vw,21px); font-weight:900; color:var(–dark); line-height:1.25; margin-bottom:10px; }
+.m-title.red { color:var(–red); }
+
+/* promo */
+.promo {
+background:linear-gradient(135deg,#FFF5F6,#FFF0F2);
+border:2px dashed rgba(232,25,44,.22); border-radius:13px;
+padding:12px 16px; text-align:center; margin:8px 0 12px;
+cursor:pointer; transition:border-color .18s;
+}
+.promo:hover { border-color:var(–red); }
+.pcode { font-family:‘Unbounded’,sans-serif; font-size:21px; font-weight:900; color:var(–red); letter-spacing:4px; }
+.phint { font-size:11px; color:#bbb; font-weight:700; margin-top:3px; display:block; }
+
+.m-desc { font-size:13px; color:var(–mid); line-height:1.65; font-weight:700; margin-bottom:11px; }
+.divider { height:1px; background:#F0F0F0; margin:11px 0; }
+
+.adcard {
+background:linear-gradient(135deg,#FFF5F6,#FFF8F0);
+border-radius:14px; padding:13px 15px; margin-bottom:16px;
+border-left:3px solid var(–red);
+}
+.adcard-ttl { font-size:11px; font-weight:900; color:var(–red); text-transform:uppercase; letter-spacing:.8px; margin-bottom:5px; }
+.adcard p { font-size:13px; color:var(–mid); line-height:1.6; font-weight:700; }
+.adcard p strong { color:var(–dark); }
+
+.spins-badge {
+display:inline-flex; align-items:center; gap:5px;
+background:var(–pale); border-radius:50px;
+padding:5px 13px; font-size:12px; font-weight:900; color:var(–red);
+margin-bottom:13px;
 }
 
-.wheel-glow {
-position: absolute;
-inset: -20px;
-border-radius: 50%;
-background: radial-gradient(circle, rgba(255,154,118,0.2) 0%, transparent 70%);
-animation: glow-pulse 3s ease-in-out infinite;
+/* ── ACTION BUTTONS ── */
+.actions { display:flex; flex-direction:column; gap:10px; }
+.btn-take {
+width:100%; background:linear-gradient(135deg,var(–red),#FF5C35);
+color:white; border:none; border-radius:13px; padding:15px;
+font-family:‘Unbounded’,sans-serif; font-size:13px; font-weight:700;
+cursor:pointer; box-shadow:0 6px 18px rgba(232,25,44,.3);
+transition:all .2s;
 }
-@keyframes glow-pulse {
-0%,100% { opacity: 0.6; transform: scale(1); }
-50% { opacity: 1; transform: scale(1.05); }
+.btn-take:hover { transform:translateY(-2px); box-shadow:0 10px 26px rgba(232,25,44,.38); }
+.btn-respin {
+width:100%; background:white; color:var(–mid);
+border:2px solid #E8E8E8; border-radius:13px; padding:13px;
+font-family:‘Nunito’,sans-serif; font-size:14px; font-weight:800;
+cursor:pointer; transition:all .2s;
 }
-
-canvas#wheel {
-width: 100%;
-height: 100%;
-border-radius: 50%;
-box-shadow: 0 12px 60px rgba(0,0,0,0.18), 0 0 0 6px white, 0 0 0 10px rgba(255,107,107,0.2);
-display: block;
-}
-
-/* Pointer */
-.pointer {
-position: absolute;
-top: -18px;
-left: 50%;
-transform: translateX(-50%);
-width: 0;
-height: 0;
-border-left: 16px solid transparent;
-border-right: 16px solid transparent;
-border-top: 36px solid var(–coral);
-filter: drop-shadow(0 4px 8px rgba(255,107,107,0.5));
-z-index: 10;
-}
-.pointer::after {
-content: ‘’;
-position: absolute;
-top: -40px;
-left: -8px;
-width: 16px;
-height: 16px;
-background: var(–coral);
-border-radius: 50%;
+.btn-respin:hover { border-color:#ccc; color:var(–dark); }
+.respin-warn {
+font-size:11px; color:#E8192C; font-weight:700; text-align:center;
+margin-top:-4px; opacity:.75;
 }
 
-/* Center button */
-.center-btn {
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-width: 70px; height: 70px;
-border-radius: 50%;
-background: white;
-border: none;
-cursor: pointer;
-box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-z-index: 10;
-transition: transform 0.15s, box-shadow 0.15s;
-font-family: ‘Nunito’, sans-serif;
-}
-.center-btn:hover { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
-.center-btn:active { transform: translate(-50%, -50%) scale(0.95); }
-.center-btn .spin-icon { font-size: 24px; }
-.center-btn .spin-txt { font-size: 10px; font-weight: 900; color: var(–coral); letter-spacing: 0.5px; }
-.center-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-/* Spin button below */
-.spin-btn {
-margin-top: 24px;
-background: linear-gradient(135deg, var(–coral), var(–peach));
-color: white;
-border: none;
-border-radius: 50px;
-padding: 16px 50px;
-font-family: ‘Nunito’, sans-serif;
-font-size: 18px;
-font-weight: 900;
-cursor: pointer;
-box-shadow: 0 8px 30px rgba(255,107,107,0.4);
-transition: all 0.2s;
-letter-spacing: 0.5px;
-}
-.spin-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(255,107,107,0.5); }
-.spin-btn:active { transform: translateY(0); }
-.spin-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-/* Result modal */
-.modal-bg {
-display: none;
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.55);
-backdrop-filter: blur(6px);
-z-index: 1000;
-justify-content: center;
-align-items: center;
-padding: 20px;
-}
-.modal-bg.show { display: flex; }
-
-.modal {
-background: white;
-border-radius: 28px;
-padding: 36px 32px;
-max-width: 400px;
-width: 100%;
-text-align: center;
-box-shadow: 0 30px 80px rgba(0,0,0,0.25);
-animation: modal-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-position: relative;
-overflow: hidden;
-}
-@keyframes modal-in {
-from { opacity: 0; transform: scale(0.7) translateY(30px); }
-to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-.modal-ribbon {
-position: absolute;
-top: 0; left: 0; right: 0;
-height: 6px;
-background: linear-gradient(90deg, var(–coral), var(–yellow), var(–mint), var(–sky));
-}
-
-.modal-emoji { font-size: 56px; margin-bottom: 8px; display: block; }
-.modal-label { font-size: 11px; font-weight: 800; color: #bbb; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
-.modal-prize { font-size: clamp(20px, 5vw, 26px); font-weight: 900; color: var(–dark); line-height: 1.2; margin-bottom: 12px; }
-.modal-promo {
-background: linear-gradient(135deg, #FFF3E0, #FFE0CC);
-border: 2px dashed var(–peach);
-border-radius: 14px;
-padding: 12px 18px;
-font-size: 22px;
-font-weight: 900;
-color: var(–coral);
-letter-spacing: 3px;
-margin: 14px 0;
-cursor: pointer;
-transition: all 0.2s;
-}
-.modal-promo:hover { background: linear-gradient(135deg, #FFE0CC, #FFD0B0); transform: scale(1.02); }
-.modal-promo .promo-hint { font-size: 11px; color: #aaa; font-weight: 600; letter-spacing: 0; display: block; margin-top: 2px; }
-
-.modal-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 16px; font-weight: 600; }
-.modal-ad {
-background: linear-gradient(135deg, #FFF5F0, #FFE8E0);
-border-radius: 16px;
-padding: 16px;
-margin: 14px 0;
-font-size: 13px;
-color: #555;
-line-height: 1.6;
-font-weight: 600;
-text-align: left;
-}
-.modal-ad strong { color: var(–coral); }
-
-.modal-close {
-background: linear-gradient(135deg, var(–coral), var(–peach));
-color: white;
-border: none;
-border-radius: 50px;
-padding: 14px 40px;
-font-family: ‘Nunito’, sans-serif;
-font-size: 16px;
-font-weight: 900;
-cursor: pointer;
-width: 100%;
-margin-top: 8px;
-box-shadow: 0 6px 20px rgba(255,107,107,0.35);
-transition: all 0.2s;
-}
-.modal-close:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,107,107,0.45); }
-
-.modal-close-link {
-display: block;
-margin-top: 12px;
-font-size: 13px;
-color: #bbb;
-cursor: pointer;
-font-weight: 600;
-}
-.modal-close-link:hover { color: #999; }
-
-/* Final modal special */
-.modal.final .modal-prize { color: var(–coral); }
-.stars-bg {
-position: absolute;
-inset: 0;
-pointer-events: none;
-overflow: hidden;
-}
-.star {
-position: absolute;
-font-size: 20px;
-opacity: 0.15;
-animation: float-star 4s ease-in-out infinite;
-}
-@keyframes float-star {
-0%, 100% { transform: translateY(0) rotate(0deg); }
-50% { transform: translateY(-12px) rotate(180deg); }
-}
-
-/* No spins state */
-.no-spins {
-text-align: center;
-padding: 20px;
-display: none;
-}
-.no-spins h2 { font-size: 20px; font-weight: 900; color: var(–dark); margin-bottom: 8px; }
-.no-spins p { font-size: 14px; color: #888; }
-
-@media (max-width: 480px) {
-.modal { padding: 28px 20px; }
-.spin-btn { padding: 14px 36px; font-size: 16px; }
-}
+/* confetti */
+.cp { position:fixed; top:-20px; opacity:0; pointer-events:none; z-index:9999; border-radius:2px; }
 </style>
 
 </head>
 <body>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
 
 <header>
-  <div class="logo">Шагай<span>Дома</span> 🚶‍♀️</div>
-  <div class="subtitle">Клуб ходьбы для стройности и здоровья</div>
-  <div class="spins-bar">
-    <span class="spins-label">Осталось вращений:</span>
-    <div class="spin-dot" id="d1"></div>
-    <div class="spin-dot" id="d2"></div>
-    <div class="spin-dot" id="d3"></div>
-    <div class="spin-dot" id="d4"></div>
-    <div class="spin-dot" id="d5"></div>
+  <div class="logo">
+    <div class="logo-ico">🚶‍♀️</div>
+    <div class="logo-name">Шагай<span>Дома</span></div>
+  </div>
+  <div class="logo-sub">Клуб ходьбы для стройности и здоровья</div>
+  <div class="spins">
+    <span class="spins-lbl">Осталось вращений</span>
+    <div class="dots">
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+      <div class="dot" id="d3"></div>
+      <div class="dot" id="d4"></div>
+      <div class="dot" id="d5"></div>
+    </div>
   </div>
 </header>
 
-<div class="main-area">
-  <div class="tagline">
+<main>
+  <div class="headline">
     <h1>Крути колесо и<br>выигрывай призы <em>бесплатно!</em></h1>
     <p>5 попыток · Каждое вращение — шанс на подарок</p>
   </div>
 
-  <div class="free-pass-banner">
-    <div class="fp-label">🏆 Главный приз</div>
-    <div class="fp-main">🎁 Бесплатный абонемент</div>
-    <div class="fp-sub">Можешь выиграть прямо сейчас!</div>
+  <div class="jbanner">
+    <div class="jico">🏆</div>
+    <div>
+      <div class="jlbl">Главный приз</div>
+      <div class="jmain">Бесплатный абонемент</div>
+      <div class="jsub">Можешь выиграть прямо сейчас!</div>
+    </div>
   </div>
 
   <div class="wheel-wrap">
-    <div class="wheel-glow"></div>
-    <canvas id="wheel" width="500" height="500"></canvas>
-    <div class="pointer"></div>
-    <button class="center-btn" id="centerBtn" onclick="spin()">
-      <span class="spin-icon">🍀</span>
-      <span class="spin-txt">КРУТИ!</span>
+    <canvas id="wc" width="660" height="660"></canvas>
+    <div class="ptr"><div class="ptr-ball"></div><div class="ptr-tri"></div></div>
+    <button class="cbtn" id="cbtn" onclick="spin()">
+      <span class="ci">🍀</span><span class="ct">КРУТИ!</span>
     </button>
   </div>
 
-<button class="spin-btn" id="spinBtn" onclick="spin()">🎯 Крутить колесо!</button>
+<button class="spinbtn" id="sbtn" onclick="spin()">🎯 Крутить колесо!</button>
 
-</div>
+  <div class="done-msg" id="doneMsg">Вращения закончились. Спасибо! 🎉</div>
+</main>
 
-<!-- Result Modal -->
+<!-- MODAL -->
 
-<div class="modal-bg" id="modalBg">
-  <div class="modal" id="modal">
-    <div class="modal-ribbon"></div>
-    <div class="stars-bg" id="modalStars"></div>
-    <span class="modal-emoji" id="modalEmoji"></span>
-    <div class="modal-label" id="modalLabel"></div>
-    <div class="modal-prize" id="modalPrize"></div>
-    <div class="modal-promo" id="modalPromo" style="display:none">
-      <span id="promoCode"></span>
-      <span class="promo-hint">👆 Нажми, чтобы скопировать</span>
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="si">
+      <div style="text-align:center">
+        <span class="m-emoji" id="mEmoji"></span>
+        <div><span class="m-tag" id="mTag"></span></div>
+        <div class="m-title" id="mTitle"></div>
+      </div>
+      <div class="promo" id="mPromo" onclick="copyCode()" style="display:none">
+        <div class="pcode" id="mCode"></div>
+        <span class="phint">👆 Нажми, чтобы скопировать</span>
+      </div>
+      <div class="m-desc" id="mDesc"></div>
+      <div class="divider"></div>
+      <div class="adcard">
+        <div class="adcard-ttl">🚶‍♀️ О клубе Шагай Дома</div>
+        <p id="mAd"></p>
+      </div>
+      <div class="spins-badge" id="mBadge" style="display:none">🎯 <span id="mBadgeTxt"></span></div>
+      <div class="actions" id="mActions"></div>
     </div>
-    <div class="modal-desc" id="modalDesc"></div>
-    <div class="modal-ad" id="modalAd"></div>
-    <button class="modal-close" id="modalClose" onclick="closeModal()"></button>
-    <span class="modal-close-link" onclick="closeModal()">Закрыть</span>
   </div>
 </div>
 
 <script>
-// ─── SEGMENTS ───────────────────────────────────────────────────────────────
-const segments = [
-  {
-    label: "Скидка\n20%",
-    emoji: "🏷️",
-    color: "#FF6B6B",
-    textColor: "#fff",
-    prize: "Скидка 20% на абонемент!",
-    promo: "ШАГАЙ20",
-    desc: "Твой промокод на 20% скидку активен 48 часов. Введи его при оформлении любого абонемента.",
-    weight: 30,
-    isFinalPrize: true,
-  },
-  {
-    label: "Меню\nклуба",
-    emoji: "📋",
-    color: "#4D96FF",
-    textColor: "#fff",
-    prize: "Меню клуба — PDF гид!",
-    desc: "Ты получаешь полное меню клуба со всеми тренировками, расписанием и форматами занятий. Скачай и изучи — тебя ждёт много интересного!",
-    weight: 25,
-  },
-  {
-    label: "Бесплатная\nтренировка",
-    emoji: "🎽",
-    color: "#6BCB77",
-    textColor: "#fff",
-    prize: "Бесплатная тренировка!",
-    desc: "Ты выиграла одну бесплатную тренировку в клубе Шагай Дома. Это твой первый шаг к стройности и здоровью!",
-    weight: 22,
-  },
-  {
-    label: "✨ Бесплатный\nАбонемент",
-    emoji: "🏆",
-    color: "#FFD700",
-    textColor: "#5B3A00",
-    prize: "🏆 Бесплатный Абонемент!",
-    desc: "Невероятно! Ты выиграла бесплатный абонемент в клуб Шагай Дома! Напиши нам в директ или на почту, чтобы активировать подарок.",
-    weight: 3,
-    isJackpot: true,
-  },
-  {
-    label: "Секретный\nтариф 🕵️",
-    emoji: "🕵️",
-    color: "#C77DFF",
-    textColor: "#fff",
-    prize: "Секретный тариф — 1 месяц!",
-    desc: "Ты открыла эксклюзивный тариф, которого нет в открытой продаже! Специальные условия на 1 месяц — только для победителей колеса удачи. Свяжись с нами для активации.",
-    weight: 10,
-  },
-  {
-    label: "Секретный\nтариф НАВСЕГДА 🔑",
-    emoji: "🔑",
-    color: "#FF6FB5",
-    textColor: "#fff",
-    prize: "Секретный тариф НАВСЕГДА!",
-    desc: "Поздравляем! Ты выиграла уникальный тариф, которого нет в продаже — доступ к клубу навсегда на специальных условиях! Только для победителей колеса. Напиши нам для активации.",
-    weight: 10,
-  },
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const SEG = [
+  { lines:['Скидка','20%'],        emoji:'🏷️', bg:'#E8192C', fg:'#fff', prize:'Скидка 20% на абонемент!',         promo:'ШАГАЙ20', desc:'Промокод на 20% скидку активен 48 часов. Введи его при оформлении любого абонемента.', w:25, isFinal:true },
+  { lines:['Меню','клуба PDF'],    emoji:'📋', bg:'#FF6B35', fg:'#fff', prize:'Меню клуба — PDF-гид!',             desc:'Полный гид по клубу: тренировки, форматы, расписание. Ссылка придёт на почту.',            w:20 },
+  { lines:['Бесплатная','тренировка'], emoji:'🎽', bg:'#FF4D5E', fg:'#fff', prize:'Бесплатная тренировка!',         desc:'Ты выиграла одну бесплатную тренировку! Напиши нам, чтобы активировать подарок.',        w:18 },
+  { lines:['✨ Бесплатный','абонемент'], emoji:'🏆', bg:'#F5A623', fg:'#3D2000', prize:'🏆 Бесплатный абонемент!', desc:'Невероятно! Ты выиграла бесплатный абонемент! Напиши нам в директ — активируем сразу.', w:3,  isJackpot:true },
+  { lines:['Секретный','тариф 🕵️'],  emoji:'🕵️', bg:'#C01020', fg:'#fff', prize:'Секретный тариф — 1 месяц!',    desc:'Закрытый тариф, которого нет в продаже! Специальные условия на 1 месяц. Напиши нам.',    w:10 },
+  { lines:['Секретный','тариф 🔑','НАВСЕГДА'], emoji:'🔑', bg:'#D4162A', fg:'#fff', prize:'Секретный тариф НАВСЕГДА!', desc:'Уникальный тариф — доступ навсегда на особых условиях! Только для победителей. Напиши нам.', w:8 },
+  { lines:['Крути','ещё раз!'],    emoji:'🔄', bg:'#FFD166', fg:'#5A3A00', prize:'Крути ещё раз!',                 desc:'Не повезло — но удача близко! Можешь крутить снова 🎯',                                   w:16, isRetry:true },
 ];
 
-// ─── ADs shown after each spin ──────────────────────────────────────────────
-const spinAds = [
-  `<strong>Шагай Дома</strong> — это больше, чем фитнес. Это сообщество <strong>10 000 женщин</strong> со всего мира, которые худеют на шагах каждый день. Твой путь начинается здесь! 🌍`,
-  `Уже <strong>10 000 шагательниц</strong> из разных уголков планеты занимаются с нами и видят результат. Ты тоже можешь! Каждый шаг — это шаг к своей лучшей версии. 💃`,
-  `В клубе <strong>Шагай Дома</strong> тебя ждут десятки тренировок, тёплое сообщество и тренеры, которые верят в тебя. <strong>10 000 женщин</strong> уже в пути — присоединяйся! 🚶‍♀️✨`,
-  `Ты знала, что ходьба — один из самых эффективных способов похудеть? Наши <strong>10 000 шагательниц</strong> подтверждают это каждый день! <strong>Шагай Дома</strong> — и результаты не заставят ждать. 🎯`,
+const ADS = [
+  'В <strong>Шагай Дома</strong> уже занимаются <strong>10&thinsp;000 женщин</strong> из России, Европы, США и со всего мира — каждый день они худеют на шагах прямо дома.',
+  '<strong>10&thinsp;000 шагательниц</strong> уже в пути! Тренируются дома, видят результат и поддерживают друг друга. Присоединяйся!',
+  'Ходьба — это наука стройности. В <strong>Шагай Дома</strong> мы превратили её в праздник движения. <strong>10&thinsp;000 женщин</strong> уже убедились — и ты сможешь!',
+  '<strong>Шагай Дома</strong> — сообщество <strong>10&thinsp;000 женщин</strong> со всего мира, которые худеют, вдохновляют и поддерживают друг друга каждый день.',
 ];
-
-// Final spin AD (guaranteed promo)
-const finalAd = `🎉 Это не просто скидка — это твой <strong>билет в клуб мечты!</strong><br><br>
-<strong>Шагай Дома</strong> — это <strong>10 000 женщин</strong> из России, Украины, Казахстана, Германии, США и многих других стран, которые уже активно худеют на шагах прямо дома.<br><br>
-С нами ты получишь:<br>
-🚶‍♀️ Десятки тренировок на любой уровень<br>
-💪 Поддержку тёплого женского сообщества<br>
-📈 Реальный результат уже через 2–3 недели<br><br>
-<strong>Применяй промокод прямо сейчас — он действует 48 часов!</strong>`;
+const FINAL_AD = 'Это твой <strong>шанс начать новую жизнь!</strong> Десятки тренировок, <strong>10&thinsp;000 женщин-единомышленниц</strong> со всего мира, первый результат через 2–3 недели — всё прямо дома! <strong>Промокод действует 48 часов!</strong>';
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
-let spinsLeft = 5;
-let isSpinning = false;
-let currentRotation = 0;
-let spinCount = 0;
+let spinsLeft = 5, busy = false, rot = 0, spinNum = 0, lastCode = '';
+let pendingIdx = -1; // prize waiting for user decision
 
-// ─── BUILD WEIGHTED POOL ─────────────────────────────────────────────────────
-function buildPool() {
-  const pool = [];
-  segments.forEach((seg, i) => {
-    for (let j = 0; j < seg.weight; j++) pool.push(i);
-  });
-  return pool;
-}
+// ─── WHEEL DRAW ──────────────────────────────────────────────────────────────
+const C = document.getElementById('wc');
+const ctx = C.getContext('2d');
+const SZ = 660, cx = SZ/2, cy = SZ/2, R = SZ/2 - 12;
+const N = SEG.length, ARC = 2*Math.PI/N;
 
-function pickSegment() {
-  // Final spin: always give promo (index 0)
-  if (spinsLeft === 1) return 0;
-  const pool = buildPool();
-  // No jackpot on first 3 spins to build tension
-  const jackpotIdx = segments.findIndex(s => s.isJackpot);
-  const filteredPool = spinsLeft > 2 ? pool.filter(i => i !== jackpotIdx) : pool;
-  return filteredPool[Math.floor(Math.random() * filteredPool.length)];
-}
+function drawWheel(r) {
+  ctx.clearRect(0,0,SZ,SZ);
 
-// ─── CANVAS DRAW ─────────────────────────────────────────────────────────────
-const canvas = document.getElementById('wheel');
-const ctx = canvas.getContext('2d');
-const cx = canvas.width / 2;
-const cy = canvas.height / 2;
-const R = cx - 10;
+  for (let i = 0; i < N; i++) {
+    const s = SEG[i];
+    // Each segment i: its CENTER is at angle  r + i*ARC  (measured from 3-o'clock)
+    // Pointer is at TOP = -π/2, so segment i lands under pointer when r + i*ARC ≡ -π/2
+    const a0 = r + i * ARC - ARC/2;   // segment start
+    const a1 = a0 + ARC;               // segment end
+    const am = r + i * ARC;            // segment center angle (from 3 o'clock, CCW)
 
-function drawWheel(rotation) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const n = segments.length;
-  const arc = (2 * Math.PI) / n;
-
-  segments.forEach((seg, i) => {
-    const start = rotation + i * arc - Math.PI / 2 - arc / 2;
-    const end = start + arc;
-
-    // Segment fill
+    // ── segment fill ──
     ctx.beginPath();
     ctx.moveTo(cx, cy);
-    ctx.arc(cx, cy, R, start, end);
+    ctx.arc(cx, cy, R, a0, a1);
     ctx.closePath();
-
-    // Gradient fill
-    const grd = ctx.createRadialGradient(cx, cy, R * 0.2, cx, cy, R);
-    grd.addColorStop(0, lightenColor(seg.color, 30));
-    grd.addColorStop(1, seg.color);
-    ctx.fillStyle = grd;
+    ctx.fillStyle = s.bg;
     ctx.fill();
 
-    // Segment border
-    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    // ── subtle gloss ──
+    const g = ctx.createRadialGradient(cx,cy,R*.05,cx,cy,R);
+    g.addColorStop(0,'rgba(255,255,255,.16)');
+    g.addColorStop(.55,'rgba(255,255,255,.04)');
+    g.addColorStop(1,'rgba(0,0,0,.07)');
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,R,a0,a1); ctx.closePath();
+    ctx.fillStyle=g; ctx.fill();
 
-    // Emoji
-    const emojiAngle = start + arc / 2;
-    const emojiR = R * 0.78;
-    const ex = cx + emojiR * Math.cos(emojiAngle);
-    const ey = cy + emojiR * Math.sin(emojiAngle);
+    // ── dividers ──
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,R,a0,a1); ctx.closePath();
+    ctx.strokeStyle='rgba(255,255,255,.45)'; ctx.lineWidth=2.5; ctx.stroke();
+
+    // ── EMOJI: place at 78% radius, aligned to segment center ──
+    const eR = R * 0.76;
+    const ex = cx + eR * Math.cos(am);
+    const ey = cy + eR * Math.sin(am);
     ctx.save();
     ctx.translate(ex, ey);
-    ctx.rotate(emojiAngle + Math.PI / 2);
-    ctx.font = `${R * 0.09}px serif`;
+    // rotate so emoji "sits upright" reading from outside
+    // text along segment = rotate by am + π/2 (points outward upward)
+    ctx.rotate(am + Math.PI/2);
+    ctx.font = `${Math.round(R * 0.095)}px serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(seg.emoji, 0, 0);
+    ctx.fillText(s.emoji, 0, 0);
     ctx.restore();
 
-    // Text
-    const textAngle = start + arc / 2;
-    const textR = R * 0.52;
+    // ── TEXT: draw lines along radial direction ──
+    // We place text starting at ~50% radius, reading outward
+    const lines = s.lines;
+    const fs = Math.max(13, Math.round(R * 0.063));
+    const lh = fs * 1.3;
+    const blockH = lines.length * lh;
+    // Start position (from center): position block so it fits between center and emoji
+    const textStart = R * 0.17;  // distance from center to first line top
+    const textEnd   = R * 0.67;  // distance from center to last line bottom
+    const span = textEnd - textStart;
+    const step = blockH > span ? span / lines.length : lh;
+    const firstY = textStart + (span - (lines.length - 1) * step) / 2;
+
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.rotate(textAngle + Math.PI / 2);
-    ctx.font = `bold ${Math.max(11, R * 0.062)}px 'Nunito', sans-serif`;
-    ctx.fillStyle = seg.textColor;
+    ctx.rotate(am + Math.PI/2);   // rotate entire context: "up" now points outward along segment
+    ctx.font = `900 ${fs}px 'Nunito', sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0,0,0,0.15)';
-    ctx.shadowBlur = 4;
-    const lines = seg.label.split('\n');
-    const lineH = Math.max(14, R * 0.075);
-    lines.forEach((line, li) => {
-      ctx.fillText(line, 0, textR + (li - (lines.length - 1) / 2) * lineH);
+    ctx.fillStyle = s.fg;
+    ctx.shadowColor = 'rgba(0,0,0,.22)';
+    ctx.shadowBlur = 3;
+    lines.forEach((ln, li) => {
+      ctx.fillText(ln, 0, firstY + li * step);
     });
     ctx.restore();
+  }
+
+  // outer ring
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,2*Math.PI);
+  ctx.strokeStyle='rgba(255,255,255,.7)'; ctx.lineWidth=5; ctx.stroke();
+
+  // center disk
+  ctx.beginPath(); ctx.arc(cx,cy,36,0,2*Math.PI);
+  ctx.fillStyle='white'; ctx.fill();
+  ctx.strokeStyle='rgba(232,25,44,.1)'; ctx.lineWidth=3; ctx.stroke();
+}
+drawWheel(rot);
+
+// ─── PICK SEGMENT ─────────────────────────────────────────────────────────────
+function pickIdx() {
+  if (spinsLeft === 1) return SEG.findIndex(s => s.isFinal); // last spin → guaranteed promo
+  const pool = [];
+  SEG.forEach((s, i) => {
+    if (s.isJackpot && spinsLeft > 2) return; // no jackpot in first 3 spins
+    for (let j = 0; j < s.w; j++) pool.push(i);
   });
-
-  // Outer ring
-  ctx.beginPath();
-  ctx.arc(cx, cy, R, 0, 2 * Math.PI);
-  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-  ctx.lineWidth = 4;
-  ctx.stroke();
-
-  // Center circle
-  ctx.beginPath();
-  ctx.arc(cx, cy, 38, 0, 2 * Math.PI);
-  ctx.fillStyle = 'white';
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(255,107,107,0.2)';
-  ctx.lineWidth = 3;
-  ctx.stroke();
+  return pool[Math.floor(Math.random() * pool.length)];
 }
-
-function lightenColor(hex, amount) {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgb(${Math.min(255, r + amount)}, ${Math.min(255, g + amount)}, ${Math.min(255, b + amount)})`;
-}
-
-drawWheel(currentRotation);
 
 // ─── SPIN ─────────────────────────────────────────────────────────────────────
 function spin() {
-  if (isSpinning || spinsLeft <= 0) return;
-  isSpinning = true;
-  document.getElementById('spinBtn').disabled = true;
-  document.getElementById('centerBtn').disabled = true;
+  if (busy || spinsLeft <= 0) return;
+  busy = true;
+  btnOff();
 
-  const targetIdx = pickSegment();
-  const n = segments.length;
-  const arc = (2 * Math.PI) / n;
+  const ti = pickIdx();
 
-  // Calculate rotation to land on targetIdx
-  // Pointer is at top (rotation=0 means segment 0 is at top)
-  // We want targetIdx segment to be under pointer
-  const targetAngle = -(targetIdx * arc); // angle of segment center relative to 0
-  const extraSpins = (4 + Math.floor(Math.random() * 4)) * 2 * Math.PI;
-  const randomOffset = (Math.random() - 0.5) * arc * 0.6;
-  const finalRotation = currentRotation + extraSpins + targetAngle - currentRotation % (2 * Math.PI) + randomOffset;
+  // We want segment ti's CENTER (angle = rot + ti*ARC from 3-o'clock) to be at top (-π/2).
+  // So we need: finalRot + ti*ARC ≡ -π/2  (mod 2π)
+  // → finalRot ≡ -π/2 - ti*ARC  (mod 2π)
+  const targetRot = ((-Math.PI/2 - ti*ARC) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+  // Add random jitter within segment (±35% of arc)
+  const jitter = (Math.random() - 0.5) * ARC * 0.7;
+  const targetRotJ = (targetRot + jitter + 2*Math.PI) % (2*Math.PI);
 
-  // Normalize
-  const fullFinal = finalRotation + 2 * Math.PI * 5; // ensure enough spin
-  const duration = 4000 + Math.random() * 1500;
-  const start = performance.now();
-  const startRot = currentRotation;
+  const currentNorm = ((rot % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
+  let delta = ((targetRotJ - currentNorm) + 2*Math.PI) % (2*Math.PI);
+  if (delta < 0.3) delta += 2*Math.PI;
 
-  function easeOut(t) {
-    return 1 - Math.pow(1 - t, 4);
-  }
+  const extraTurns = (5 + Math.floor(Math.random() * 4)) * 2*Math.PI;
+  const totalDelta = extraTurns + delta;
 
-  function animate(now) {
-    const elapsed = now - start;
-    const t = Math.min(elapsed / duration, 1);
-    const rot = startRot + (fullFinal - startRot) * easeOut(t);
-    currentRotation = rot;
+  const startRot = rot;
+  const dur = 4200 + Math.random() * 1200;
+  const t0 = performance.now();
+
+  function ease(t) { return 1 - Math.pow(1 - t, 3.8); }
+
+  (function frame(now) {
+    const t = Math.min((now - t0) / dur, 1);
+    rot = startRot + totalDelta * ease(t);
     drawWheel(rot);
+    if (t < 1) { requestAnimationFrame(frame); return; }
 
-    if (t < 1) {
-      requestAnimationFrame(animate);
+    // done
+    spinning = false;
+    spinNum++;
+    spinsLeft--;
+    updateDots();
+
+    if (SEG[ti].isRetry) {
+      // "Крути ещё раз" — just re-enable, no modal
+      if (spinsLeft > 0) {
+        toast('🔄 Крути ещё раз! Удача близко!');
+        btnOn();
+      } else {
+        // last spin was retry → force promo
+        const fi = SEG.findIndex(s => s.isFinal);
+        pendingIdx = fi;
+        showModal(fi);
+      }
     } else {
-      isSpinning = false;
-      spinCount++;
+      pendingIdx = ti;
+      showModal(ti);
+    }
+
+    if (spinsLeft === 0) {
+      document.getElementById('sbtn').style.display = 'none';
+      document.getElementById('doneMsg').style.display = 'block';
+    }
+  })(t0);
+  requestAnimationFrame(t => {
+    // kick off properly
+  });
+  // Actually run the animation:
+  requestAnimationFrame(function go(now) {
+    const t = Math.min((now - t0) / dur, 1);
+    rot = startRot + totalDelta * ease(t);
+    drawWheel(rot);
+    if (t < 1) { requestAnimationFrame(go); } else {
+      busy = false;
+      spinNum++;
       spinsLeft--;
       updateDots();
-      currentRotation = rot % (2 * Math.PI);
-      showResult(targetIdx);
-      if (spinsLeft > 0) {
-        document.getElementById('spinBtn').disabled = false;
-        document.getElementById('centerBtn').disabled = false;
+      if (SEG[ti].isRetry) {
+        if (spinsLeft > 0) { toast('🔄 Крути ещё раз! Удача близко!'); btnOn(); }
+        else { const fi = SEG.findIndex(s=>s.isFinal); pendingIdx=fi; showModal(fi); }
+      } else {
+        pendingIdx = ti;
+        showModal(ti);
+      }
+      if (spinsLeft === 0) {
+        document.getElementById('sbtn').style.display='none';
+        document.getElementById('doneMsg').style.display='block';
       }
     }
-  }
-
-  requestAnimationFrame(animate);
+  });
 }
 
+function btnOff() {
+  document.getElementById('sbtn').disabled = true;
+  document.getElementById('cbtn').disabled = true;
+}
+function btnOn() {
+  document.getElementById('sbtn').disabled = false;
+  document.getElementById('cbtn').disabled = false;
+}
 function updateDots() {
   const used = 5 - spinsLeft;
-  for (let i = 1; i <= 5; i++) {
-    const dot = document.getElementById('d' + i);
-    if (i <= used) dot.classList.add('used');
-  }
+  for (let i = 1; i <= 5; i++) document.getElementById('d'+i).classList.toggle('off', i <= used);
 }
 
-// ─── MODAL ────────────────────────────────────────────────────────────────────
-function showResult(idx) {
-  const seg = segments[idx];
-  const isFinal = spinsLeft === 0;
+// ─── MODAL ───────────────────────────────────────────────────────────────────
+function showModal(idx) {
+  const s = SEG[idx];
+  const isFinalSpin = (spinsLeft === 0);
 
-  document.getElementById('modalEmoji').textContent = seg.emoji;
-  document.getElementById('modalLabel').textContent = isFinal ? '🎊 Последнее вращение — твой подарок!' : '🎉 Поздравляем!';
-  document.getElementById('modalPrize').textContent = isFinal ? '🏷️ Скидка 20% на абонемент!' : seg.prize;
+  document.getElementById('mEmoji').textContent  = s.emoji;
+  document.getElementById('mTag').textContent    = isFinalSpin ? '🎊 Последнее вращение!' : '🎉 Поздравляем!';
+  const titleEl = document.getElementById('mTitle');
+  titleEl.textContent = s.prize;
+  titleEl.className  = 'm-title' + (s.isJackpot || isFinalSpin ? ' red' : '');
 
-  // Promo code
-  const promoEl = document.getElementById('modalPromo');
-  const promoCode = document.getElementById('promoCode');
-  if (isFinal || seg.promo) {
+  const promoEl = document.getElementById('mPromo');
+  if (s.promo || isFinalSpin) {
     promoEl.style.display = 'block';
-    promoCode.textContent = isFinal ? 'ШАГАЙ20' : seg.promo;
-    promoEl.onclick = () => {
-      navigator.clipboard.writeText(isFinal ? 'ШАГАЙ20' : seg.promo).catch(() => {});
-      promoCode.textContent = '✅ Скопировано!';
-      setTimeout(() => { promoCode.textContent = isFinal ? 'ШАГАЙ20' : seg.promo; }, 2000);
-    };
+    lastCode = isFinalSpin ? 'ШАГАЙ20' : s.promo;
+    document.getElementById('mCode').textContent = lastCode;
   } else {
     promoEl.style.display = 'none';
   }
 
-  document.getElementById('modalDesc').textContent = isFinal
-    ? 'Твой промокод на 20% скидку активен 48 часов. Введи его при оформлении любого абонемента.'
-    : seg.desc;
+  document.getElementById('mDesc').textContent = s.desc;
+  document.getElementById('mAd').innerHTML = isFinalSpin ? FINAL_AD : ADS[spinNum % ADS.length];
 
-  const adEl = document.getElementById('modalAd');
-  adEl.innerHTML = isFinal ? finalAd : spinAds[(spinCount - 1) % spinAds.length];
-
-  const btn = document.getElementById('modalClose');
-  if (isFinal) {
-    btn.textContent = '🚀 Хочу попасть в клуб!';
-  } else if (spinsLeft > 0) {
-    btn.textContent = `Отлично! Ещё ${spinsLeft} вращени${spinsLeft === 1 ? 'е' : 'я'} 🎯`;
+  const badge = document.getElementById('mBadge');
+  if (spinsLeft > 0) {
+    badge.style.display = 'inline-flex';
+    document.getElementById('mBadgeTxt').textContent =
+      `Ещё ${spinsLeft} вращени${spinsLeft===1?'е':'я'}`;
   } else {
-    btn.textContent = '✨ Получить приз!';
+    badge.style.display = 'none';
   }
 
-  const modal = document.getElementById('modal');
-  modal.className = 'modal' + (seg.isJackpot ? ' final' : '');
+  // ── ACTION BUTTONS ──
+  const acts = document.getElementById('mActions');
+  acts.innerHTML = '';
 
-  // Stars for jackpot
-  const starsEl = document.getElementById('modalStars');
-  starsEl.innerHTML = '';
-  if (seg.isJackpot || isFinal) {
-    const starChars = ['⭐','✨','🌟','💫'];
-    for (let i = 0; i < 8; i++) {
-      const s = document.createElement('div');
-      s.className = 'star';
-      s.textContent = starChars[i % starChars.length];
-      s.style.left = (10 + Math.random() * 80) + '%';
-      s.style.top = (10 + Math.random() * 80) + '%';
-      s.style.animationDelay = (Math.random() * 3) + 's';
-      s.style.animationDuration = (3 + Math.random() * 2) + 's';
-      starsEl.appendChild(s);
-    }
+  // Primary: take prize
+  const btnTake = document.createElement('button');
+  btnTake.className = 'btn-take';
+  btnTake.textContent = isFinalSpin
+    ? '🚀 Забрать промокод и войти в клуб!'
+    : s.isJackpot ? '🏆 Забрать абонемент!' : '✅ Забрать приз!';
+  btnTake.onclick = () => closeModal(false);
+  acts.appendChild(btnTake);
+
+  // Secondary: respin (only if spins left AND it's not the last spin)
+  if (spinsLeft > 0 && !isFinalSpin) {
+    const btnSpin = document.createElement('button');
+    btnSpin.className = 'btn-respin';
+    btnSpin.textContent = `🎯 Крутить ещё раз (${spinsLeft} вращени${spinsLeft===1?'е':'я'})`;
+    btnSpin.onclick = () => closeModal(true);
+    acts.appendChild(btnSpin);
+
+    const warn = document.createElement('div');
+    warn.className = 'respin-warn';
+    warn.textContent = '⚠️ Если крутишь снова — текущий приз сгорает!';
+    acts.appendChild(warn);
   }
 
-  document.getElementById('modalBg').classList.add('show');
-
-  if (seg.isJackpot || isFinal) launchConfetti();
+  document.getElementById('overlay').classList.add('show');
+  if (s.isJackpot || isFinalSpin) confetti();
 }
 
-function closeModal() {
-  document.getElementById('modalBg').classList.remove('show');
-  if (spinsLeft === 0) {
-    document.getElementById('spinBtn').style.display = 'none';
+function closeModal(respin) {
+  document.getElementById('overlay').classList.remove('show');
+  if (respin && spinsLeft > 0) {
+    // discard pending prize, re-enable spin
+    pendingIdx = -1;
+    btnOn();
   }
+}
+
+function copyCode() {
+  navigator.clipboard.writeText(lastCode).catch(() => {});
+  const el = document.getElementById('mCode');
+  const orig = el.textContent;
+  el.textContent = '✅ Скопировано!';
+  setTimeout(() => el.textContent = orig, 2000);
+}
+
+// ─── TOAST ───────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);' +
+    'background:#222;color:#fff;border-radius:50px;padding:11px 20px;' +
+    'font-family:Nunito,sans-serif;font-size:14px;font-weight:800;' +
+    'box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2400);
 }
 
 // ─── CONFETTI ─────────────────────────────────────────────────────────────────
-function launchConfetti() {
-  const colors = ['#FF6B6B','#FFD93D','#6BCB77','#4D96FF','#FF6FB5','#C77DFF','#FF9A76'];
-  for (let i = 0; i < 60; i++) {
-    setTimeout(() => {
-      const el = document.createElement('div');
-      el.className = 'confetti-piece';
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.background = colors[Math.floor(Math.random() * colors.length)];
-      el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-      el.style.width = el.style.height = (6 + Math.random() * 8) + 'px';
-      el.style.transform = `rotate(${Math.random() * 360}deg)`;
-      document.body.appendChild(el);
-      el.animate([
-        { top: '-20px', opacity: 1, transform: `rotate(0deg) translateX(0)` },
-        { top: '110vh', opacity: 0, transform: `rotate(${360 + Math.random() * 360}deg) translateX(${(Math.random() - 0.5) * 200}px)` }
-      ], {
-        duration: 2500 + Math.random() * 1500,
-        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        fill: 'forwards'
-      }).onfinish = () => el.remove();
-    }, i * 40);
-  }
+function confetti() {
+  const cols = ['#E8192C','#FF6B35','#F5A623','#FFD166','#FF4D5E','#fff'];
+  for (let i = 0; i < 65; i++) setTimeout(() => {
+    const el = document.createElement('div');
+    el.className = 'cp';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.background = cols[Math.floor(Math.random() * cols.length)];
+    el.style.borderRadius = Math.random() > .4 ? '50%' : '2px';
+    const sz = 6 + Math.random() * 8;
+    el.style.width = el.style.height = sz + 'px';
+    document.body.appendChild(el);
+    el.animate([
+      { top:'-20px', opacity:1, transform:`rotate(0)` },
+      { top:'108vh',  opacity:0, transform:`rotate(${400+Math.random()*360}deg) translateX(${(Math.random()-.5)*160}px)` }
+    ], { duration:2000+Math.random()*1500, easing:'cubic-bezier(.2,.8,.4,1)', fill:'forwards' })
+    .onfinish = () => el.remove();
+  }, i * 32);
 }
 </script>
 
