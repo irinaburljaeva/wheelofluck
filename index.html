@@ -133,10 +133,10 @@ canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
 
 <header>
   <div class="logo">
-    <div class="logo-ico">🚶‍♀️</div>
-    <div class="logo-name">Шагай<span>Дома</span></div>
+    <div class="logo-ico"> ⚡️</div>
+    <div class="logo-name">ШАГАЙ <span>ДОМА</span></div>
   </div>
-  <div class="logo-sub">Клуб ходьбы для стройности и здоровья</div>
+  <div class="logo-sub">Шагай для стройности и здоровья</div>
   <div class="spins">
     <span class="spins-lbl">Осталось вращений</span>
     <div class="dots">
@@ -278,13 +278,6 @@ function drawWheel(r) {
     ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
     ctx.strokeStyle='rgba(255,255,255,.5)'; ctx.lineWidth=2.5; ctx.stroke();
 
-    // ── TEXT ──
-    // Strategy: save/translate to center of wheel, rotate by segAngle so
-    // the segment's bisector points UP (negative Y in rotated frame).
-    // Then draw text lines at increasing positive Y (going toward rim).
-    // Each line is drawn horizontally centered at x=0.
-    // Result: text reads left-to-right when you rotate the wheel so that
-    // segment faces up — exactly how real prize wheels look.
 
     ctx.save();
     ctx.translate(CX, CY);
@@ -410,8 +403,8 @@ function updateDots(){
 
 // ─── MODAL ────────────────────────────────────────────────────────────────────
 // НАСТРОЙКИ — замени на свои!
-const FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORMSPREE_ID'; // зарегистрируйся на formspree.io
-const BUY_URL = 'https://ВАШ_САЙТ/купить'; // ссылка на страницу покупки
+const FORMSPREE_URL = 'https://formspree.io/f/mvzvawok'; 
+const BUY_URL = 'https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel'; 
 
 function showModal(idx){
   const s=SEG[idx], fin=spinsLeft===0;
