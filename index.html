@@ -17,65 +17,66 @@ body{font-family:'Nunito',sans-serif;background:#F8F4F4;min-height:100vh;
 
 header{width:100%;max-width:460px;padding:26px 22px 0;text-align:center;position:relative;z-index:1}
 .logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:3px}
-.logo-ico{width:40px;height:40px;background:linear-gradient(135deg,var(--red),var(--red3));
-  border-radius:11px;display:flex;align-items:center;justify-content:center;
-  font-size:20px;box-shadow:0 4px 14px rgba(232,25,44,.3)}
-.logo-name{font-family:'Unbounded',sans-serif;font-size:19px;font-weight:900;color:var(--dark)}
-.logo-name span{color:var(--red)}
+.logo-ico{width:40px;height:40px;background:linear-gradient(135deg,var(–red),var(–red3));
+border-radius:11px;display:flex;align-items:center;justify-content:center;
+font-size:20px;box-shadow:0 4px 14px rgba(232,25,44,.3)}
+.logo-name{font-family:‘Unbounded’,sans-serif;font-size:19px;font-weight:900;color:var(–dark)}
+.logo-name span{color:var(–red)}
 .logo-sub{font-size:12px;color:#aaa;font-weight:700}
 .spins{margin:16px auto 0;display:flex;align-items:center;gap:10px;background:#fff;
-  border-radius:50px;padding:9px 18px;width:fit-content;box-shadow:0 2px 14px rgba(0,0,0,.06)}
+border-radius:50px;padding:9px 18px;width:fit-content;box-shadow:0 2px 14px rgba(0,0,0,.06)}
 .spins-lbl{font-size:12px;font-weight:800;color:#bbb}
 .dots{display:flex;gap:6px}
-.dot{width:11px;height:11px;border-radius:50%;background:var(--red);
-  box-shadow:0 2px 5px rgba(232,25,44,.35);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.dot{width:11px;height:11px;border-radius:50%;background:var(–red);
+box-shadow:0 2px 5px rgba(232,25,44,.35);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
 .dot.off{background:#E0E0E0;box-shadow:none;transform:scale(.7)}
 
 main{width:100%;max-width:460px;padding:16px 18px 50px;
-  display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
+display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
 .headline{text-align:center;margin-bottom:14px}
-.headline h1{font-family:'Unbounded',sans-serif;font-size:clamp(15px,4.2vw,20px);
-  font-weight:900;color:var(--dark);line-height:1.3}
-.headline h1 em{font-style:normal;color:var(--red)}
+.headline h1{font-family:‘Unbounded’,sans-serif;font-size:clamp(15px,4.2vw,20px);
+font-weight:900;color:var(–dark);line-height:1.3}
+.headline h1 em{font-style:normal;color:var(–red)}
 .headline p{font-size:12px;color:#bbb;font-weight:700;margin-top:5px}
 
-.jbanner{width:100%;background:linear-gradient(135deg,var(--red) 0%,#FF5C35 100%);
-  border-radius:16px;padding:13px 16px;display:flex;align-items:center;gap:13px;
-  margin-bottom:20px;box-shadow:0 8px 26px rgba(232,25,44,.28);overflow:hidden;position:relative}
-.jbanner::after{content:'';position:absolute;top:-25px;right:-15px;
-  width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07)}
+.jbanner{width:100%;background:linear-gradient(135deg,var(–red) 0%,#FF5C35 100%);
+border-radius:16px;padding:13px 16px;display:flex;align-items:center;gap:13px;
+margin-bottom:20px;box-shadow:0 8px 26px rgba(232,25,44,.28);overflow:hidden;position:relative}
+.jbanner::after{content:’’;position:absolute;top:-25px;right:-15px;
+width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07)}
 .jico{font-size:36px;flex-shrink:0;animation:jb 2.5s ease-in-out infinite}
 @keyframes jb{0%,100%{transform:rotate(-6deg) scale(1)}50%{transform:rotate(6deg) scale(1.1)}}
 .jlbl{font-size:10px;font-weight:800;color:rgba(255,255,255,.7);letter-spacing:1.8px;text-transform:uppercase}
-.jmain{font-family:'Unbounded',sans-serif;font-size:clamp(13px,3.8vw,16px);font-weight:900;color:#fff;line-height:1.2}
+.jmain{font-family:‘Unbounded’,sans-serif;font-size:clamp(13px,3.8vw,16px);font-weight:900;color:#fff;line-height:1.2}
 .jsub{font-size:11px;color:rgba(255,255,255,.8);font-weight:700;margin-top:2px}
 
 .wheel-wrap{position:relative;width:min(320px,84vw);height:min(320px,84vw);margin-bottom:20px}
 canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
-  box-shadow:0 0 0 5px #fff,0 0 0 9px rgba(232,25,44,.13),0 18px 50px rgba(0,0,0,.14)}
+box-shadow:0 0 0 5px #fff,0 0 0 9px rgba(232,25,44,.13),0 18px 50px rgba(0,0,0,.14)}
 .ptr{position:absolute;top:-4px;left:50%;transform:translateX(-50%);
-  z-index:10;display:flex;flex-direction:column;align-items:center}
-.ptr-ball{width:17px;height:17px;background:var(--red);border-radius:50%;
-  border:3px solid #fff;box-shadow:0 3px 9px rgba(232,25,44,.45)}
+z-index:10;display:flex;flex-direction:column;align-items:center}
+.ptr-ball{width:17px;height:17px;background:var(–red);border-radius:50%;
+border:3px solid #fff;box-shadow:0 3px 9px rgba(232,25,44,.45)}
 .ptr-tri{width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;
-  border-top:20px solid var(--red);filter:drop-shadow(0 3px 4px rgba(232,25,44,.35));margin-top:-2px}
+border-top:20px solid var(–red);filter:drop-shadow(0 3px 4px rgba(232,25,44,.35));margin-top:-2px}
 .cbtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:60px;height:60px;border-radius:50%;background:#fff;
-  border:3px solid rgba(232,25,44,.12);cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.1);transition:transform .2s;font-family:'Nunito',sans-serif}
+width:60px;height:60px;border-radius:50%;background:#fff;
+border:3px solid rgba(232,25,44,.12);cursor:pointer;
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.1);transition:transform .2s;font-family:inherit}
 .cbtn:hover{transform:translate(-50%,-50%) scale(1.1)}
 .cbtn:active{transform:translate(-50%,-50%) scale(.92)}
 .cbtn:disabled{opacity:.4;cursor:not-allowed}
-.cbtn .ci{font-size:23px}.cbtn .ct{font-size:9px;font-weight:900;color:var(--red);margin-top:1px}
+.cbtn .ci{font-size:23px}.cbtn .ct{font-size:9px;font-weight:900;color:var(–red);margin-top:1px;
+font-family:‘Nunito’,sans-serif}
 
-.spinbtn{width:100%;max-width:300px;background:linear-gradient(135deg,var(--red),#FF5C35);
-  color:#fff;border:none;border-radius:14px;padding:16px 22px;
-  font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;cursor:pointer;
-  box-shadow:0 8px 26px rgba(232,25,44,.36);transition:all .2s;position:relative;overflow:hidden}
-.spinbtn::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
-  animation:shine 3s ease-in-out infinite}
+.spinbtn{width:100%;max-width:300px;background:linear-gradient(135deg,var(–red),#FF5C35);
+color:#fff;border:none;border-radius:14px;padding:16px 22px;
+font-family:‘Unbounded’,sans-serif;font-size:14px;font-weight:700;cursor:pointer;
+box-shadow:0 8px 26px rgba(232,25,44,.36);transition:all .2s;position:relative;overflow:hidden}
+.spinbtn::before{content:’’;position:absolute;top:0;left:-100%;width:60%;height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+animation:shine 3s ease-in-out infinite}
 @keyframes shine{0%{left:-100%}40%,100%{left:150%}}
 .spinbtn:hover{transform:translateY(-3px);box-shadow:0 12px 34px rgba(232,25,44,.44)}
 .spinbtn:active{transform:translateY(1px)}
@@ -83,47 +84,47 @@ canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
 .done-msg{display:none;margin-top:12px;font-size:13px;color:#bbb;font-weight:700;text-align:center}
 
 .overlay{display:none;position:fixed;inset:0;background:rgba(12,5,7,.6);
-  backdrop-filter:blur(8px);z-index:100;justify-content:center;align-items:flex-end}
+backdrop-filter:blur(8px);z-index:100;justify-content:center;align-items:flex-end}
 .overlay.show{display:flex}
 .sheet{background:#fff;border-radius:26px 26px 0 0;width:100%;max-width:460px;
-  max-height:88vh;overflow-y:auto;animation:shup .38s cubic-bezier(.34,1.3,.64,1);
-  padding-bottom:env(safe-area-inset-bottom,20px)}
+max-height:88vh;overflow-y:auto;animation:shup .38s cubic-bezier(.34,1.3,.64,1);
+padding-bottom:env(safe-area-inset-bottom,20px)}
 @keyframes shup{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
 .handle{width:36px;height:4px;background:#EBEBEB;border-radius:2px;margin:13px auto 0}
 .si{padding:16px 20px 24px}
 .m-emoji{font-size:54px;text-align:center;display:block;margin-bottom:5px}
-.m-tag{display:inline-block;background:var(--pale);color:var(--red);font-size:10px;
-  font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;
-  border-radius:50px;margin-bottom:7px}
-.m-title{font-family:'Unbounded',sans-serif;font-size:clamp(16px,4.5vw,21px);
-  font-weight:900;color:var(--dark);line-height:1.25;margin-bottom:10px}
-.m-title.red{color:var(--red)}
+.m-tag{display:inline-block;background:var(–pale);color:var(–red);font-size:10px;
+font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;
+border-radius:50px;margin-bottom:7px}
+.m-title{font-family:‘Unbounded’,sans-serif;font-size:clamp(16px,4.5vw,21px);
+font-weight:900;color:var(–dark);line-height:1.25;margin-bottom:10px}
+.m-title.red{color:var(–red)}
 .promo{background:linear-gradient(135deg,#FFF5F6,#FFF0F2);
-  border:2px dashed rgba(232,25,44,.22);border-radius:13px;padding:12px 16px;
-  text-align:center;margin:8px 0 12px;cursor:pointer;transition:border-color .18s}
-.promo:hover{border-color:var(--red)}
-.pcode{font-family:'Unbounded',sans-serif;font-size:21px;font-weight:900;color:var(--red);letter-spacing:4px}
+border:2px dashed rgba(232,25,44,.22);border-radius:13px;padding:12px 16px;
+text-align:center;margin:8px 0 12px;cursor:pointer;transition:border-color .18s}
+.promo:hover{border-color:var(–red)}
+.pcode{font-family:‘Unbounded’,sans-serif;font-size:21px;font-weight:900;color:var(–red);letter-spacing:4px}
 .phint{font-size:11px;color:#bbb;font-weight:700;margin-top:3px;display:block}
-.m-desc{font-size:13px;color:var(--mid);line-height:1.65;font-weight:700;margin-bottom:11px}
+.m-desc{font-size:13px;color:var(–mid);line-height:1.65;font-weight:700;margin-bottom:11px}
 .divider{height:1px;background:#F0F0F0;margin:11px 0}
 .adcard{background:linear-gradient(135deg,#FFF5F6,#FFF8F0);border-radius:14px;
-  padding:13px 15px;margin-bottom:16px;border-left:3px solid var(--red)}
-.adcard-ttl{font-size:11px;font-weight:900;color:var(--red);text-transform:uppercase;
-  letter-spacing:.8px;margin-bottom:5px}
-.adcard p{font-size:13px;color:var(--mid);line-height:1.6;font-weight:700}
-.adcard p strong{color:var(--dark)}
-.spins-badge{display:inline-flex;align-items:center;gap:5px;background:var(--pale);
-  border-radius:50px;padding:5px 13px;font-size:12px;font-weight:900;color:var(--red);margin-bottom:13px}
+padding:13px 15px;margin-bottom:16px;border-left:3px solid var(–red)}
+.adcard-ttl{font-size:11px;font-weight:900;color:var(–red);text-transform:uppercase;
+letter-spacing:.8px;margin-bottom:5px}
+.adcard p{font-size:13px;color:var(–mid);line-height:1.6;font-weight:700}
+.adcard p strong{color:var(–dark)}
+.spins-badge{display:inline-flex;align-items:center;gap:5px;background:var(–pale);
+border-radius:50px;padding:5px 13px;font-size:12px;font-weight:900;color:var(–red);margin-bottom:13px}
 .actions{display:flex;flex-direction:column;gap:10px}
-.btn-take{width:100%;background:linear-gradient(135deg,var(--red),#FF5C35);color:#fff;
-  border:none;border-radius:13px;padding:15px;font-family:'Unbounded',sans-serif;
-  font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(232,25,44,.3);transition:all .2s}
+.btn-take{width:100%;background:linear-gradient(135deg,var(–red),#FF5C35);color:#fff;
+border:none;border-radius:13px;padding:15px;font-family:‘Unbounded’,sans-serif;
+font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(232,25,44,.3);transition:all .2s}
 .btn-take:hover{transform:translateY(-2px)}
-.btn-respin{width:100%;background:#fff;color:var(--mid);border:2px solid #E8E8E8;
-  border-radius:13px;padding:13px;font-family:'Nunito',sans-serif;font-size:14px;
-  font-weight:800;cursor:pointer;transition:all .2s}
-.btn-respin:hover{border-color:#ccc;color:var(--dark)}
-.respin-warn{font-size:11px;color:var(--red);font-weight:700;text-align:center;margin-top:-4px;opacity:.75}
+.btn-respin{width:100%;background:#fff;color:var(–mid);border:2px solid #E8E8E8;
+border-radius:13px;padding:13px;font-family:‘Nunito’,sans-serif;font-size:14px;
+font-weight:800;cursor:pointer;transition:all .2s}
+.btn-respin:hover{border-color:#ccc;color:var(–dark)}
+.respin-warn{font-size:11px;color:var(–red);font-weight:700;text-align:center;margin-top:-4px;opacity:.8}
 .cp{position:fixed;top:-20px;opacity:0;pointer-events:none;z-index:9999;border-radius:2px}
 </style>
 
@@ -133,10 +134,10 @@ canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
 
 <header>
   <div class="logo">
-    <div class="logo-ico"> ⚡️</div>
-    <div class="logo-name">ШАГАЙ<span> ДОМА</span></div>
+    <div class="logo-ico">🚶‍♀️</div>
+    <div class="logo-name">Шагай<span>Дома</span></div>
   </div>
-  <div class="logo-sub">Клуб домашних тренировок для стройности и здоровья</div>
+  <div class="logo-sub">Клуб ходьбы для стройности и здоровья</div>
   <div class="spins">
     <span class="spins-lbl">Осталось вращений</span>
     <div class="dots">
@@ -167,9 +168,7 @@ canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
       <span class="ci">🍀</span><span class="ct">КРУТИ!</span>
     </button>
   </div>
-
-<button class="spinbtn" id="sbtn" onclick="spin()">🎯 Крутить колесо!</button>
-
+  <button class="spinbtn" id="sbtn" onclick="spin()">🎯 Крутить колесо!</button>
   <div class="done-msg" id="doneMsg">Вращения закончились. Спасибо! 🎉</div>
 </main>
 
@@ -199,58 +198,50 @@ canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
 </div>
 
 <script>
-// ─── DATA ─────────────────────────────────────────────────────────────────────
-// label: short lines shown on the wheel (2 lines max for clarity)
 const SEG = [
-  { label:'Скидка\n20%',           emoji:'🏷️', bg:'#E8192C', fg:'#fff',
-    prize:'Скидка 20% на абонемент!', promo:'ШАГАЙ20',
-    desc:'Промокод на 20% скидку активен 48 часов. Введи его при оформлении любого абонемента.',
-    w:25, isFinal:true },
-  { label:'Меню\nклуба PDF',       emoji:'📋', bg:'#FF6B35', fg:'#fff',
+  { label:['Скидка','20%'],               emoji:'🏷️', bg:'#E8192C', fg:'#fff',
+    prize:'Скидка 20% на абонемент!',      promo:'LUCKY',
+    desc:'Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.',
+    w:25, isFinal:true, isDiscount:true },
+  { label:['Меню','клуба PDF'],            emoji:'📋', bg:'#FF6B35', fg:'#fff',
     prize:'Меню клуба — PDF-гид!',
     desc:'Полный гид: тренировки, форматы, расписание. Ссылка придёт на почту.',
     w:20 },
-  { label:'Бесплатная\nтренировка',emoji:'🎽', bg:'#FF4D5E', fg:'#fff',
+  { label:['Бесплатная','тренировка'],     emoji:'🎽', bg:'#FF4D5E', fg:'#fff',
     prize:'Бесплатная тренировка!',
     desc:'Ты выиграла одну бесплатную тренировку! Напиши нам, чтобы активировать подарок.',
     w:18 },
-  { label:'✨Бесплатный\nабонемент', emoji:'🏆', bg:'#F5A623', fg:'#3D2000',
+  { label:['✨ Бесплатный','абонемент'],   emoji:'🏆', bg:'#F5A623', fg:'#3D2000',
     prize:'🏆 Бесплатный абонемент!',
     desc:'Невероятно! Ты выиграла бесплатный абонемент! Напиши нам в директ — активируем сразу.',
     w:3, isJackpot:true },
-  { label:'Секретный\nтариф 🕵️',   emoji:'🕵️', bg:'#C01020', fg:'#fff',
+  { label:['Секретный','тариф 🕵️'],       emoji:'🕵️', bg:'#C01020', fg:'#fff',
     prize:'Секретный тариф — 1 месяц!',
     desc:'Закрытый тариф, которого нет в продаже! Спец. условия на 1 месяц. Напиши нам.',
     w:10 },
-  { label:'Секретный\nтариф НАВСЕГДА',emoji:'🔑', bg:'#D4162A', fg:'#fff',
+  { label:['Секретный тариф','НАВСЕГДА'], emoji:'🔑', bg:'#D4162A', fg:'#fff',
     prize:'Секретный тариф НАВСЕГДА!',
     desc:'Уникальный тариф — доступ навсегда на особых условиях! Только для победителей.',
     w:8 },
-  { label:'Крути\nещё раз! 🔄',    emoji:'🔄', bg:'#FFD166', fg:'#5A3A00',
+  { label:['Крути','ещё раз! 🔄'],        emoji:'🔄', bg:'#FFD166', fg:'#5A3A00',
     prize:'Крути ещё раз!',
     desc:'Не повезло — но удача близко! Можешь крутить снова 🎯',
     w:16, isRetry:true },
 ];
 
 const ADS=[
-  'В <strong>Шагай Дома</strong> уже занимаются <strong>10&thinsp;000 женщин</strong> из России, Европы, США и со всего мира — каждый день они худеют на шагах прямо дома.',
-  '<strong>10&thinsp;000 шагательниц</strong> уже в пути! Тренируются дома, видят результат и поддерживают друг друга. Присоединяйся!',
-  'Ходьба — это наука стройности. В <strong>Шагай Дома</strong> мы превратили её в праздник движения. <strong>10&thinsp;000 женщин</strong> уже убедились!',
-  '<strong>Шагай Дома</strong> — сообщество <strong>10&thinsp;000 женщин</strong> со всего мира, которые худеют и вдохновляют друг друга каждый день.',
+  'В <strong>Шагай Дома</strong> уже занимаются <strong>10\u202f000 женщин</strong> из России, Европы, США и со всего мира — каждый день они худеют на шагах прямо дома.',
+  '<strong>10\u202f000 шагательниц</strong> уже в пути! Тренируются дома, видят результат и поддерживают друг друга. Присоединяйся!',
+  'Ходьба — это наука стройности. В <strong>Шагай Дома</strong> мы превратили её в праздник движения. <strong>10\u202f000 женщин</strong> уже убедились!',
+  '<strong>Шагай Дома</strong> — сообщество <strong>10\u202f000 женщин</strong> со всего мира, которые худеют и вдохновляют друг друга.',
 ];
-const FINAL_AD='Это твой <strong>шанс начать новую жизнь!</strong> Десятки тренировок, <strong>10&thinsp;000 женщин-единомышленниц</strong> со всего мира, первый результат через 2–3 недели — всё прямо дома! <strong>Промокод действует 48 часов!</strong>';
+const FINAL_AD='Это твой <strong>шанс начать новую жизнь!</strong> Десятки тренировок, <strong>10\u202f000 женщин-единомышленниц</strong> со всего мира, первый результат через 2–3 недели — всё прямо дома! <strong>Промокод действует 48 часов!</strong>';
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
 let spinsLeft=5, busy=false, rot=0, spinNum=0, lastCode='';
 const N=SEG.length, ARC=2*Math.PI/N;
-
-// ─── CANVAS SETUP ─────────────────────────────────────────────────────────────
 const CV=document.getElementById('wc');
 const ctx=CV.getContext('2d');
 const SZ=640, CX=SZ/2, CY=SZ/2, R=SZ/2-10;
-
-// Pre-load font so canvas text renders correctly
-document.fonts.load('900 20px Nunito').then(()=>drawWheel(rot));
 
 // ─── DRAW ─────────────────────────────────────────────────────────────────────
 function drawWheel(r) {
@@ -259,15 +250,14 @@ function drawWheel(r) {
   for (let i=0; i<N; i++) {
     const s = SEG[i];
 
-    // Segment i center angle (0 = top, going clockwise)
-    // We define rot=0 → segment 0 is at top.
-    // Canvas 0 = right (3 o'clock). Top = -π/2.
-    const center = r - Math.PI/2 + i*ARC;
-    const a0 = center - ARC/2;
-    const a1 = center + ARC/2;
+    // angle of segment i center, measured from 12 o'clock (top), clockwise
+    // canvas 0 = 3 o'clock, top = -π/2
+    // segment i center in canvas coords: r - π/2 + i*ARC
+    const segAngle = r - Math.PI/2 + i*ARC;
+    const a0 = segAngle - ARC/2;
+    const a1 = segAngle + ARC/2;
 
-    // ── fill segment ──
-    ctx.save();
+    // ── draw sector ──
     ctx.beginPath();
     ctx.moveTo(CX,CY);
     ctx.arc(CX,CY,R,a0,a1);
@@ -288,55 +278,63 @@ function drawWheel(r) {
     ctx.beginPath(); ctx.moveTo(CX,CY);
     ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
     ctx.strokeStyle='rgba(255,255,255,.5)'; ctx.lineWidth=2.5; ctx.stroke();
-    ctx.restore();
 
-    // ── TEXT: clip to segment, draw horizontally ──
+    // ── TEXT ──
+    // Strategy: save/translate to center of wheel, rotate by segAngle so
+    // the segment's bisector points UP (negative Y in rotated frame).
+    // Then draw text lines at increasing positive Y (going toward rim).
+    // Each line is drawn horizontally centered at x=0.
+    // Result: text reads left-to-right when you rotate the wheel so that
+    // segment faces up — exactly how real prize wheels look.
+
     ctx.save();
+    ctx.translate(CX, CY);
+    // After this rotation, "outward along segment" = +Y direction
+    ctx.rotate(segAngle + Math.PI/2);
 
-    // Clip to this segment so text doesn't bleed over
+    // Clip to this segment so text stays inside
     ctx.beginPath();
-    ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1);
+    ctx.moveTo(0, 0);
+    // Arc in rotated space: still need the original arc angles
+    // Easier: just use a large clip rect and rely on the segment being narrow
+    // Actually clip properly by redrawing sector in rotated coords:
+    ctx.arc(0, 0, R, a0 - (segAngle + Math.PI/2), a1 - (segAngle + Math.PI/2));
     ctx.closePath();
     ctx.clip();
 
-    // Text anchor point: midway between center (40%) and rim (75%)
-    const tR = R * 0.56;  // distance from wheel center to text center
-    const tx = CX + tR * Math.cos(center);
-    const ty = CY + tR * Math.sin(center);
+    const lines = s.label;
+    const fs = Math.max(16, Math.round(R * 0.068));
+    const lh = fs * 1.28;
+    const totalH = (lines.length - 1) * lh;
 
-    // Rotate canvas so text reads "outward" along the segment's radius.
-    // After rotating by `center + π/2`, the Y axis points outward
-    // and text written horizontally will read from inside to outside.
-    ctx.translate(tx, ty);
-    ctx.rotate(center + Math.PI/2);
+    // Position text block: center it between 20% and 70% of radius
+    const midR = R * 0.44;
 
-    const lines = s.label.split('\n');
-    const fs = Math.max(15, Math.round(R * 0.068));
-    const lh = fs * 1.30;
-    ctx.font = `900 ${fs}px 'Nunito', sans-serif`;
+    ctx.font = `bold ${fs}px Arial, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = s.fg;
     ctx.shadowColor = 'rgba(0,0,0,.3)';
-    ctx.shadowBlur = 4;
+    ctx.shadowBlur = 3;
 
-    const totalH = (lines.length - 1) * lh;
     lines.forEach((line, li) => {
-      ctx.fillText(line, 0, -totalH/2 + li*lh);
+      // y goes outward (positive = toward rim in this rotated frame)
+      const y = midR - totalH/2 + li * lh;
+      ctx.fillText(line, 0, y);
     });
 
     ctx.restore();
 
     // ── EMOJI near rim ──
-    const eR = R * 0.83;
-    const ex = CX + eR * Math.cos(center);
-    const ey = CY + eR * Math.sin(center);
+    const eR = R * 0.82;
+    const ex = CX + eR * Math.cos(segAngle);
+    const ey = CY + eR * Math.sin(segAngle);
     ctx.save();
     ctx.translate(ex, ey);
-    ctx.rotate(center + Math.PI/2);
-    ctx.font = `${Math.round(R*0.082)}px serif`;
+    ctx.rotate(segAngle + Math.PI/2);
+    ctx.font = `${Math.round(R*0.09)}px serif`;
     ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.shadowColor='rgba(0,0,0,.15)'; ctx.shadowBlur=2;
     ctx.fillText(s.emoji, 0, 0);
     ctx.restore();
   }
@@ -354,11 +352,11 @@ function drawWheel(r) {
 drawWheel(rot);
 
 // ─── PICK ─────────────────────────────────────────────────────────────────────
-function pickIdx() {
-  if (spinsLeft===1) return SEG.findIndex(s=>s.isFinal);
+function pickIdx(){
+  if(spinsLeft===1) return SEG.findIndex(s=>s.isFinal);
   const pool=[];
   SEG.forEach((s,i)=>{
-    if(s.isJackpot && spinsLeft>2) return;
+    if(s.isJackpot&&spinsLeft>2) return;
     for(let j=0;j<s.w;j++) pool.push(i);
   });
   return pool[Math.floor(Math.random()*pool.length)];
@@ -368,22 +366,18 @@ function pickIdx() {
 function spin(){
   if(busy||spinsLeft<=0) return;
   busy=true; btnOff();
-
   const ti=pickIdx();
 
-  // Target: segment ti center lands at top.
-  // Segment i center canvas angle = rot - π/2 + i*ARC
-  // We want that = -π/2 (top)
-  // → rot = -i*ARC → normalised:
-  const targetRot = ((-ti*ARC) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+  // Want segment ti at top after spin.
+  // Segment i center in canvas = r - π/2 + i*ARC
+  // For it to be at top (-π/2): r - π/2 + ti*ARC = -π/2  →  r = -ti*ARC
+  const targetRot = ((-ti*ARC)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
   const jitter = (Math.random()-.5)*ARC*0.55;
-  const targetJ = (targetRot + jitter + 2*Math.PI) % (2*Math.PI);
-
+  const targetJ = (targetRot+jitter+2*Math.PI)%(2*Math.PI);
   const curNorm = ((rot%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
-  let delta = ((targetJ - curNorm)+2*Math.PI)%(2*Math.PI);
+  let delta = ((targetJ-curNorm)+2*Math.PI)%(2*Math.PI);
   if(delta<0.4) delta+=2*Math.PI;
-
-  const total = (5+Math.floor(Math.random()*4))*2*Math.PI + delta;
+  const total=(5+Math.floor(Math.random()*4))*2*Math.PI+delta;
   const startRot=rot, dur=4200+Math.random()*1100, t0=performance.now();
   function ease(t){return 1-Math.pow(1-t,3.8)}
 
@@ -392,13 +386,11 @@ function spin(){
     rot=startRot+total*ease(t);
     drawWheel(rot);
     if(t<1){requestAnimationFrame(go);return}
-
     busy=false; spinNum++; spinsLeft--;
     updateDots();
-
     if(SEG[ti].isRetry){
       if(spinsLeft>0){toast('🔄 Крути ещё раз! Удача близко!');btnOn();}
-      else{const fi=SEG.findIndex(s=>s.isFinal);showModal(fi);}
+      else{showModal(SEG.findIndex(s=>s.isFinal));}
     } else {
       showModal(ti);
       if(spinsLeft>0) btnOn();
@@ -411,50 +403,121 @@ function spin(){
 }
 
 function btnOff(){['sbtn','cbtn'].forEach(id=>document.getElementById(id).disabled=true)}
-function btnOn() {['sbtn','cbtn'].forEach(id=>document.getElementById(id).disabled=false)}
+function btnOn(){['sbtn','cbtn'].forEach(id=>document.getElementById(id).disabled=false)}
 function updateDots(){
   const used=5-spinsLeft;
   for(let i=1;i<=5;i++) document.getElementById('d'+i).classList.toggle('off',i<=used);
 }
 
 // ─── MODAL ────────────────────────────────────────────────────────────────────
+// НАСТРОЙКИ — замени на свои!
+const FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORMSPREE_ID'; // зарегистрируйся на formspree.io
+const BUY_URL = 'https://ВАШ_САЙТ/купить'; // ссылка на страницу покупки
+
 function showModal(idx){
-  const s=SEG[idx], isFinalSpin=spinsLeft===0;
+  const s=SEG[idx], fin=spinsLeft===0;
   document.getElementById('mEmoji').textContent=s.emoji;
-  document.getElementById('mTag').textContent=isFinalSpin?'🎊 Последнее вращение!':'🎉 Поздравляем!';
+  document.getElementById('mTag').textContent=fin?'🎊 Последнее вращение!':'🎉 Поздравляем!';
   const tel=document.getElementById('mTitle');
-  tel.textContent=s.prize; tel.className='m-title'+(s.isJackpot||isFinalSpin?' red':'');
+  tel.textContent=s.prize; tel.className='m-title'+(s.isJackpot||fin?' red':'');
+
+  // Показываем промокод только для скидки (не для джекпота)
   const pel=document.getElementById('mPromo');
-  if(s.promo||isFinalSpin){
-    pel.style.display='block';
-    lastCode=isFinalSpin?'ШАГАЙ20':s.promo;
+  if((s.promo||fin) && !s.isJackpot){
+    pel.style.display='block'; lastCode=fin?'LUCKY':s.promo;
     document.getElementById('mCode').textContent=lastCode;
   } else pel.style.display='none';
+
   document.getElementById('mDesc').textContent=s.desc;
-  document.getElementById('mAd').innerHTML=isFinalSpin?FINAL_AD:ADS[spinNum%ADS.length];
+  document.getElementById('mAd').innerHTML=fin?FINAL_AD:ADS[spinNum%ADS.length];
+
   const badge=document.getElementById('mBadge');
   if(spinsLeft>0){
     badge.style.display='inline-flex';
     document.getElementById('mBadgeTxt').textContent=`Ещё ${spinsLeft} вращени${spinsLeft===1?'е':'я'}`;
   } else badge.style.display='none';
 
-  const acts=document.getElementById('mActions');
-  acts.innerHTML='';
-  const bt=document.createElement('button'); bt.className='btn-take';
-  bt.textContent=isFinalSpin?'🚀 Забрать промокод и войти в клуб!':s.isJackpot?'🏆 Забрать абонемент!':'✅ Забрать приз!';
-  bt.onclick=()=>closeModal(false); acts.appendChild(bt);
+  const acts=document.getElementById('mActions'); acts.innerHTML='';
 
-  if(spinsLeft>0&&!isFinalSpin){
+  // ── ДЖЕКПОТ: форма для сбора email ──
+  if(s.isJackpot){
+    acts.innerHTML=`
+      <div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:800;color:var(--dark);margin-bottom:10px;line-height:1.5">
+          📧 Оставь свою почту — мы активируем твой бесплатный абонемент и пришлём всё на email:
+        </div>
+        <input id="jackpotEmail" type="email" placeholder="твоя@почта.ru"
+          style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;
+          font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;outline:none;
+          box-sizing:border-box;margin-bottom:10px;transition:border-color .2s"
+          onfocus="this.style.borderColor='#E8192C'" onblur="this.style.borderColor='#E8E8E8'">
+        <button onclick="submitJackpot()"
+          style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;
+          border:none;border-radius:11px;padding:14px;font-family:'Unbounded',sans-serif;
+          font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">
+          🏆 Получить бесплатный абонемент!
+        </button>
+        <div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div>
+      </div>`;
+
+  // ── СКИДКА (включая гарантированную на 5-м вращении): промокод + кнопка на сайт ──
+  } else if(s.isDiscount||fin){
+    const bt=document.createElement('button'); bt.className='btn-take';
+    bt.innerHTML='🛒 Перейти к покупке со скидкой 20%';
+    bt.onclick=()=>{ window.open(BUY_URL,'_blank'); closeModal(); };
+    acts.appendChild(bt);
+
+  // ── ОСТАЛЬНЫЕ ПРИЗЫ ──
+  } else {
+    const bt=document.createElement('button'); bt.className='btn-take';
+    bt.textContent='✅ Забрать приз!';
+    bt.onclick=()=>closeModal(); acts.appendChild(bt);
+  }
+
+  // Кнопка "крутить ещё раз" (не показываем для джекпота и последнего вращения)
+  if(spinsLeft>0 && !fin && !s.isJackpot){
     const br=document.createElement('button'); br.className='btn-respin';
     br.textContent=`🎯 Крутить ещё раз (${spinsLeft} вращени${spinsLeft===1?'е':'я'})`;
     br.onclick=()=>closeModal(true); acts.appendChild(br);
     const w=document.createElement('div'); w.className='respin-warn';
-    w.textContent='⚠️ Если крутишь снова — текущий приз сгорает!';
-    acts.appendChild(w);
+    w.textContent='⚠️ Если крутишь снова — текущий приз сгорает!'; acts.appendChild(w);
   }
 
   document.getElementById('overlay').classList.add('show');
-  if(s.isJackpot||isFinalSpin) confetti();
+  if(s.isJackpot||fin) confetti();
+}
+
+function submitJackpot(){
+  const email=document.getElementById('jackpotEmail').value.trim();
+  const status=document.getElementById('jackpotStatus');
+  if(!email||!email.includes('@')||!email.includes('.')){
+    status.style.color='#E8192C';
+    status.textContent='Пожалуйста, введи корректный email 📧';
+    return;
+  }
+  status.style.color='#aaa';
+  status.textContent='Отправляем...';
+  fetch(FORMSPREE_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({email, prize:'🏆 Бесплатный абонемент', source:'Колесо удачи ШагайДома'})
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    if(data.ok){
+      document.getElementById('jackpotEmail').style.display='none';
+      document.querySelector('[onclick="submitJackpot()"]').style.display='none';
+      status.style.color='#22aa55'; status.style.fontSize='14px';
+      status.textContent='🎉 Готово! Мы скоро напишем тебе на почту!';
+    } else {
+      status.style.color='#E8192C';
+      status.textContent='Что-то пошло не так. Попробуй ещё раз.';
+    }
+  })
+  .catch(()=>{
+    status.style.color='#E8192C';
+    status.textContent='Ошибка сети. Напиши нам напрямую.';
+  });
 }
 
 function closeModal(respin){
@@ -462,12 +525,12 @@ function closeModal(respin){
 }
 function copyCode(){
   navigator.clipboard.writeText(lastCode).catch(()=>{});
-  const el=document.getElementById('mCode'),orig=el.textContent;
-  el.textContent='✅ Скопировано!'; setTimeout(()=>el.textContent=orig,2000);
+  const el=document.getElementById('mCode'),o=el.textContent;
+  el.textContent='✅ Скопировано!'; setTimeout(()=>el.textContent=o,2000);
 }
 function toast(msg){
   const t=document.createElement('div');
-  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;border-radius:50px;padding:11px 20px;font-family:Nunito,sans-serif;font-size:14px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;';
+  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;border-radius:50px;padding:11px 20px;font-family:inherit;font-size:14px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;';
   t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2400);
 }
 function confetti(){
