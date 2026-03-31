@@ -1,11 +1,14 @@
-<!DOCTYPE html><html lang="ru">
+<!DOCTYPE html>
+
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Колесо Удачи — Шагай Дома</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
-<style>*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:‘Nunito’,sans-serif;background:#F8F4F4;min-height:100vh;
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:#F8F4F4;min-height:100vh;
 display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
 .blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:.08;pointer-events:none;z-index:0}
 .b1{width:500px;height:500px;background:#E8192C;top:-140px;right:-120px}
@@ -15,7 +18,7 @@ header{width:100%;max-width:460px;padding:26px 22px 0;text-align:center;position
 .logo-ico{width:40px;height:40px;background:linear-gradient(135deg,#E8192C,#FF4D5E);
 border-radius:11px;display:flex;align-items:center;justify-content:center;
 font-size:20px;box-shadow:0 4px 14px rgba(232,25,44,.3)}
-.logo-name{font-family:‘Unbounded’,sans-serif;font-size:19px;font-weight:900;color:#1A1A2E}
+.logo-name{font-family:'Unbounded',sans-serif;font-size:19px;font-weight:900;color:#1A1A2E}
 .logo-name span{color:#E8192C}
 .logo-sub{font-size:12px;color:#aaa;font-weight:700}
 .spins{margin:16px auto 0;display:flex;align-items:center;gap:10px;background:#fff;
@@ -28,19 +31,19 @@ box-shadow:0 2px 5px rgba(232,25,44,.35);transition:all .4s cubic-bezier(.34,1.5
 main{width:100%;max-width:460px;padding:16px 18px 50px;
 display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
 .headline{text-align:center;margin-bottom:14px}
-.headline h1{font-family:‘Unbounded’,sans-serif;font-size:clamp(15px,4.2vw,20px);
+.headline h1{font-family:'Unbounded',sans-serif;font-size:clamp(15px,4.2vw,20px);
 font-weight:900;color:#1A1A2E;line-height:1.3}
 .headline h1 em{font-style:normal;color:#E8192C}
 .headline p{font-size:12px;color:#bbb;font-weight:700;margin-top:5px}
 .jbanner{width:100%;background:linear-gradient(135deg,#E8192C 0%,#FF5C35 100%);
 border-radius:16px;padding:13px 16px;display:flex;align-items:center;gap:13px;
 margin-bottom:20px;box-shadow:0 8px 26px rgba(232,25,44,.28);overflow:hidden;position:relative}
-.jbanner::after{content:’’;position:absolute;top:-25px;right:-15px;
+.jbanner::after{content:'';position:absolute;top:-25px;right:-15px;
 width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07)}
 .jico{font-size:36px;flex-shrink:0;animation:jb 2.5s ease-in-out infinite}
 @keyframes jb{0%,100%{transform:rotate(-6deg) scale(1)}50%{transform:rotate(6deg) scale(1.1)}}
 .jlbl{font-size:10px;font-weight:800;color:rgba(255,255,255,.7);letter-spacing:1.8px;text-transform:uppercase}
-.jmain{font-family:‘Unbounded’,sans-serif;font-size:clamp(13px,3.8vw,16px);font-weight:900;color:#fff;line-height:1.2}
+.jmain{font-family:'Unbounded',sans-serif;font-size:clamp(13px,3.8vw,16px);font-weight:900;color:#fff;line-height:1.2}
 .jsub{font-size:11px;color:rgba(255,255,255,.8);font-weight:700;margin-top:2px}
 .wheel-wrap{position:relative;width:min(320px,84vw);height:min(320px,84vw);margin-bottom:20px}
 canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
@@ -55,16 +58,16 @@ border-top:20px solid #E8192C;filter:drop-shadow(0 3px 4px rgba(232,25,44,.35));
 width:60px;height:60px;border-radius:50%;background:#fff;
 border:3px solid rgba(232,25,44,.12);cursor:pointer;
 display:flex;flex-direction:column;align-items:center;justify-content:center;
-z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.1);transition:transform .2s;font-family:‘Nunito’,sans-serif}
+z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.1);transition:transform .2s;font-family:'Nunito',sans-serif}
 .cbtn:hover{transform:translate(-50%,-50%) scale(1.1)}
 .cbtn:active{transform:translate(-50%,-50%) scale(.92)}
 .cbtn:disabled{opacity:.4;cursor:not-allowed}
 .cbtn .ci{font-size:23px}.cbtn .ct{font-size:9px;font-weight:900;color:#E8192C;margin-top:1px}
 .spinbtn{width:100%;max-width:300px;background:linear-gradient(135deg,#E8192C,#FF5C35);
 color:#fff;border:none;border-radius:14px;padding:16px 22px;
-font-family:‘Unbounded’,sans-serif;font-size:14px;font-weight:700;cursor:pointer;
+font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;cursor:pointer;
 box-shadow:0 8px 26px rgba(232,25,44,.36);transition:all .2s;position:relative;overflow:hidden}
-.spinbtn::before{content:’’;position:absolute;top:0;left:-100%;width:60%;height:100%;
+.spinbtn::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
 background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
 animation:shine 3s ease-in-out infinite}
 @keyframes shine{0%{left:-100%}40%,100%{left:150%}}
@@ -72,7 +75,6 @@ animation:shine 3s ease-in-out infinite}
 .spinbtn:active{transform:translateY(1px)}
 .spinbtn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .done-msg{display:none;margin-top:12px;font-size:13px;color:#bbb;font-weight:700;text-align:center}
-/* ── PRIZE MODAL (bottom sheet) ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(12,5,7,.6);
 backdrop-filter:blur(8px);z-index:100;justify-content:center;align-items:flex-end}
 .overlay.show{display:flex}
@@ -86,14 +88,14 @@ padding-bottom:env(safe-area-inset-bottom,20px)}
 .m-tag{display:inline-block;background:#FFF0F1;color:#E8192C;font-size:10px;
 font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;
 border-radius:50px;margin-bottom:7px}
-.m-title{font-family:‘Unbounded’,sans-serif;font-size:clamp(16px,4.5vw,21px);
+.m-title{font-family:'Unbounded',sans-serif;font-size:clamp(16px,4.5vw,21px);
 font-weight:900;color:#1A1A2E;line-height:1.25;margin-bottom:10px}
 .m-title.red{color:#E8192C}
 .promo{background:linear-gradient(135deg,#FFF5F6,#FFF0F2);
 border:2px dashed rgba(232,25,44,.22);border-radius:13px;padding:12px 16px;
 text-align:center;margin:8px 0 12px;cursor:pointer;transition:border-color .18s}
 .promo:hover{border-color:#E8192C}
-.pcode{font-family:‘Unbounded’,sans-serif;font-size:21px;font-weight:900;color:#E8192C;letter-spacing:4px}
+.pcode{font-family:'Unbounded',sans-serif;font-size:21px;font-weight:900;color:#E8192C;letter-spacing:4px}
 .phint{font-size:11px;color:#bbb;font-weight:700;margin-top:3px;display:block}
 .m-desc{font-size:13px;color:#666666;line-height:1.65;font-weight:700;margin-bottom:11px}
 .divider{height:1px;background:#F0F0F0;margin:11px 0}
@@ -107,42 +109,35 @@ letter-spacing:.8px;margin-bottom:5px}
 border-radius:50px;padding:5px 13px;font-size:12px;font-weight:900;color:#E8192C;margin-bottom:13px}
 .actions{display:flex;flex-direction:column;gap:10px}
 .btn-take{width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;
-border:none;border-radius:13px;padding:15px;font-family:‘Unbounded’,sans-serif;
+border:none;border-radius:13px;padding:15px;font-family:'Unbounded',sans-serif;
 font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(232,25,44,.3);transition:all .2s}
 .btn-take:hover{transform:translateY(-2px)}
 .btn-respin{width:100%;background:#fff;color:#666666;border:2px solid #E8E8E8;
-border-radius:13px;padding:13px;font-family:‘Nunito’,sans-serif;font-size:14px;
+border-radius:13px;padding:13px;font-family:'Nunito',sans-serif;font-size:14px;
 font-weight:800;cursor:pointer;transition:all .2s}
 .btn-respin:hover{border-color:#ccc;color:#1A1A2E}
 .respin-warn{font-size:11px;color:#E8192C;font-weight:700;text-align:center;margin-top:-4px;opacity:.75}
-/* ── VIDEO MODAL (fullscreen) ── */
 .voverlay{display:none;position:fixed;inset:0;background:#000;z-index:200;
 flex-direction:column;justify-content:center;align-items:center}
 .voverlay.show{display:flex}
-.vframe-wrap{position:relative;width:100%;max-width:480px;
-aspect-ratio:9/16;background:#000}
+.vframe-wrap{position:relative;width:100%;max-width:480px;aspect-ratio:9/16;background:#000}
 .vframe-wrap iframe{width:100%;height:100%;border:none;display:block}
-/* skip button */
-.skip-btn{position:absolute;bottom:24px;right:16px;
-background:rgba(0,0,0,.65);color:#fff;border:2px solid rgba(255,255,255,.5);
-border-radius:50px;padding:8px 18px;font-family:‘Nunito’,sans-serif;
-font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;
-backdrop-filter:blur(4px)}
+.skip-btn{position:absolute;bottom:24px;right:16px;background:rgba(0,0,0,.65);color:#fff;
+border:2px solid rgba(255,255,255,.5);border-radius:50px;padding:8px 18px;
+font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;
+transition:all .2s;backdrop-filter:blur(4px)}
 .skip-btn:hover{background:rgba(255,255,255,.15)}
-.skip-countdown{display:inline-block;background:rgba(255,255,255,.2);
-border-radius:50%;width:22px;height:22px;line-height:22px;
-text-align:center;font-size:11px;font-weight:900;margin-left:4px}
-/* close btn for prize video */
-.vclose-btn{position:absolute;top:16px;right:16px;
-background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;
-width:36px;height:36px;font-size:18px;cursor:pointer;
-display:flex;align-items:center;justify-content:center;
-backdrop-filter:blur(4px)}
+.skip-countdown{display:inline-block;background:rgba(255,255,255,.2);border-radius:50%;
+width:22px;height:22px;line-height:22px;text-align:center;font-size:11px;font-weight:900;margin-left:4px}
+.vclose-btn{position:absolute;top:16px;right:16px;background:rgba(0,0,0,.5);color:#fff;
+border:none;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;
+display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .cp{position:fixed;top:-20px;opacity:0;pointer-events:none;z-index:9999;border-radius:2px}
 </style>
 </head>
 <body>
-<div class="blob b1"></div><div class="blob b2"></div><header>
+<div class="blob b1"></div><div class="blob b2"></div>
+<header>
   <div class="logo">
     <div class="logo-ico">⚡️</div>
     <div class="logo-name">ШАГАЙ <span>ДОМА</span></div>
@@ -154,9 +149,10 @@ backdrop-filter:blur(4px)}
       <div class="dot" id="d3"></div><div class="dot" id="d4"></div><div class="dot" id="d5"></div>
     </div>
   </div>
-</header><main>
+</header>
+<main>
   <div class="headline">
-    <h1>Крути колесо и<br>выигрывай призы!</h1>
+    <h1>Крути колесо и<br>выигрывай призы <em>бесплатно!</em></h1>
     <p>5 попыток · Каждое вращение — шанс на подарок</p>
   </div>
   <div class="jbanner">
@@ -176,7 +172,8 @@ backdrop-filter:blur(4px)}
   </div>
   <button class="spinbtn" id="sbtn" onclick="spin()">🎯 Крутить колесо!</button>
   <div class="done-msg" id="doneMsg">Вращения закончились. Спасибо! 🎉</div>
-</main><!-- PRIZE MODAL --><div class="overlay" id="overlay">
+</main>
+<div class="overlay" id="overlay">
   <div class="sheet">
     <div class="handle"></div>
     <div class="si">
@@ -192,421 +189,358 @@ backdrop-filter:blur(4px)}
       <div class="m-desc" id="mDesc"></div>
       <div class="divider"></div>
       <div class="adcard">
-        <div class="adcard-ttl">🚶‍♀️ О клубе ШАГАЙ ДОМА</div>
+        <div class="adcard-ttl" id="adTtl">🚶‍♀️ О клубе ШАГАЙ ДОМА</div>
         <p id="mAd"></p>
       </div>
       <div class="spins-badge" id="mBadge" style="display:none">🎯 <span id="mBadgeTxt"></span></div>
       <div class="actions" id="mActions"></div>
     </div>
   </div>
-</div><!-- VIDEO MODAL (prize training + ad) --><div class="voverlay" id="voverlay">
+</div>
+<div class="voverlay" id="voverlay">
   <div class="vframe-wrap" id="vframeWrap">
-    <iframe id="vframe" src="" allowfullscreen
-      allow="autoplay; fullscreen; picture-in-picture"></iframe>
-    <!-- close button for prize video -->
+    <iframe id="vframe" src="" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe>
     <button class="vclose-btn" id="vcloseBtn" onclick="closeVideo()" style="display:none">✕</button>
-    <!-- skip button for ad video -->
     <button class="skip-btn" id="skipBtn" onclick="skipAd()" style="display:none">
-      Пропустить <span class="skip-countdown" id="skipCount">3</span>
+      Пропустить <span class="skip-countdown" id="skipCount">5</span>
     </button>
   </div>
-</div><script>
-// ─── НАСТРОЙКИ ────────────────────────────────────────────────────────────────
+</div>
+<script>
 const FORMSPREE_URL = 'https://formspree.io/f/mvzvawok';
 const BUY_URL = 'https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel';
-// VK embed: используем iframe-ссылку через vk.com/video_ext.php
-const AD_VIDEO_URL   = 'https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1';
-const PRIZE_VIDEO_URL= 'https://vk.com/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1';
+const AD_VIDEO_URL    = 'https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1';
+const PRIZE_VIDEO_URL = 'https://vk.com/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1';
 
-// ─── СЕГМЕНТЫ ─────────────────────────────────────────────────────────────────
 const SEG = [
-  { label:['Скидка','20%'],             emoji:'🏷️', bg:'#E8192C', fg:'#fff',
-    prize:'Скидка 20% на абонемент!',   promo:'LUCKY',
-    desc:'Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.',
-    w:25, isFinal:true, isDiscount:true },
-  { label:['Рецепты','от диетолога'],   emoji:'🥗', bg:'#FF6B35', fg:'#fff',
-    prize:'Рецепты от диетолога — PDF!',
-    desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
-    w:20, isMenuPdf:true },
-  { label:['Бесплатная','тренировка'],  emoji:'🎽', bg:'#FF4D5E', fg:'#fff',
-    prize:'Бесплатная тренировка!',
-    desc:'Ты выиграла целую тренировку прямо сейчас! Нажми кнопку ниже и занимайся немедленно 🔥',
-    w:18, isTraining:true },
-  { label:['✨ Бесплатный','абонемент'],emoji:'🏆', bg:'#F5A623', fg:'#3D2000',
-    prize:'🏆 Бесплатный абонемент!',
-    desc:'Невероятно! Ты выиграла бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
-    w:3, isJackpot:true },
-  { label:['Секретный','тариф 🕵️'],    emoji:'🕵️', bg:'#C01020', fg:'#fff',
-    prize:'Секретный тариф — 1 месяц!',
-    desc:'Закрытый тариф, которого нет в открытой продаже! Спец. условия на 1 месяц. Напиши нам.',
-    w:10 },
-  { label:['Секретный тариф','НАВСЕГДА'],emoji:'🔑', bg:'#D4162A', fg:'#fff',
-    prize:'Секретный тариф НАВСЕГДА!',
-    desc:'Уникальный тариф — доступ навсегда на особых условиях! Только для победителей колеса.',
-    w:8 },
-  { label:['Крути','ещё раз! 🔄'],     emoji:'🔄', bg:'#FFD166', fg:'#5A3A00',
-    prize:'Крути ещё раз!',
-    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
-    w:16, isRetry:true },
+{ label:[‘Скидка’,‘20%’],              emoji:‘🏷️’, bg:’#E8192C’, fg:’#fff’,
+prize:‘Скидка 20% на абонемент!’,    promo:‘LUCKY’,
+desc:‘Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.’,
+w:25, isFinal:true, isDiscount:true },
+{ label:[‘Рецепты’,‘от диетолога’],    emoji:‘🥗’, bg:’#FF6B35’, fg:’#fff’,
+prize:‘Рецепты от диетолога — PDF!’,
+desc:‘Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗’,
+w:20, isMenuPdf:true },
+{ label:[‘Бесплатная’,‘тренировка’],   emoji:‘🎽’, bg:’#FF4D5E’, fg:’#fff’,
+prize:‘Бесплатная тренировка!’,
+desc:‘Ты выиграла целую тренировку прямо сейчас! Нажми кнопку ниже и занимайся немедленно 🔥’,
+w:18, isTraining:true },
+{ label:[‘Бесплатный’,‘абонемент’],    emoji:‘🏆’, bg:’#F5A623’, fg:’#3D2000’,
+prize:‘🏆 Бесплатный абонемент!’,
+desc:‘Невероятно! Ты выиграла бесплатный абонемент! Оставь свою почту — мы активируем доступ.’,
+w:3, isJackpot:true },
+{ label:[‘Секретный’,‘тариф 🕵️’],     emoji:‘🕵️’, bg:’#C01020’, fg:’#fff’,
+prize:‘Секретный тариф — 1 месяц!’,
+desc:‘Закрытый тариф, которого нет в открытой продаже! Спец. условия на 1 месяц. Напиши нам.’,
+w:10 },
+{ label:[‘Секретный тариф’,‘НАВСЕГДА’],emoji:‘🔑’, bg:’#D4162A’, fg:’#fff’,
+prize:‘Секретный тариф НАВСЕГДА!’,
+desc:‘Уникальный тариф — доступ навсегда на особых условиях! Только для победителей колеса.’,
+w:8 },
+{ label:[‘Крути’,‘ещё раз! 🔄’],      emoji:‘🔄’, bg:’#FFD166’, fg:’#5A3A00’,
+prize:‘Крути ещё раз!’,
+desc:‘Не повезло — но удача совсем близко! Крути снова 🎯’,
+w:16, isRetry:true },
 ];
 
-// ─── РЕКЛАМНЫЕ ТЕКСТЫ (закрываем возражения) ─────────────────────────────────
+// Каждый текст — своё возражение, фраза про похудение только в первом
 const ADS = [
-  { title:'🤔 «У меня нет времени на спорт»',
-    text:'Наши тренировки — от <strong>10 до 30 минут</strong> прямо дома. Никуда ехать не надо! Участницы худеют на <strong>от -1 до -4 кг всего за неделю</strong> — просто шагая под видео. <strong>10 000 занятых женщин</strong> нашли время — найдёшь и ты!' },
-  { title:'😟 «Я уже пробовала — не похудела»',
-    text:'Ходьба работает иначе! Она <strong>не стрессует тело</strong>, не вызывает срывов. Наши участницы показывают результат <strong>от -1 до -4 кг уже за первую неделю</strong> — без диет и изнурительных тренировок. Просто шаги!' },
-  { title:'💸 «Это дорого, подожду»',
-    text:'Один поход в зал стоит дороже месяца в нашем клубе. Здесь — <strong>неограниченный доступ</strong> к тренировкам и сообщество <strong>10 000 шагательниц</strong>. Результат уже с первой недели: <strong>-1 до -4 кг</strong>. Пока ты ждёшь — другие уже худеют!' },
-  { title:'😴 «Я слишком устаю, чтобы тренироваться»',
-    text:'Именно для усталых! Ходьба <strong>восстанавливает энергию</strong>, а не забирает её. 15 минут шагов дома — и уже <strong>-1 до -4 кг за неделю</strong>. Наши участницы говорят: <strong>«наконец-то тренировка, от которой не умираешь»</strong>.' },
+{ title:‘🔥 От -1 до -4 кг уже за первую неделю!’,
+text:‘Не диета, не изнурительный зал — просто <strong>ходьба дома под видео</strong>. Наши участницы видят результат уже на первой неделе. <strong>10 000 женщин</strong> со всего мира уже шагают — присоединяйся!’ },
+{ title:‘🤔 «У меня нет времени на спорт»’,
+text:‘Тренировки от <strong>10 до 30 минут</strong> прямо дома — никуда ехать не нужно. Встала, включила видео, прошагала. <strong>10 000 занятых женщин</strong> нашли время — найдёшь и ты!’ },
+{ title:‘😟 «Я уже пробовала — не помогло»’,
+text:‘Ходьба работает иначе, чем изнурительные тренировки. Она <strong>не стрессует тело</strong>, не вызывает срывов и подходит любому уровню подготовки. Просто шаги — и результат!’ },
+{ title:‘💸 «Пока подожду с покупкой»’,
+text:‘Один поход в зал стоит дороже, чем <strong>целый месяц</strong> в нашем клубе. Пока ты ждёшь — участницы уже худеют. Не откладывай то, что работает!’ },
 ];
 
-const FINAL_AD = 'Это твой <strong>шанс войти в клуб прямо сейчас!</strong> Участницы худеют на <strong>от -1 до -4 кг уже за первую неделю</strong> — просто шагая дома! <strong>10 000 женщин</strong> со всего мира уже в пути. <strong>Промокод LUCKY даёт -20% — действует 48 часов!</strong>';
+const FINAL_AD = ‘Это твой <strong>шанс войти в клуб прямо сейчас!</strong> Десятки тренировок дома, <strong>10 000 женщин-единомышленниц</strong> со всего мира и твоя новая стройная жизнь. <strong>Промокод LUCKY даёт -20% — действует 48 часов!</strong>’;
 
-// ─── СОСТОЯНИЕ ────────────────────────────────────────────────────────────────
-let spinsLeft=5, busy=false, rot=0, spinNum=0, lastCode='';
+let spinsLeft=5, busy=false, rot=0, spinNum=0, lastCode=’’;
 let skipTimer=null;
 const N=SEG.length, ARC=2*Math.PI/N;
-
-// ─── CANVAS ───────────────────────────────────────────────────────────────────
-const CV=document.getElementById('wc');
-const ctx=CV.getContext('2d');
+const CV=document.getElementById(‘wc’);
+const ctx=CV.getContext(‘2d’);
 const SZ=640, CX=SZ/2, CY=SZ/2, R=SZ/2-10;
 
 function drawWheel(r){
-  ctx.clearRect(0,0,SZ,SZ);
-  for(let i=0;i<N;i++){
-    const s=SEG[i];
-    const segAngle=r-Math.PI/2+i*ARC;
-    const a0=segAngle-ARC/2, a1=segAngle+ARC/2;
-
-    ctx.beginPath(); ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
-    ctx.fillStyle=s.bg; ctx.fill();
-
-    const g=ctx.createRadialGradient(CX,CY,R*.04,CX,CY,R);
-    g.addColorStop(0,'rgba(255,255,255,.18)');
-    g.addColorStop(.5,'rgba(255,255,255,.04)');
-    g.addColorStop(1,'rgba(0,0,0,.07)');
-    ctx.beginPath(); ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
-    ctx.fillStyle=g; ctx.fill();
-
-    ctx.beginPath(); ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
-    ctx.strokeStyle='rgba(255,255,255,.5)'; ctx.lineWidth=2.5; ctx.stroke();
-
-    ctx.save();
-    ctx.translate(CX,CY);
-    ctx.rotate(segAngle+Math.PI/2);
-    ctx.beginPath(); ctx.moveTo(0,0);
-    ctx.arc(0,0,R,a0-(segAngle+Math.PI/2),a1-(segAngle+Math.PI/2));
-    ctx.closePath(); ctx.clip();
-    const lines=s.label, fs=Math.max(16,Math.round(R*0.068)), lh=fs*1.28;
-    const midR=R*0.44, totalH=(lines.length-1)*lh;
-    ctx.font=`bold ${fs}px Arial,sans-serif`;
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillStyle=s.fg; ctx.shadowColor='rgba(0,0,0,.3)'; ctx.shadowBlur=3;
-    lines.forEach((ln,li)=>ctx.fillText(ln,0,midR-totalH/2+li*lh));
-    ctx.restore();
-
-    const eR=R*0.82, ex=CX+eR*Math.cos(segAngle), ey=CY+eR*Math.sin(segAngle);
-    ctx.save(); ctx.translate(ex,ey); ctx.rotate(segAngle+Math.PI/2);
-    ctx.font=`${Math.round(R*0.09)}px serif`;
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.shadowColor='rgba(0,0,0,.15)'; ctx.shadowBlur=2;
-    ctx.fillText(s.emoji,0,0); ctx.restore();
-  }
-  ctx.beginPath(); ctx.arc(CX,CY,R,0,2*Math.PI);
-  ctx.strokeStyle='rgba(255,255,255,.7)'; ctx.lineWidth=5; ctx.stroke();
-  ctx.beginPath(); ctx.arc(CX,CY,35,0,2*Math.PI);
-  ctx.fillStyle='#fff'; ctx.fill();
-  ctx.strokeStyle='rgba(232,25,44,.1)'; ctx.lineWidth=3; ctx.stroke();
+ctx.clearRect(0,0,SZ,SZ);
+for(let i=0;i<N;i++){
+const s=SEG[i];
+const segAngle=r-Math.PI/2+i*ARC;
+const a0=segAngle-ARC/2, a1=segAngle+ARC/2;
+ctx.beginPath(); ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
+ctx.fillStyle=s.bg; ctx.fill();
+const g=ctx.createRadialGradient(CX,CY,R*.04,CX,CY,R);
+g.addColorStop(0,‘rgba(255,255,255,.18)’);
+g.addColorStop(.5,‘rgba(255,255,255,.04)’);
+g.addColorStop(1,‘rgba(0,0,0,.07)’);
+ctx.beginPath(); ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
+ctx.fillStyle=g; ctx.fill();
+ctx.beginPath(); ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
+ctx.strokeStyle=‘rgba(255,255,255,.5)’; ctx.lineWidth=2.5; ctx.stroke();
+ctx.save();
+ctx.translate(CX,CY);
+ctx.rotate(segAngle+Math.PI/2);
+ctx.beginPath(); ctx.moveTo(0,0);
+ctx.arc(0,0,R,a0-(segAngle+Math.PI/2),a1-(segAngle+Math.PI/2));
+ctx.closePath(); ctx.clip();
+const lines=s.label, fs=Math.max(16,Math.round(R*0.068)), lh=fs*1.28;
+const midR=R*0.44, totalH=(lines.length-1)*lh;
+ctx.font=’bold ’+fs+‘px Arial,sans-serif’;
+ctx.textAlign=‘center’; ctx.textBaseline=‘middle’;
+ctx.fillStyle=s.fg; ctx.shadowColor=‘rgba(0,0,0,.3)’; ctx.shadowBlur=3;
+lines.forEach(function(ln,li){ctx.fillText(ln,0,midR-totalH/2+li*lh);});
+ctx.restore();
+const eR=R*0.82, ex=CX+eR*Math.cos(segAngle), ey=CY+eR*Math.sin(segAngle);
+ctx.save(); ctx.translate(ex,ey); ctx.rotate(segAngle+Math.PI/2);
+ctx.font=Math.round(R*0.09)+‘px serif’;
+ctx.textAlign=‘center’; ctx.textBaseline=‘middle’;
+ctx.shadowColor=‘rgba(0,0,0,.15)’; ctx.shadowBlur=2;
+ctx.fillText(s.emoji,0,0); ctx.restore();
 }
-// Ждём шрифты перед первой отрисовкой — иначе текст рендерится пустым
-if (document.fonts && document.fonts.ready) {
-  document.fonts.ready.then(() => { drawWheel(rot); setTimeout(()=>drawWheel(rot),800); });
+ctx.beginPath(); ctx.arc(CX,CY,R,0,2*Math.PI);
+ctx.strokeStyle=‘rgba(255,255,255,.7)’; ctx.lineWidth=5; ctx.stroke();
+ctx.beginPath(); ctx.arc(CX,CY,35,0,2*Math.PI);
+ctx.fillStyle=’#fff’; ctx.fill();
+ctx.strokeStyle=‘rgba(232,25,44,.1)’; ctx.lineWidth=3; ctx.stroke();
+}
+
+if(document.fonts && document.fonts.ready){
+document.fonts.ready.then(function(){drawWheel(rot); setTimeout(function(){drawWheel(rot);},800);});
 } else {
-  setTimeout(() => drawWheel(rot), 500);
+setTimeout(function(){drawWheel(rot);},500);
 }
-// ─── PICK ─────────────────────────────────────────────────────────────────────
+
 function pickIdx(){
-  if(spinsLeft===1) return SEG.findIndex(s=>s.isFinal);
-  const pool=[];
-  SEG.forEach((s,i)=>{
-    if(s.isJackpot&&spinsLeft>2) return;
-    for(let j=0;j<s.w;j++) pool.push(i);
-  });
-  return pool[Math.floor(Math.random()*pool.length)];
+if(spinsLeft===1) return SEG.findIndex(function(s){return s.isFinal;});
+var pool=[];
+SEG.forEach(function(s,i){
+if(s.isJackpot&&spinsLeft>2) return;
+for(var j=0;j<s.w;j++) pool.push(i);
+});
+return pool[Math.floor(Math.random()*pool.length)];
 }
 
-// ─── SPIN ─────────────────────────────────────────────────────────────────────
 function spin(){
-  if(busy||spinsLeft<=0) return;
-  busy=true; btnOff();
-  const ti=pickIdx();
-  const targetRot=((-ti*ARC)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
-  const jitter=(Math.random()-.5)*ARC*0.55;
-  const targetJ=(targetRot+jitter+2*Math.PI)%(2*Math.PI);
-  const curNorm=((rot%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
-  let delta=((targetJ-curNorm)+2*Math.PI)%(2*Math.PI);
-  if(delta<0.4) delta+=2*Math.PI;
-  const total=(5+Math.floor(Math.random()*4))*2*Math.PI+delta;
-  const startRot=rot, dur=4200+Math.random()*1100, t0=performance.now();
-  function ease(t){return 1-Math.pow(1-t,3.8)}
-
-  requestAnimationFrame(function go(now){
-    const t=Math.min((now-t0)/dur,1);
-    rot=startRot+total*ease(t);
-    drawWheel(rot);
-    if(t<1){requestAnimationFrame(go);return}
-
-    busy=false; spinNum++; spinsLeft--;
-    updateDots();
-
-    const afterSpin=()=>{
-      if(SEG[ti].isRetry){
-        if(spinsLeft>0){toast('🔄 Крути ещё раз! Удача близко!');btnOn();}
-        else showModal(SEG.findIndex(s=>s.isFinal));
-      } else {
-        showModal(ti);
-        if(spinsLeft>0) btnOn();
-      }
-      if(spinsLeft===0){
-        document.getElementById('sbtn').style.display='none';
-        document.getElementById('doneMsg').style.display='block';
-      }
-    };
-
-    // После 2-го вращения (spinNum===2) — показываем рекламное видео
-    if(spinNum===2 && !SEG[ti].isRetry){
-      showAdVideo(afterSpin);
-    } else {
-      afterSpin();
-    }
-  });
+if(busy||spinsLeft<=0) return;
+busy=true; btnOff();
+var ti=pickIdx();
+var targetRot=((-ti*ARC)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+var jitter=(Math.random()-.5)*ARC*0.55;
+var targetJ=(targetRot+jitter+2*Math.PI)%(2*Math.PI);
+var curNorm=((rot%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+var delta=((targetJ-curNorm)+2*Math.PI)%(2*Math.PI);
+if(delta<0.4) delta+=2*Math.PI;
+var total=(5+Math.floor(Math.random()*4))*2*Math.PI+delta;
+var startRot=rot, dur=4200+Math.random()*1100, t0=performance.now();
+function ease(t){return 1-Math.pow(1-t,3.8);}
+requestAnimationFrame(function go(now){
+var t=Math.min((now-t0)/dur,1);
+rot=startRot+total*ease(t);
+drawWheel(rot);
+if(t<1){requestAnimationFrame(go);return;}
+busy=false; spinNum++; spinsLeft–;
+updateDots();
+var afterSpin=function(){
+if(SEG[ti].isRetry){
+if(spinsLeft>0){toast(‘🔄 Крути ещё раз! Удача близко!’);btnOn();}
+else showModal(SEG.findIndex(function(s){return s.isFinal;}));
+} else {
+showModal(ti);
+if(spinsLeft>0) btnOn();
+}
+if(spinsLeft===0){
+document.getElementById(‘sbtn’).style.display=‘none’;
+document.getElementById(‘doneMsg’).style.display=‘block’;
+}
+};
+if(spinNum===2&&!SEG[ti].isRetry){showAdVideo(afterSpin);}
+else{afterSpin();}
+});
 }
 
-function btnOff(){['sbtn','cbtn'].forEach(id=>document.getElementById(id).disabled=true)}
-function btnOn(){['sbtn','cbtn'].forEach(id=>document.getElementById(id).disabled=false)}
+function btnOff(){[‘sbtn’,‘cbtn’].forEach(function(id){document.getElementById(id).disabled=true;});}
+function btnOn(){[‘sbtn’,‘cbtn’].forEach(function(id){document.getElementById(id).disabled=false;});}
 function updateDots(){
-  const used=5-spinsLeft;
-  for(let i=1;i<=5;i++) document.getElementById('d'+i).classList.toggle('off',i<=used);
+var used=5-spinsLeft;
+for(var i=1;i<=5;i++) document.getElementById(‘d’+i).classList.toggle(‘off’,i<=used);
 }
 
-// ─── AD VIDEO ─────────────────────────────────────────────────────────────────
 function showAdVideo(callback){
-  const frame = document.getElementById('vframe');
-  const skipBtn = document.getElementById('skipBtn');
-  const skipCount = document.getElementById('skipCount');
-
-  // Скрываем кнопку пока видео не загрузилось
-  skipBtn.style.display = 'none';
-  skipBtn.disabled = true;
-  document.getElementById('vcloseBtn').style.display = 'none';
-  skipCount.textContent = '5';
-  frame.src = AD_VIDEO_URL;
-  document.getElementById('voverlay').classList.add('show');
-
-  window._adCallback = callback;
-
-  // Запускаем отсчёт только после загрузки iframe
-  function startCountdown() {
-    skipBtn.style.display = 'flex';
-    let sec = 5;
-    skipCount.textContent = sec;
-    skipTimer = setInterval(() => {
-      sec--;
-      skipCount.textContent = sec;
-      if (sec <= 0) {
-        clearInterval(skipTimer);
-        skipBtn.disabled = false;
-        skipBtn.innerHTML = 'Пропустить ✕';
-      }
-    }, 1000);
-  }
-
-  // load срабатывает когда iframe получил ответ
-  frame.onload = startCountdown;
-  // Страховка: если onload не сработал за 4 сек — всё равно показываем кнопку
-  setTimeout(() => { if(skipBtn.style.display==='none') startCountdown(); }, 4000);
+var frame=document.getElementById(‘vframe’);
+var skipBtn=document.getElementById(‘skipBtn’);
+var skipCount=document.getElementById(‘skipCount’);
+skipBtn.style.display=‘none’;
+skipBtn.disabled=true;
+document.getElementById(‘vcloseBtn’).style.display=‘none’;
+skipCount.textContent=‘5’;
+frame.src=AD_VIDEO_URL;
+document.getElementById(‘voverlay’).classList.add(‘show’);
+window._adCallback=callback;
+function startCountdown(){
+skipBtn.style.display=‘flex’;
+var sec=5;
+skipCount.textContent=sec;
+skipTimer=setInterval(function(){
+sec–;
+skipCount.textContent=sec;
+if(sec<=0){
+clearInterval(skipTimer);
+skipBtn.disabled=false;
+skipBtn.innerHTML=‘Пропустить ✕’;
+}
+},1000);
+}
+frame.onload=startCountdown;
+setTimeout(function(){if(skipBtn.style.display===‘none’) startCountdown();},4000);
 }
 
 function skipAd(){
-  clearInterval(skipTimer);
-  document.getElementById('vframe').src='';
-  document.getElementById('voverlay').classList.remove('show');
-  if(window._adCallback){ window._adCallback(); window._adCallback=null; }
+clearInterval(skipTimer);
+document.getElementById(‘vframe’).src=’’;
+document.getElementById(‘voverlay’).classList.remove(‘show’);
+if(window._adCallback){window._adCallback();window._adCallback=null;}
 }
 
-// ─── PRIZE VIDEO (тренировка) ─────────────────────────────────────────────────
 function showPrizeVideo(){
-  document.getElementById('vframe').src=PRIZE_VIDEO_URL;
-  document.getElementById('skipBtn').style.display='none';
-  document.getElementById('vcloseBtn').style.display='flex';
-  document.getElementById('voverlay').classList.add('show');
+document.getElementById(‘vframe’).src=PRIZE_VIDEO_URL;
+document.getElementById(‘skipBtn’).style.display=‘none’;
+document.getElementById(‘vcloseBtn’).style.display=‘flex’;
+document.getElementById(‘voverlay’).classList.add(‘show’);
 }
 
 function closeVideo(){
-  document.getElementById('vframe').src='';
-  document.getElementById('voverlay').classList.remove('show');
+document.getElementById(‘vframe’).src=’’;
+document.getElementById(‘voverlay’).classList.remove(‘show’);
 }
 
-// ─── MODAL ────────────────────────────────────────────────────────────────────
 function showModal(idx){
-  const s=SEG[idx], fin=spinsLeft===0;
-  document.getElementById('mEmoji').textContent=s.emoji;
-  document.getElementById('mTag').textContent=fin?'🎊 Последнее вращение!':'🎉 Поздравляем!';
-  const tel=document.getElementById('mTitle');
-  tel.textContent=s.prize;
-  tel.className='m-title'+(s.isJackpot||fin?' red':'');
-
-  const pel=document.getElementById('mPromo');
-  if((s.promo||fin)&&!s.isJackpot){
-    pel.style.display='block';
-    lastCode=fin?'LUCKY':s.promo;
-    document.getElementById('mCode').textContent=lastCode;
-  } else pel.style.display='none';
-
-  document.getElementById('mDesc').textContent=s.desc;
-
-  // Рекламный блок — для последнего вращения особый текст, иначе возражения
-  const adCard=document.getElementById('mAd');
-  const adTtl=document.querySelector('.adcard-ttl');
-  if(fin){
-    adTtl.textContent='🚶‍♀️ О клубе Шагай Дома';
-    adCard.innerHTML=FINAL_AD;
-  } else {
-    const ad=ADS[spinNum%ADS.length];
-    adTtl.textContent=ad.title;
-    adCard.innerHTML=ad.text;
-  }
-
-  const badge=document.getElementById('mBadge');
-  if(spinsLeft>0){
-    badge.style.display='inline-flex';
-    document.getElementById('mBadgeTxt').textContent=`Ещё ${spinsLeft} вращени${spinsLeft===1?'е':'я'}`;
-  } else badge.style.display='none';
-
-  const acts=document.getElementById('mActions'); acts.innerHTML='';
-
-  if(s.isJackpot){
-    // Форма email
-    acts.innerHTML=`
-      <div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px">
-        <div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">
-          📧 Оставь свою почту — мы активируем твой бесплатный абонемент:
-        </div>
-        <input id="jackpotEmail" type="email" placeholder="твоя@почта.ru"
-          style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;
-          font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;outline:none;
-          box-sizing:border-box;margin-bottom:10px;transition:border-color .2s"
-          onfocus="this.style.borderColor='#E8192C'" onblur="this.style.borderColor='#E8E8E8'">
-        <button onclick="submitJackpot()"
-          style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;
-          border:none;border-radius:11px;padding:14px;font-family:'Unbounded',sans-serif;
-          font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">
-          🏆 Получить бесплатный абонемент!
-        </button>
-        <div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div>
-      </div>`;
-
-  } else if(s.isMenuPdf){
-    const bt=document.createElement('button'); bt.className='btn-take';
-    bt.innerHTML='📥 Скачать рецепты PDF бесплатно!';
-    bt.onclick=()=>{
-      const a=document.createElement('a');
-      a.href='menu.pdf'; a.download='menu.pdf';
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      closeModal();
-    };
-    acts.appendChild(bt);
-
-  } else if(s.isTraining){
-    // Кнопка просмотра тренировки
-    const bt=document.createElement('button'); bt.className='btn-take';
-    bt.innerHTML='▶️ Смотреть тренировку прямо сейчас!';
-    bt.onclick=()=>{ closeModal(); showPrizeVideo(); };
-    acts.appendChild(bt);
-
-  } else if(s.isDiscount||fin){
-    const bt=document.createElement('button'); bt.className='btn-take';
-    bt.innerHTML='🛒 Перейти к покупке со скидкой 20%';
-    bt.onclick=()=>{ window.open(BUY_URL,'_blank'); closeModal(); };
-    acts.appendChild(bt);
-
-  } else {
-    const bt=document.createElement('button'); bt.className='btn-take';
-    bt.textContent='✅ Забрать приз!';
-    bt.onclick=()=>closeModal(); acts.appendChild(bt);
-  }
-
-  if(spinsLeft>0&&!fin&&!s.isJackpot){
-    const br=document.createElement('button'); br.className='btn-respin';
-    br.textContent=`🎯 Крутить ещё раз (${spinsLeft} вращени${spinsLeft===1?'е':'я'})`;
-    br.onclick=()=>closeModal(true); acts.appendChild(br);
-    const w=document.createElement('div'); w.className='respin-warn';
-    w.textContent='⚠️ Если крутишь снова — текущий приз сгорает!'; acts.appendChild(w);
-  }
-
-  document.getElementById('overlay').classList.add('show');
-  if(s.isJackpot||fin) confetti();
+var s=SEG[idx], fin=spinsLeft===0;
+document.getElementById(‘mEmoji’).textContent=s.emoji;
+document.getElementById(‘mTag’).textContent=fin?‘🎊 Последнее вращение!’:‘🎉 Поздравляем!’;
+var tel=document.getElementById(‘mTitle’);
+tel.textContent=s.prize;
+tel.className=‘m-title’+(s.isJackpot||fin?’ red’:’’);
+var pel=document.getElementById(‘mPromo’);
+if((s.promo||fin)&&!s.isJackpot){
+pel.style.display=‘block’;
+lastCode=fin?‘LUCKY’:s.promo;
+document.getElementById(‘mCode’).textContent=lastCode;
+} else pel.style.display=‘none’;
+document.getElementById(‘mDesc’).textContent=s.desc;
+var adCard=document.getElementById(‘mAd’);
+var adTtl=document.getElementById(‘adTtl’);
+if(fin){
+adTtl.textContent=‘🚶‍♀️ О клубе ШАГАЙ ДОМА’;
+adCard.innerHTML=FINAL_AD;
+} else {
+var ad=ADS[(spinNum-1)%ADS.length];
+adTtl.textContent=ad.title;
+adCard.innerHTML=ad.text;
+}
+var badge=document.getElementById(‘mBadge’);
+if(spinsLeft>0){
+badge.style.display=‘inline-flex’;
+document.getElementById(‘mBadgeTxt’).textContent=‘Ещё ‘+spinsLeft+’ вращени’+(spinsLeft===1?‘е’:‘я’);
+} else badge.style.display=‘none’;
+var acts=document.getElementById(‘mActions’); acts.innerHTML=’’;
+if(s.isJackpot){
+acts.innerHTML=’<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:\'Nunito\',sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:\'Unbounded\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>’;
+} else if(s.isMenuPdf){
+var bt=document.createElement(‘button’); bt.className=‘btn-take’;
+bt.innerHTML=‘📥 Скачать рецепты PDF бесплатно!’;
+bt.onclick=function(){
+var a=document.createElement(‘a’); a.href=‘menu.pdf’; a.download=‘menu.pdf’;
+document.body.appendChild(a); a.click(); document.body.removeChild(a);
+closeModal();
+};
+acts.appendChild(bt);
+} else if(s.isTraining){
+var bt=document.createElement(‘button’); bt.className=‘btn-take’;
+bt.innerHTML=‘▶️ Смотреть тренировку прямо сейчас!’;
+bt.onclick=function(){closeModal(); showPrizeVideo();};
+acts.appendChild(bt);
+} else if(s.isDiscount||fin){
+var bt=document.createElement(‘button’); bt.className=‘btn-take’;
+bt.innerHTML=‘🛒 Перейти к покупке со скидкой 20%’;
+bt.onclick=function(){window.open(BUY_URL,’_blank’); closeModal();};
+acts.appendChild(bt);
+} else {
+var bt=document.createElement(‘button’); bt.className=‘btn-take’;
+bt.textContent=‘✅ Забрать приз!’;
+bt.onclick=function(){closeModal();};
+acts.appendChild(bt);
+}
+if(spinsLeft>0&&!fin&&!s.isJackpot){
+var br=document.createElement(‘button’); br.className=‘btn-respin’;
+br.textContent=‘🎯 Крутить ещё раз (’+spinsLeft+’ вращени’+(spinsLeft===1?‘е’:‘я’)+’)’;
+br.onclick=function(){closeModal();};
+acts.appendChild(br);
+var w=document.createElement(‘div’); w.className=‘respin-warn’;
+w.textContent=‘⚠️ Если крутишь снова — текущий приз сгорает!’; acts.appendChild(w);
+}
+document.getElementById(‘overlay’).classList.add(‘show’);
+if(s.isJackpot||fin) confetti();
 }
 
-function closeModal(){
-  document.getElementById('overlay').classList.remove('show');
-}
+function closeModal(){document.getElementById(‘overlay’).classList.remove(‘show’);}
 
 function submitJackpot(){
-  const email=document.getElementById('jackpotEmail').value.trim();
-  const status=document.getElementById('jackpotStatus');
-  if(!email||!email.includes('@')||!email.includes('.')){
-    status.style.color='#E8192C';
-    status.textContent='Пожалуйста, введи корректный email 📧'; return;
-  }
-  status.style.color='#aaa'; status.textContent='Отправляем...';
-  fetch(FORMSPREE_URL,{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({email,prize:'🏆 Бесплатный абонемент',source:'Колесо удачи ШагайДома'})
-  })
-  .then(r=>r.json())
-  .then(data=>{
-    if(data.ok){
-      document.getElementById('jackpotEmail').style.display='none';
-      document.querySelector('[onclick="submitJackpot()"]').style.display='none';
-      status.style.color='#22aa55'; status.style.fontSize='14px';
-      status.textContent='🎉 Готово! Мы скоро напишем тебе на почту!';
-    } else { status.style.color='#E8192C'; status.textContent='Что-то пошло не так. Попробуй ещё раз.'; }
-  })
-  .catch(()=>{ status.style.color='#E8192C'; status.textContent='Ошибка сети. Напиши нам напрямую.'; });
+var email=document.getElementById(‘jackpotEmail’).value.trim();
+var status=document.getElementById(‘jackpotStatus’);
+if(!email||!email.includes(’@’)||!email.includes(’.’)){
+status.style.color=’#E8192C’;
+status.textContent=‘Пожалуйста, введи корректный email 📧’; return;
+}
+status.style.color=’#aaa’; status.textContent=‘Отправляем…’;
+fetch(FORMSPREE_URL,{
+method:‘POST’,
+headers:{‘Content-Type’:‘application/json’,‘Accept’:‘application/json’},
+body:JSON.stringify({email:email,prize:‘🏆 Бесплатный абонемент’,source:‘Колесо удачи ШагайДома’})
+})
+.then(function(r){return r.json();})
+.then(function(data){
+if(data.ok){
+document.getElementById(‘jackpotEmail’).style.display=‘none’;
+document.querySelector(’[onclick=“submitJackpot()”]’).style.display=‘none’;
+status.style.color=’#22aa55’; status.style.fontSize=‘14px’;
+status.textContent=‘🎉 Готово! Мы скоро напишем тебе на почту!’;
+} else {status.style.color=’#E8192C’; status.textContent=‘Что-то пошло не так. Попробуй ещё раз.’;}
+})
+.catch(function(){status.style.color=’#E8192C’; status.textContent=‘Ошибка сети. Напиши нам напрямую.’;});
 }
 
 function copyCode(){
-  navigator.clipboard.writeText(lastCode).catch(()=>{});
-  const el=document.getElementById('mCode'),o=el.textContent;
-  el.textContent='✅ Скопировано!'; setTimeout(()=>el.textContent=o,2000);
+navigator.clipboard.writeText(lastCode).catch(function(){});
+var el=document.getElementById(‘mCode’),o=el.textContent;
+el.textContent=‘✅ Скопировано!’; setTimeout(function(){el.textContent=o;},2000);
 }
 function toast(msg){
-  const t=document.createElement('div');
-  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;border-radius:50px;padding:11px 20px;font-family:inherit;font-size:14px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;';
-  t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2400);
+var t=document.createElement(‘div’);
+t.style.cssText=‘position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;border-radius:50px;padding:11px 20px;font-family:inherit;font-size:14px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;’;
+t.textContent=msg; document.body.appendChild(t); setTimeout(function(){t.remove();},2400);
 }
 function confetti(){
-  const cols=['#E8192C','#FF6B35','#F5A623','#FFD166','#FF4D5E','#fff'];
-  for(let i=0;i<65;i++) setTimeout(()=>{
-    const el=document.createElement('div'); el.className='cp';
-    el.style.left=Math.random()*100+'vw';
-    el.style.background=cols[Math.floor(Math.random()*cols.length)];
-    el.style.borderRadius=Math.random()>.4?'50%':'2px';
-    const sz=6+Math.random()*8; el.style.width=el.style.height=sz+'px';
-    document.body.appendChild(el);
-    el.animate([{top:'-20px',opacity:1,transform:'rotate(0)'},{top:'108vh',opacity:0,
-      transform:`rotate(${400+Math.random()\*360}deg) translateX(${(Math.random()-.5)*160}px)`}],
-    {duration:2000+Math.random()*1500,easing:'cubic-bezier(.2,.8,.4,1)',fill:'forwards'})
-    .onfinish=()=>el.remove();
-  },i*32);
+var cols=[’#E8192C’,’#FF6B35’,’#F5A623’,’#FFD166’,’#FF4D5E’,’#fff’];
+for(var i=0;i<65;i++) (function(i){setTimeout(function(){
+var el=document.createElement(‘div’); el.className=‘cp’;
+el.style.left=Math.random()*100+‘vw’;
+el.style.background=cols[Math.floor(Math.random()*cols.length)];
+el.style.borderRadius=Math.random()>.4?‘50%’:‘2px’;
+var sz=6+Math.random()*8; el.style.width=el.style.height=sz+‘px’;
+document.body.appendChild(el);
+el.animate([{top:’-20px’,opacity:1,transform:‘rotate(0)’},{top:‘108vh’,opacity:0,
+transform:‘rotate(’+(400+Math.random()*360)+‘deg) translateX(’+(Math.random()-.5)*160+‘px)’}],
+{duration:2000+Math.random()*1500,easing:‘cubic-bezier(.2,.8,.4,1)’,fill:‘forwards’})
+.onfinish=function(){el.remove();};
+},i*32);})(i);
 }
-</script></body>
+</script>
+
+</body>
 </html>
