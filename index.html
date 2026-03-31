@@ -17,113 +17,141 @@ body{font-family:'Nunito',sans-serif;background:#F8F4F4;min-height:100vh;
 
 header{width:100%;max-width:460px;padding:26px 22px 0;text-align:center;position:relative;z-index:1}
 .logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:3px}
-.logo-ico{width:40px;height:40px;background:linear-gradient(135deg,var(--red),var(--red3));
-  border-radius:11px;display:flex;align-items:center;justify-content:center;
-  font-size:20px;box-shadow:0 4px 14px rgba(232,25,44,.3)}
-.logo-name{font-family:'Unbounded',sans-serif;font-size:19px;font-weight:900;color:var(--dark)}
-.logo-name span{color:var(--red)}
+.logo-ico{width:40px;height:40px;background:linear-gradient(135deg,var(–red),var(–red3));
+border-radius:11px;display:flex;align-items:center;justify-content:center;
+font-size:20px;box-shadow:0 4px 14px rgba(232,25,44,.3)}
+.logo-name{font-family:‘Unbounded’,sans-serif;font-size:19px;font-weight:900;color:var(–dark)}
+.logo-name span{color:var(–red)}
 .logo-sub{font-size:12px;color:#aaa;font-weight:700}
 .spins{margin:16px auto 0;display:flex;align-items:center;gap:10px;background:#fff;
-  border-radius:50px;padding:9px 18px;width:fit-content;box-shadow:0 2px 14px rgba(0,0,0,.06)}
+border-radius:50px;padding:9px 18px;width:fit-content;box-shadow:0 2px 14px rgba(0,0,0,.06)}
 .spins-lbl{font-size:12px;font-weight:800;color:#bbb}
 .dots{display:flex;gap:6px}
-.dot{width:11px;height:11px;border-radius:50%;background:var(--red);
-  box-shadow:0 2px 5px rgba(232,25,44,.35);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.dot{width:11px;height:11px;border-radius:50%;background:var(–red);
+box-shadow:0 2px 5px rgba(232,25,44,.35);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
 .dot.off{background:#E0E0E0;box-shadow:none;transform:scale(.7)}
 
 main{width:100%;max-width:460px;padding:16px 18px 50px;
-  display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
+display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
 .headline{text-align:center;margin-bottom:14px}
-.headline h1{font-family:'Unbounded',sans-serif;font-size:clamp(15px,4.2vw,20px);
-  font-weight:900;color:var(--dark);line-height:1.3}
-.headline h1 em{font-style:normal;color:var(--red)}
+.headline h1{font-family:‘Unbounded’,sans-serif;font-size:clamp(15px,4.2vw,20px);
+font-weight:900;color:var(–dark);line-height:1.3}
+.headline h1 em{font-style:normal;color:var(–red)}
 .headline p{font-size:12px;color:#bbb;font-weight:700;margin-top:5px}
 
-.jbanner{width:100%;background:linear-gradient(135deg,var(--red) 0%,#FF5C35 100%);
-  border-radius:16px;padding:13px 16px;display:flex;align-items:center;gap:13px;
-  margin-bottom:20px;box-shadow:0 8px 26px rgba(232,25,44,.28);overflow:hidden;position:relative}
-.jbanner::after{content:'';position:absolute;top:-25px;right:-15px;
-  width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07)}
+.jbanner{width:100%;background:linear-gradient(135deg,var(–red) 0%,#FF5C35 100%);
+border-radius:16px;padding:13px 16px;display:flex;align-items:center;gap:13px;
+margin-bottom:20px;box-shadow:0 8px 26px rgba(232,25,44,.28);overflow:hidden;position:relative}
+.jbanner::after{content:’’;position:absolute;top:-25px;right:-15px;
+width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07)}
 .jico{font-size:36px;flex-shrink:0;animation:jb 2.5s ease-in-out infinite}
 @keyframes jb{0%,100%{transform:rotate(-6deg) scale(1)}50%{transform:rotate(6deg) scale(1.1)}}
 .jlbl{font-size:10px;font-weight:800;color:rgba(255,255,255,.7);letter-spacing:1.8px;text-transform:uppercase}
-.jmain{font-family:'Unbounded',sans-serif;font-size:clamp(13px,3.8vw,16px);font-weight:900;color:#fff;line-height:1.2}
+.jmain{font-family:‘Unbounded’,sans-serif;font-size:clamp(13px,3.8vw,16px);font-weight:900;color:#fff;line-height:1.2}
 .jsub{font-size:11px;color:rgba(255,255,255,.8);font-weight:700;margin-top:2px}
 
 .wheel-wrap{position:relative;width:min(320px,84vw);height:min(320px,84vw);margin-bottom:20px}
 canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
-  box-shadow:0 0 0 5px #fff,0 0 0 9px rgba(232,25,44,.13),0 18px 50px rgba(0,0,0,.14)}
+box-shadow:0 0 0 5px #fff,0 0 0 9px rgba(232,25,44,.13),0 18px 50px rgba(0,0,0,.14)}
 .ptr{position:absolute;top:-4px;left:50%;transform:translateX(-50%);
-  z-index:10;display:flex;flex-direction:column;align-items:center}
-.ptr-ball{width:17px;height:17px;background:var(--red);border-radius:50%;
-  border:3px solid #fff;box-shadow:0 3px 9px rgba(232,25,44,.45)}
+z-index:10;display:flex;flex-direction:column;align-items:center}
+.ptr-ball{width:17px;height:17px;background:var(–red);border-radius:50%;
+border:3px solid #fff;box-shadow:0 3px 9px rgba(232,25,44,.45)}
 .ptr-tri{width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;
-  border-top:20px solid var(--red);filter:drop-shadow(0 3px 4px rgba(232,25,44,.35));margin-top:-2px}
+border-top:20px solid var(–red);filter:drop-shadow(0 3px 4px rgba(232,25,44,.35));margin-top:-2px}
 .cbtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:60px;height:60px;border-radius:50%;background:#fff;
-  border:3px solid rgba(232,25,44,.12);cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.1);transition:transform .2s;font-family:'Nunito',sans-serif}
+width:60px;height:60px;border-radius:50%;background:#fff;
+border:3px solid rgba(232,25,44,.12);cursor:pointer;
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.1);transition:transform .2s;font-family:‘Nunito’,sans-serif}
 .cbtn:hover{transform:translate(-50%,-50%) scale(1.1)}
 .cbtn:active{transform:translate(-50%,-50%) scale(.92)}
 .cbtn:disabled{opacity:.4;cursor:not-allowed}
-.cbtn .ci{font-size:23px}.cbtn .ct{font-size:9px;font-weight:900;color:var(--red);margin-top:1px}
+.cbtn .ci{font-size:23px}.cbtn .ct{font-size:9px;font-weight:900;color:var(–red);margin-top:1px}
 
-.spinbtn{width:100%;max-width:300px;background:linear-gradient(135deg,var(--red),#FF5C35);
-  color:#fff;border:none;border-radius:14px;padding:16px 22px;
-  font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;cursor:pointer;
-  box-shadow:0 8px 26px rgba(232,25,44,.36);transition:all .2s;position:relative;overflow:hidden}
-.spinbtn::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
-  animation:shine 3s ease-in-out infinite}
+.spinbtn{width:100%;max-width:300px;background:linear-gradient(135deg,var(–red),#FF5C35);
+color:#fff;border:none;border-radius:14px;padding:16px 22px;
+font-family:‘Unbounded’,sans-serif;font-size:14px;font-weight:700;cursor:pointer;
+box-shadow:0 8px 26px rgba(232,25,44,.36);transition:all .2s;position:relative;overflow:hidden}
+.spinbtn::before{content:’’;position:absolute;top:0;left:-100%;width:60%;height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+animation:shine 3s ease-in-out infinite}
 @keyframes shine{0%{left:-100%}40%,100%{left:150%}}
 .spinbtn:hover{transform:translateY(-3px);box-shadow:0 12px 34px rgba(232,25,44,.44)}
 .spinbtn:active{transform:translateY(1px)}
 .spinbtn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .done-msg{display:none;margin-top:12px;font-size:13px;color:#bbb;font-weight:700;text-align:center}
 
+/* ── PRIZE MODAL (bottom sheet) ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(12,5,7,.6);
-  backdrop-filter:blur(8px);z-index:100;justify-content:center;align-items:flex-end}
+backdrop-filter:blur(8px);z-index:100;justify-content:center;align-items:flex-end}
 .overlay.show{display:flex}
 .sheet{background:#fff;border-radius:26px 26px 0 0;width:100%;max-width:460px;
-  max-height:88vh;overflow-y:auto;animation:shup .38s cubic-bezier(.34,1.3,.64,1);
-  padding-bottom:env(safe-area-inset-bottom,20px)}
+max-height:88vh;overflow-y:auto;animation:shup .38s cubic-bezier(.34,1.3,.64,1);
+padding-bottom:env(safe-area-inset-bottom,20px)}
 @keyframes shup{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
 .handle{width:36px;height:4px;background:#EBEBEB;border-radius:2px;margin:13px auto 0}
 .si{padding:16px 20px 24px}
 .m-emoji{font-size:54px;text-align:center;display:block;margin-bottom:5px}
-.m-tag{display:inline-block;background:var(--pale);color:var(--red);font-size:10px;
-  font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;
-  border-radius:50px;margin-bottom:7px}
-.m-title{font-family:'Unbounded',sans-serif;font-size:clamp(16px,4.5vw,21px);
-  font-weight:900;color:var(--dark);line-height:1.25;margin-bottom:10px}
-.m-title.red{color:var(--red)}
+.m-tag{display:inline-block;background:var(–pale);color:var(–red);font-size:10px;
+font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;
+border-radius:50px;margin-bottom:7px}
+.m-title{font-family:‘Unbounded’,sans-serif;font-size:clamp(16px,4.5vw,21px);
+font-weight:900;color:var(–dark);line-height:1.25;margin-bottom:10px}
+.m-title.red{color:var(–red)}
 .promo{background:linear-gradient(135deg,#FFF5F6,#FFF0F2);
-  border:2px dashed rgba(232,25,44,.22);border-radius:13px;padding:12px 16px;
-  text-align:center;margin:8px 0 12px;cursor:pointer;transition:border-color .18s}
-.promo:hover{border-color:var(--red)}
-.pcode{font-family:'Unbounded',sans-serif;font-size:21px;font-weight:900;color:var(--red);letter-spacing:4px}
+border:2px dashed rgba(232,25,44,.22);border-radius:13px;padding:12px 16px;
+text-align:center;margin:8px 0 12px;cursor:pointer;transition:border-color .18s}
+.promo:hover{border-color:var(–red)}
+.pcode{font-family:‘Unbounded’,sans-serif;font-size:21px;font-weight:900;color:var(–red);letter-spacing:4px}
 .phint{font-size:11px;color:#bbb;font-weight:700;margin-top:3px;display:block}
-.m-desc{font-size:13px;color:var(--mid);line-height:1.65;font-weight:700;margin-bottom:11px}
+.m-desc{font-size:13px;color:var(–mid);line-height:1.65;font-weight:700;margin-bottom:11px}
 .divider{height:1px;background:#F0F0F0;margin:11px 0}
 .adcard{background:linear-gradient(135deg,#FFF5F6,#FFF8F0);border-radius:14px;
-  padding:13px 15px;margin-bottom:16px;border-left:3px solid var(--red)}
-.adcard-ttl{font-size:11px;font-weight:900;color:var(--red);text-transform:uppercase;
-  letter-spacing:.8px;margin-bottom:5px}
-.adcard p{font-size:13px;color:var(--mid);line-height:1.6;font-weight:700}
-.adcard p strong{color:var(--dark)}
-.spins-badge{display:inline-flex;align-items:center;gap:5px;background:var(--pale);
-  border-radius:50px;padding:5px 13px;font-size:12px;font-weight:900;color:var(--red);margin-bottom:13px}
+padding:13px 15px;margin-bottom:16px;border-left:3px solid var(–red)}
+.adcard-ttl{font-size:11px;font-weight:900;color:var(–red);text-transform:uppercase;
+letter-spacing:.8px;margin-bottom:5px}
+.adcard p{font-size:13px;color:var(–mid);line-height:1.6;font-weight:700}
+.adcard p strong{color:var(–dark)}
+.spins-badge{display:inline-flex;align-items:center;gap:5px;background:var(–pale);
+border-radius:50px;padding:5px 13px;font-size:12px;font-weight:900;color:var(–red);margin-bottom:13px}
 .actions{display:flex;flex-direction:column;gap:10px}
-.btn-take{width:100%;background:linear-gradient(135deg,var(--red),#FF5C35);color:#fff;
-  border:none;border-radius:13px;padding:15px;font-family:'Unbounded',sans-serif;
-  font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(232,25,44,.3);transition:all .2s}
+.btn-take{width:100%;background:linear-gradient(135deg,var(–red),#FF5C35);color:#fff;
+border:none;border-radius:13px;padding:15px;font-family:‘Unbounded’,sans-serif;
+font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(232,25,44,.3);transition:all .2s}
 .btn-take:hover{transform:translateY(-2px)}
-.btn-respin{width:100%;background:#fff;color:var(--mid);border:2px solid #E8E8E8;
-  border-radius:13px;padding:13px;font-family:'Nunito',sans-serif;font-size:14px;
-  font-weight:800;cursor:pointer;transition:all .2s}
-.btn-respin:hover{border-color:#ccc;color:var(--dark)}
-.respin-warn{font-size:11px;color:var(--red);font-weight:700;text-align:center;margin-top:-4px;opacity:.75}
+.btn-respin{width:100%;background:#fff;color:var(–mid);border:2px solid #E8E8E8;
+border-radius:13px;padding:13px;font-family:‘Nunito’,sans-serif;font-size:14px;
+font-weight:800;cursor:pointer;transition:all .2s}
+.btn-respin:hover{border-color:#ccc;color:var(–dark)}
+.respin-warn{font-size:11px;color:var(–red);font-weight:700;text-align:center;margin-top:-4px;opacity:.75}
+
+/* ── VIDEO MODAL (fullscreen) ── */
+.voverlay{display:none;position:fixed;inset:0;background:#000;z-index:200;
+flex-direction:column;justify-content:center;align-items:center}
+.voverlay.show{display:flex}
+.vframe-wrap{position:relative;width:100%;max-width:480px;
+aspect-ratio:9/16;background:#000}
+.vframe-wrap iframe{width:100%;height:100%;border:none;display:block}
+
+/* skip button */
+.skip-btn{position:absolute;bottom:24px;right:16px;
+background:rgba(0,0,0,.65);color:#fff;border:2px solid rgba(255,255,255,.5);
+border-radius:50px;padding:8px 18px;font-family:‘Nunito’,sans-serif;
+font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;
+backdrop-filter:blur(4px)}
+.skip-btn:hover{background:rgba(255,255,255,.15)}
+.skip-countdown{display:inline-block;background:rgba(255,255,255,.2);
+border-radius:50%;width:22px;height:22px;line-height:22px;
+text-align:center;font-size:11px;font-weight:900;margin-left:4px}
+
+/* close btn for prize video */
+.vclose-btn{position:absolute;top:16px;right:16px;
+background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;
+width:36px;height:36px;font-size:18px;cursor:pointer;
+display:flex;align-items:center;justify-content:center;
+backdrop-filter:blur(4px)}
+
 .cp{position:fixed;top:-20px;opacity:0;pointer-events:none;z-index:9999;border-radius:2px}
 </style>
 
@@ -133,7 +161,7 @@ canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
 
 <header>
   <div class="logo">
-    <div class="logo-ico"> ⚡️</div>
+    <div class="logo-ico">⚡️</div>
     <div class="logo-name">ШАГАЙ <span>ДОМА</span></div>
   </div>
   <div class="logo-sub">Шагай для стройности и здоровья</div>
@@ -159,7 +187,6 @@ canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
       <div class="jsub">Можешь выиграть прямо сейчас!</div>
     </div>
   </div>
-
   <div class="wheel-wrap">
     <canvas id="wc" width="640" height="640"></canvas>
     <div class="ptr"><div class="ptr-ball"></div><div class="ptr-tri"></div></div>
@@ -170,6 +197,8 @@ canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
   <button class="spinbtn" id="sbtn" onclick="spin()">🎯 Крутить колесо!</button>
   <div class="done-msg" id="doneMsg">Вращения закончились. Спасибо! 🎉</div>
 </main>
+
+<!-- PRIZE MODAL -->
 
 <div class="overlay" id="overlay">
   <div class="sheet">
@@ -196,75 +225,96 @@ canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
   </div>
 </div>
 
+<!-- VIDEO MODAL (prize training + ad) -->
+
+<div class="voverlay" id="voverlay">
+  <div class="vframe-wrap" id="vframeWrap">
+    <iframe id="vframe" src="" allowfullscreen
+      allow="autoplay; fullscreen; picture-in-picture"></iframe>
+    <!-- close button for prize video -->
+    <button class="vclose-btn" id="vcloseBtn" onclick="closeVideo()" style="display:none">✕</button>
+    <!-- skip button for ad video -->
+    <button class="skip-btn" id="skipBtn" onclick="skipAd()" style="display:none">
+      Пропустить <span class="skip-countdown" id="skipCount">3</span>
+    </button>
+  </div>
+</div>
+
 <script>
+// ─── НАСТРОЙКИ ────────────────────────────────────────────────────────────────
+const FORMSPREE_URL = 'https://formspree.io/f/mvzvawok';
+const BUY_URL = 'https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel';
+// VK embed: используем iframe-ссылку через vk.com/video_ext.php
+const AD_VIDEO_URL   = 'https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1';
+const PRIZE_VIDEO_URL= 'https://vk.com/video_ext.php?oid=-222534261&id=456241559&hd=2&autoplay=1';
+
+// ─── СЕГМЕНТЫ ─────────────────────────────────────────────────────────────────
 const SEG = [
-  { label:['Скидка','20%'],               emoji:'🏷️', bg:'#E8192C', fg:'#fff',
-    prize:'Скидка 20% на абонемент!',      promo:'LUCKY',
+  { label:['Скидка','20%'],             emoji:'🏷️', bg:'#E8192C', fg:'#fff',
+    prize:'Скидка 20% на абонемент!',   promo:'LUCKY',
     desc:'Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.',
     w:25, isFinal:true, isDiscount:true },
-  { label:['Меню','клуба PDF'],            emoji:'📋', bg:'#FF6B35', fg:'#fff',
+  { label:['Меню','клуба PDF'],         emoji:'📋', bg:'#FF6B35', fg:'#fff',
     prize:'Меню клуба — PDF-гид!',
-    desc:'Полный гид: тренировки, форматы, расписание. Ссылка придёт на почту.',
+    desc:'Полный гид по клубу: тренировки, форматы, расписание. Ссылка придёт на почту.',
     w:20 },
-  { label:['Бесплатная','тренировка'],     emoji:'🎽', bg:'#FF4D5E', fg:'#fff',
+  { label:['Бесплатная','тренировка'],  emoji:'🎽', bg:'#FF4D5E', fg:'#fff',
     prize:'Бесплатная тренировка!',
-    desc:'Ты выиграла одну бесплатную тренировку! Напиши нам, чтобы активировать подарок.',
-    w:18 },
-  { label:['✨ Бесплатный','абонемент'],   emoji:'🏆', bg:'#F5A623', fg:'#3D2000',
+    desc:'Ты выиграла целую тренировку прямо сейчас! Нажми кнопку ниже и занимайся немедленно 🔥',
+    w:18, isTraining:true },
+  { label:['✨ Бесплатный','абонемент'],emoji:'🏆', bg:'#F5A623', fg:'#3D2000',
     prize:'🏆 Бесплатный абонемент!',
-    desc:'Невероятно! Ты выиграла бесплатный абонемент! Напиши нам в директ — активируем сразу.',
+    desc:'Невероятно! Ты выиграла бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
     w:3, isJackpot:true },
-  { label:['Секретный','тариф 🕵️'],       emoji:'🕵️', bg:'#C01020', fg:'#fff',
+  { label:['Секретный','тариф 🕵️'],    emoji:'🕵️', bg:'#C01020', fg:'#fff',
     prize:'Секретный тариф — 1 месяц!',
-    desc:'Закрытый тариф, которого нет в продаже! Спец. условия на 1 месяц. Напиши нам.',
+    desc:'Закрытый тариф, которого нет в открытой продаже! Спец. условия на 1 месяц. Напиши нам.',
     w:10 },
-  { label:['Секретный тариф','НАВСЕГДА'], emoji:'🔑', bg:'#D4162A', fg:'#fff',
+  { label:['Секретный тариф','НАВСЕГДА'],emoji:'🔑', bg:'#D4162A', fg:'#fff',
     prize:'Секретный тариф НАВСЕГДА!',
-    desc:'Уникальный тариф — доступ навсегда на особых условиях! Только для победителей.',
+    desc:'Уникальный тариф — доступ навсегда на особых условиях! Только для победителей колеса.',
     w:8 },
-  { label:['Крути','ещё раз! 🔄'],        emoji:'🔄', bg:'#FFD166', fg:'#5A3A00',
+  { label:['Крути','ещё раз! 🔄'],     emoji:'🔄', bg:'#FFD166', fg:'#5A3A00',
     prize:'Крути ещё раз!',
-    desc:'Не повезло — но удача близко! Можешь крутить снова 🎯',
+    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
     w:16, isRetry:true },
 ];
 
-const ADS=[
-  'В <strong>Шагай Дома</strong> уже занимаются <strong>10\u202f000 женщин</strong> из России, Европы, США и со всего мира — каждый день они худеют на шагах прямо дома.',
-  '<strong>10\u202f000 шагательниц</strong> уже в пути! Тренируются дома, видят результат и поддерживают друг друга. Присоединяйся!',
-  'Ходьба — это наука стройности. В <strong>Шагай Дома</strong> мы превратили её в праздник движения. <strong>10\u202f000 женщин</strong> уже убедились!',
-  '<strong>Шагай Дома</strong> — сообщество <strong>10\u202f000 женщин</strong> со всего мира, которые худеют и вдохновляют друг друга.',
+// ─── РЕКЛАМНЫЕ ТЕКСТЫ (закрываем возражения) ─────────────────────────────────
+const ADS = [
+  { title:'🤔 «У меня нет времени на спорт»',
+    text:'Наши тренировки — от <strong>10 до 30 минут</strong>. Никуда ехать не нужно: встала, прошагала прямо дома, получила результат. Уже <strong>10 000 занятых женщин</strong> нашли время — и ты найдёшь!' },
+  { title:'😟 «Я уже пробовала — не похудела»',
+    text:'Ходьба работает иначе, чем изнурительные тренировки. Она <strong>не стрессует тело</strong>, не вызывает срывов и подходит любому возрасту. Наши участницы в среднем теряют <strong>3–8 кг за первый месяц</strong>.' },
+  { title:'💸 «Это дорого, подожду»',
+    text:'Один поход в зал стоит дороже, чем месяц в нашем клубе. А здесь — <strong>неограниченный доступ</strong> к тренировкам, поддержка куратора и сообщество <strong>10 000 шагательниц</strong>, которые тебя поймут.' },
+  { title:'😴 «Я слишком устаю, чтобы тренироваться»',
+    text:'Именно для усталых! Ходьба <strong>восстанавливает энергию</strong>, а не забирает её. После 15 минут прогулки дома ты почувствуешь прилив сил. Наши участницы говорят: <strong>«наконец-то тренировка, от которой не умираешь»</strong>.' },
 ];
-const FINAL_AD='Это твой <strong>шанс начать новую жизнь!</strong> Десятки тренировок, <strong>10\u202f000 женщин-единомышленниц</strong> со всего мира, первый результат через 2–3 недели — всё прямо дома! <strong>Промокод действует 48 часов!</strong>';
 
+const FINAL_AD = 'Это твой <strong>шанс войти в клуб прямо сейчас!</strong> Десятки тренировок, <strong>10 000 женщин-единомышленниц</strong> со всего мира, первый результат через 2–3 недели — всё прямо дома! <strong>Промокод действует 48 часов!</strong>';
+
+// ─── СОСТОЯНИЕ ────────────────────────────────────────────────────────────────
 let spinsLeft=5, busy=false, rot=0, spinNum=0, lastCode='';
+let skipTimer=null;
 const N=SEG.length, ARC=2*Math.PI/N;
+
+// ─── CANVAS ───────────────────────────────────────────────────────────────────
 const CV=document.getElementById('wc');
 const ctx=CV.getContext('2d');
 const SZ=640, CX=SZ/2, CY=SZ/2, R=SZ/2-10;
 
-// ─── DRAW ─────────────────────────────────────────────────────────────────────
-function drawWheel(r) {
+function drawWheel(r){
   ctx.clearRect(0,0,SZ,SZ);
+  for(let i=0;i<N;i++){
+    const s=SEG[i];
+    const segAngle=r-Math.PI/2+i*ARC;
+    const a0=segAngle-ARC/2, a1=segAngle+ARC/2;
 
-  for (let i=0; i<N; i++) {
-    const s = SEG[i];
+    ctx.beginPath(); ctx.moveTo(CX,CY);
+    ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
+    ctx.fillStyle=s.bg; ctx.fill();
 
-    // angle of segment i center, measured from 12 o'clock (top), clockwise
-    // canvas 0 = 3 o'clock, top = -π/2
-    // segment i center in canvas coords: r - π/2 + i*ARC
-    const segAngle = r - Math.PI/2 + i*ARC;
-    const a0 = segAngle - ARC/2;
-    const a1 = segAngle + ARC/2;
-
-    // ── draw sector ──
-    ctx.beginPath();
-    ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1);
-    ctx.closePath();
-    ctx.fillStyle = s.bg;
-    ctx.fill();
-
-    // gloss
     const g=ctx.createRadialGradient(CX,CY,R*.04,CX,CY,R);
     g.addColorStop(0,'rgba(255,255,255,.18)');
     g.addColorStop(.5,'rgba(255,255,255,.04)');
@@ -273,74 +323,37 @@ function drawWheel(r) {
     ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
     ctx.fillStyle=g; ctx.fill();
 
-    // divider
     ctx.beginPath(); ctx.moveTo(CX,CY);
     ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
     ctx.strokeStyle='rgba(255,255,255,.5)'; ctx.lineWidth=2.5; ctx.stroke();
 
-
     ctx.save();
-    ctx.translate(CX, CY);
-    // After this rotation, "outward along segment" = +Y direction
-    ctx.rotate(segAngle + Math.PI/2);
-
-    // Clip to this segment so text stays inside
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    // Arc in rotated space: still need the original arc angles
-    // Easier: just use a large clip rect and rely on the segment being narrow
-    // Actually clip properly by redrawing sector in rotated coords:
-    ctx.arc(0, 0, R, a0 - (segAngle + Math.PI/2), a1 - (segAngle + Math.PI/2));
-    ctx.closePath();
-    ctx.clip();
-
-    const lines = s.label;
-    const fs = Math.max(16, Math.round(R * 0.068));
-    const lh = fs * 1.28;
-    const totalH = (lines.length - 1) * lh;
-
-    // Position text block: center it between 20% and 70% of radius
-    const midR = R * 0.44;
-
-    ctx.font = `bold ${fs}px Arial, sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = s.fg;
-    ctx.shadowColor = 'rgba(0,0,0,.3)';
-    ctx.shadowBlur = 3;
-
-    lines.forEach((line, li) => {
-      // y goes outward (positive = toward rim in this rotated frame)
-      const y = midR - totalH/2 + li * lh;
-      ctx.fillText(line, 0, y);
-    });
-
+    ctx.translate(CX,CY);
+    ctx.rotate(segAngle+Math.PI/2);
+    ctx.beginPath(); ctx.moveTo(0,0);
+    ctx.arc(0,0,R,a0-(segAngle+Math.PI/2),a1-(segAngle+Math.PI/2));
+    ctx.closePath(); ctx.clip();
+    const lines=s.label, fs=Math.max(16,Math.round(R*0.068)), lh=fs*1.28;
+    const midR=R*0.44, totalH=(lines.length-1)*lh;
+    ctx.font=`bold ${fs}px Arial,sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=s.fg; ctx.shadowColor='rgba(0,0,0,.3)'; ctx.shadowBlur=3;
+    lines.forEach((ln,li)=>ctx.fillText(ln,0,midR-totalH/2+li*lh));
     ctx.restore();
 
-    // ── EMOJI near rim ──
-    const eR = R * 0.82;
-    const ex = CX + eR * Math.cos(segAngle);
-    const ey = CY + eR * Math.sin(segAngle);
-    ctx.save();
-    ctx.translate(ex, ey);
-    ctx.rotate(segAngle + Math.PI/2);
-    ctx.font = `${Math.round(R*0.09)}px serif`;
+    const eR=R*0.82, ex=CX+eR*Math.cos(segAngle), ey=CY+eR*Math.sin(segAngle);
+    ctx.save(); ctx.translate(ex,ey); ctx.rotate(segAngle+Math.PI/2);
+    ctx.font=`${Math.round(R*0.09)}px serif`;
     ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.shadowColor='rgba(0,0,0,.15)'; ctx.shadowBlur=2;
-    ctx.fillText(s.emoji, 0, 0);
-    ctx.restore();
+    ctx.fillText(s.emoji,0,0); ctx.restore();
   }
-
-  // outer ring
   ctx.beginPath(); ctx.arc(CX,CY,R,0,2*Math.PI);
   ctx.strokeStyle='rgba(255,255,255,.7)'; ctx.lineWidth=5; ctx.stroke();
-
-  // center disk
   ctx.beginPath(); ctx.arc(CX,CY,35,0,2*Math.PI);
   ctx.fillStyle='#fff'; ctx.fill();
   ctx.strokeStyle='rgba(232,25,44,.1)'; ctx.lineWidth=3; ctx.stroke();
 }
-
 drawWheel(rot);
 
 // ─── PICK ─────────────────────────────────────────────────────────────────────
@@ -359,15 +372,11 @@ function spin(){
   if(busy||spinsLeft<=0) return;
   busy=true; btnOff();
   const ti=pickIdx();
-
-  // Want segment ti at top after spin.
-  // Segment i center in canvas = r - π/2 + i*ARC
-  // For it to be at top (-π/2): r - π/2 + ti*ARC = -π/2  →  r = -ti*ARC
-  const targetRot = ((-ti*ARC)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
-  const jitter = (Math.random()-.5)*ARC*0.55;
-  const targetJ = (targetRot+jitter+2*Math.PI)%(2*Math.PI);
-  const curNorm = ((rot%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
-  let delta = ((targetJ-curNorm)+2*Math.PI)%(2*Math.PI);
+  const targetRot=((-ti*ARC)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  const jitter=(Math.random()-.5)*ARC*0.55;
+  const targetJ=(targetRot+jitter+2*Math.PI)%(2*Math.PI);
+  const curNorm=((rot%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+  let delta=((targetJ-curNorm)+2*Math.PI)%(2*Math.PI);
   if(delta<0.4) delta+=2*Math.PI;
   const total=(5+Math.floor(Math.random()*4))*2*Math.PI+delta;
   const startRot=rot, dur=4200+Math.random()*1100, t0=performance.now();
@@ -378,18 +387,29 @@ function spin(){
     rot=startRot+total*ease(t);
     drawWheel(rot);
     if(t<1){requestAnimationFrame(go);return}
+
     busy=false; spinNum++; spinsLeft--;
     updateDots();
-    if(SEG[ti].isRetry){
-      if(spinsLeft>0){toast('🔄 Крути ещё раз! Удача близко!');btnOn();}
-      else{showModal(SEG.findIndex(s=>s.isFinal));}
+
+    const afterSpin=()=>{
+      if(SEG[ti].isRetry){
+        if(spinsLeft>0){toast('🔄 Крути ещё раз! Удача близко!');btnOn();}
+        else showModal(SEG.findIndex(s=>s.isFinal));
+      } else {
+        showModal(ti);
+        if(spinsLeft>0) btnOn();
+      }
+      if(spinsLeft===0){
+        document.getElementById('sbtn').style.display='none';
+        document.getElementById('doneMsg').style.display='block';
+      }
+    };
+
+    // После 2-го вращения (spinNum===2) — показываем рекламное видео
+    if(spinNum===2 && !SEG[ti].isRetry){
+      showAdVideo(afterSpin);
     } else {
-      showModal(ti);
-      if(spinsLeft>0) btnOn();
-    }
-    if(spinsLeft===0){
-      document.getElementById('sbtn').style.display='none';
-      document.getElementById('doneMsg').style.display='block';
+      afterSpin();
     }
   });
 }
@@ -401,27 +421,80 @@ function updateDots(){
   for(let i=1;i<=5;i++) document.getElementById('d'+i).classList.toggle('off',i<=used);
 }
 
-// ─── MODAL ────────────────────────────────────────────────────────────────────
-// НАСТРОЙКИ — замени на свои!
-const FORMSPREE_URL = 'https://formspree.io/f/mvzvawok'; 
-const BUY_URL = 'https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel'; 
+// ─── AD VIDEO ─────────────────────────────────────────────────────────────────
+function showAdVideo(callback){
+  document.getElementById('vframe').src=AD_VIDEO_URL;
+  document.getElementById('vcloseBtn').style.display='none';
+  document.getElementById('skipBtn').style.display='flex';
+  document.getElementById('skipCount').textContent='3';
+  document.getElementById('voverlay').classList.add('show');
 
+  let sec=3;
+  const skipBtn=document.getElementById('skipBtn');
+  skipBtn.disabled=true;
+  skipTimer=setInterval(()=>{
+    sec--;
+    document.getElementById('skipCount').textContent=sec;
+    if(sec<=0){
+      clearInterval(skipTimer);
+      skipBtn.disabled=false;
+      skipBtn.innerHTML='Пропустить ✕';
+    }
+  },1000);
+
+  // сохраняем колбэк
+  window._adCallback=callback;
+}
+
+function skipAd(){
+  clearInterval(skipTimer);
+  document.getElementById('vframe').src='';
+  document.getElementById('voverlay').classList.remove('show');
+  if(window._adCallback){ window._adCallback(); window._adCallback=null; }
+}
+
+// ─── PRIZE VIDEO (тренировка) ─────────────────────────────────────────────────
+function showPrizeVideo(){
+  document.getElementById('vframe').src=PRIZE_VIDEO_URL;
+  document.getElementById('skipBtn').style.display='none';
+  document.getElementById('vcloseBtn').style.display='flex';
+  document.getElementById('voverlay').classList.add('show');
+}
+
+function closeVideo(){
+  document.getElementById('vframe').src='';
+  document.getElementById('voverlay').classList.remove('show');
+}
+
+// ─── MODAL ────────────────────────────────────────────────────────────────────
 function showModal(idx){
   const s=SEG[idx], fin=spinsLeft===0;
   document.getElementById('mEmoji').textContent=s.emoji;
   document.getElementById('mTag').textContent=fin?'🎊 Последнее вращение!':'🎉 Поздравляем!';
   const tel=document.getElementById('mTitle');
-  tel.textContent=s.prize; tel.className='m-title'+(s.isJackpot||fin?' red':'');
+  tel.textContent=s.prize;
+  tel.className='m-title'+(s.isJackpot||fin?' red':'');
 
-  // Показываем промокод только для скидки (не для джекпота)
   const pel=document.getElementById('mPromo');
-  if((s.promo||fin) && !s.isJackpot){
-    pel.style.display='block'; lastCode=fin?'LUCKY':s.promo;
+  if((s.promo||fin)&&!s.isJackpot){
+    pel.style.display='block';
+    lastCode=fin?'LUCKY':s.promo;
     document.getElementById('mCode').textContent=lastCode;
   } else pel.style.display='none';
 
   document.getElementById('mDesc').textContent=s.desc;
-  document.getElementById('mAd').innerHTML=fin?FINAL_AD:ADS[spinNum%ADS.length];
+
+  // Рекламный блок — для последнего вращения особый текст, иначе возражения
+  const adCard=document.getElementById('mAd');
+  const adTtl=document.querySelector('.adcard-ttl');
+  if(fin){
+    adTtl.textContent='🚶‍♀️ О клубе Шагай Дома';
+    adCard.innerHTML=FINAL_AD;
+  } else {
+    const ad=ADS[spinNum%ADS.length];
+    adTtl.textContent=ad.title;
+    adCard.innerHTML=ad.text;
+  }
 
   const badge=document.getElementById('mBadge');
   if(spinsLeft>0){
@@ -431,12 +504,12 @@ function showModal(idx){
 
   const acts=document.getElementById('mActions'); acts.innerHTML='';
 
-  // ── ДЖЕКПОТ: форма для сбора email ──
   if(s.isJackpot){
+    // Форма email
     acts.innerHTML=`
       <div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px">
         <div style="font-size:13px;font-weight:800;color:var(--dark);margin-bottom:10px;line-height:1.5">
-          📧 Оставь свою почту — мы активируем твой бесплатный абонемент и пришлём всё на email:
+          📧 Оставь свою почту — мы активируем твой бесплатный абонемент:
         </div>
         <input id="jackpotEmail" type="email" placeholder="твоя@почта.ru"
           style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;
@@ -452,22 +525,26 @@ function showModal(idx){
         <div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div>
       </div>`;
 
-  // ── СКИДКА (включая гарантированную на 5-м вращении): промокод + кнопка на сайт ──
+  } else if(s.isTraining){
+    // Кнопка просмотра тренировки
+    const bt=document.createElement('button'); bt.className='btn-take';
+    bt.innerHTML='▶️ Смотреть тренировку прямо сейчас!';
+    bt.onclick=()=>{ closeModal(); showPrizeVideo(); };
+    acts.appendChild(bt);
+
   } else if(s.isDiscount||fin){
     const bt=document.createElement('button'); bt.className='btn-take';
     bt.innerHTML='🛒 Перейти к покупке со скидкой 20%';
     bt.onclick=()=>{ window.open(BUY_URL,'_blank'); closeModal(); };
     acts.appendChild(bt);
 
-  // ── ОСТАЛЬНЫЕ ПРИЗЫ ──
   } else {
     const bt=document.createElement('button'); bt.className='btn-take';
     bt.textContent='✅ Забрать приз!';
     bt.onclick=()=>closeModal(); acts.appendChild(bt);
   }
 
-  // Кнопка "крутить ещё раз" (не показываем для джекпота и последнего вращения)
-  if(spinsLeft>0 && !fin && !s.isJackpot){
+  if(spinsLeft>0&&!fin&&!s.isJackpot){
     const br=document.createElement('button'); br.className='btn-respin';
     br.textContent=`🎯 Крутить ещё раз (${spinsLeft} вращени${spinsLeft===1?'е':'я'})`;
     br.onclick=()=>closeModal(true); acts.appendChild(br);
@@ -479,20 +556,22 @@ function showModal(idx){
   if(s.isJackpot||fin) confetti();
 }
 
+function closeModal(){
+  document.getElementById('overlay').classList.remove('show');
+}
+
 function submitJackpot(){
   const email=document.getElementById('jackpotEmail').value.trim();
   const status=document.getElementById('jackpotStatus');
   if(!email||!email.includes('@')||!email.includes('.')){
     status.style.color='#E8192C';
-    status.textContent='Пожалуйста, введи корректный email 📧';
-    return;
+    status.textContent='Пожалуйста, введи корректный email 📧'; return;
   }
-  status.style.color='#aaa';
-  status.textContent='Отправляем...';
+  status.style.color='#aaa'; status.textContent='Отправляем...';
   fetch(FORMSPREE_URL,{
     method:'POST',
     headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({email, prize:'🏆 Бесплатный абонемент', source:'Колесо удачи ШагайДома'})
+    body:JSON.stringify({email,prize:'🏆 Бесплатный абонемент',source:'Колесо удачи ШагайДома'})
   })
   .then(r=>r.json())
   .then(data=>{
@@ -501,20 +580,11 @@ function submitJackpot(){
       document.querySelector('[onclick="submitJackpot()"]').style.display='none';
       status.style.color='#22aa55'; status.style.fontSize='14px';
       status.textContent='🎉 Готово! Мы скоро напишем тебе на почту!';
-    } else {
-      status.style.color='#E8192C';
-      status.textContent='Что-то пошло не так. Попробуй ещё раз.';
-    }
+    } else { status.style.color='#E8192C'; status.textContent='Что-то пошло не так. Попробуй ещё раз.'; }
   })
-  .catch(()=>{
-    status.style.color='#E8192C';
-    status.textContent='Ошибка сети. Напиши нам напрямую.';
-  });
+  .catch(()=>{ status.style.color='#E8192C'; status.textContent='Ошибка сети. Напиши нам напрямую.'; });
 }
 
-function closeModal(respin){
-  document.getElementById('overlay').classList.remove('show');
-}
 function copyCode(){
   navigator.clipboard.writeText(lastCode).catch(()=>{});
   const el=document.getElementById('mCode'),o=el.textContent;
@@ -534,8 +604,10 @@ function confetti(){
     el.style.borderRadius=Math.random()>.4?'50%':'2px';
     const sz=6+Math.random()*8; el.style.width=el.style.height=sz+'px';
     document.body.appendChild(el);
-    el.animate([{top:'-20px',opacity:1,transform:'rotate(0)'},{top:'108vh',opacity:0,transform:`rotate(${400+Math.random()*360}deg) translateX(${(Math.random()-.5)*160}px)`}],
-    {duration:2000+Math.random()*1500,easing:'cubic-bezier(.2,.8,.4,1)',fill:'forwards'}).onfinish=()=>el.remove();
+    el.animate([{top:'-20px',opacity:1,transform:'rotate(0)'},{top:'108vh',opacity:0,
+      transform:`rotate(${400+Math.random()*360}deg) translateX(${(Math.random()-.5)*160}px)`}],
+    {duration:2000+Math.random()*1500,easing:'cubic-bezier(.2,.8,.4,1)',fill:'forwards'})
+    .onfinish=()=>el.remove();
   },i*32);
 }
 </script>
