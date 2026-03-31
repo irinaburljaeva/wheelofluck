@@ -266,54 +266,106 @@ const SZ=640, CX=SZ/2, CY=SZ/2, R=SZ/2-10;
 
 function drawWheel(r){
 ctx.clearRect(0,0,SZ,SZ);
-for(let i=0;i<N;i++){
-const s=SEG[i];
-const segAngle=r-Math.PI/2+i*ARC;
-const a0=segAngle-ARC/2, a1=segAngle+ARC/2;
-ctx.beginPath(); ctx.moveTo(CX,CY);
-ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
-ctx.fillStyle=s.bg; ctx.fill();
-const g=ctx.createRadialGradient(CX,CY,R*.04,CX,CY,R);
-g.addColorStop(0,‘rgba(255,255,255,.18)’);
-g.addColorStop(.5,‘rgba(255,255,255,.04)’);
-g.addColorStop(1,‘rgba(0,0,0,.07)’);
-ctx.beginPath(); ctx.moveTo(CX,CY);
-ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
-ctx.fillStyle=g; ctx.fill();
-ctx.beginPath(); ctx.moveTo(CX,CY);
-ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
-ctx.strokeStyle=‘rgba(255,255,255,.5)’; ctx.lineWidth=2.5; ctx.stroke();
+for(var i=0;i<N;i++){
+var s=SEG[i];
+var segAngle=r-Math.PI/2+i*ARC;
+var a0=segAngle-ARC/2, a1=segAngle+ARC/2;
+
+```
+// Весь сегмент рисуем внутри save/restore чтобы clip не влиял на другие сегменты
 ctx.save();
+
+// Заливка сегмента
+ctx.beginPath();
+ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1);
+ctx.closePath();
+ctx.fillStyle=s.bg;
+ctx.fill();
+
+// Блик
+var g=ctx.createRadialGradient(CX,CY,R*.04,CX,CY,R);
+g.addColorStop(0,'rgba(255,255,255,.18)');
+g.addColorStop(.5,'rgba(255,255,255,.04)');
+g.addColorStop(1,'rgba(0,0,0,.07)');
+ctx.beginPath();
+ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1);
+ctx.closePath();
+ctx.fillStyle=g;
+ctx.fill();
+
+// Разделитель
+ctx.beginPath();
+ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1);
+ctx.closePath();
+ctx.strokeStyle='rgba(255,255,255,.5)';
+ctx.lineWidth=2.5;
+ctx.stroke();
+
+// Текст — клипируем только для него, внутри того же save
 ctx.translate(CX,CY);
 ctx.rotate(segAngle+Math.PI/2);
-ctx.beginPath(); ctx.moveTo(0,0);
+ctx.beginPath();
+ctx.moveTo(0,0);
 ctx.arc(0,0,R,a0-(segAngle+Math.PI/2),a1-(segAngle+Math.PI/2));
-ctx.closePath(); ctx.clip();
-const lines=s.label, fs=Math.max(16,Math.round(R*0.068)), lh=fs*1.28;
-const midR=R*0.44, totalH=(lines.length-1)*lh;
-ctx.font=’bold ’+fs+‘px Arial,sans-serif’;
-ctx.textAlign=‘center’; ctx.textBaseline=‘middle’;
-ctx.fillStyle=s.fg; ctx.shadowColor=‘rgba(0,0,0,.3)’; ctx.shadowBlur=3;
+ctx.closePath();
+ctx.clip();
+var lines=s.label, fs=Math.max(16,Math.round(R*0.068)), lh=fs*1.28;
+var midR=R*0.44, totalH=(lines.length-1)*lh;
+ctx.font='bold '+fs+'px Arial,sans-serif';
+ctx.textAlign='center';
+ctx.textBaseline='middle';
+ctx.fillStyle=s.fg;
+ctx.shadowColor='rgba(0,0,0,.3)';
+ctx.shadowBlur=3;
 lines.forEach(function(ln,li){ctx.fillText(ln,0,midR-totalH/2+li*lh);});
+
+ctx.restore(); // clip сброшен, сегмент завершён
+
+// Эмодзи у обода (вне clip, поэтому отдельный save)
+var eR=R*0.82;
+var ex=CX+eR*Math.cos(segAngle);
+var ey=CY+eR*Math.sin(segAngle);
+ctx.save();
+ctx.translate(ex,ey);
+ctx.rotate(segAngle+Math.PI/2);
+ctx.font=Math.round(R*0.09)+'px serif';
+ctx.textAlign='center';
+ctx.textBaseline='middle';
+ctx.shadowColor='rgba(0,0,0,.15)';
+ctx.shadowBlur=2;
+ctx.fillText(s.emoji,0,0);
 ctx.restore();
-const eR=R*0.82, ex=CX+eR*Math.cos(segAngle), ey=CY+eR*Math.sin(segAngle);
-ctx.save(); ctx.translate(ex,ey); ctx.rotate(segAngle+Math.PI/2);
-ctx.font=Math.round(R*0.09)+‘px serif’;
-ctx.textAlign=‘center’; ctx.textBaseline=‘middle’;
-ctx.shadowColor=‘rgba(0,0,0,.15)’; ctx.shadowBlur=2;
-ctx.fillText(s.emoji,0,0); ctx.restore();
-}
-ctx.beginPath(); ctx.arc(CX,CY,R,0,2*Math.PI);
-ctx.strokeStyle=‘rgba(255,255,255,.7)’; ctx.lineWidth=5; ctx.stroke();
-ctx.beginPath(); ctx.arc(CX,CY,35,0,2*Math.PI);
-ctx.fillStyle=’#fff’; ctx.fill();
-ctx.strokeStyle=‘rgba(232,25,44,.1)’; ctx.lineWidth=3; ctx.stroke();
+```
+
 }
 
+// Внешнее кольцо
+ctx.beginPath();
+ctx.arc(CX,CY,R,0,2*Math.PI);
+ctx.strokeStyle=‘rgba(255,255,255,.7)’;
+ctx.lineWidth=5;
+ctx.stroke();
+
+// Центральный круг
+ctx.beginPath();
+ctx.arc(CX,CY,35,0,2*Math.PI);
+ctx.fillStyle=’#fff’;
+ctx.fill();
+ctx.strokeStyle=‘rgba(232,25,44,.1)’;
+ctx.lineWidth=3;
+ctx.stroke();
+}
+
+// Рисуем сразу и несколько раз с задержкой — гарантия отрисовки в любом браузере
+drawWheel(rot);
+setTimeout(function(){drawWheel(rot);}, 200);
+setTimeout(function(){drawWheel(rot);}, 600);
+setTimeout(function(){drawWheel(rot);}, 1200);
 if(document.fonts && document.fonts.ready){
-document.fonts.ready.then(function(){drawWheel(rot); setTimeout(function(){drawWheel(rot);},800);});
-} else {
-setTimeout(function(){drawWheel(rot);},500);
+document.fonts.ready.then(function(){drawWheel(rot);});
 }
 
 function pickIdx(){
