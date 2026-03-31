@@ -254,10 +254,10 @@ const SEG = [
     prize:'Скидка 20% на абонемент!',   promo:'LUCKY',
     desc:'Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.',
     w:25, isFinal:true, isDiscount:true },
-  { label:['Меню','клуба PDF'],         emoji:'📋', bg:'#FF6B35', fg:'#fff',
-    prize:'Меню клуба — PDF-гид!',
-    desc:'Полный гид по клубу: тренировки, форматы, расписание. Ссылка придёт на почту.',
-    w:20 },
+  { label:['Рецепты','от диетолога'],   emoji:'🥗', bg:'#FF6B35', fg:'#fff',
+    prize:'Рецепты от диетолога — PDF!',
+    desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
+    w:20, isMenuPdf:true },
   { label:['Бесплатная','тренировка'],  emoji:'🎽', bg:'#FF4D5E', fg:'#fff',
     prize:'Бесплатная тренировка!',
     desc:'Ты выиграла целую тренировку прямо сейчас! Нажми кнопку ниже и занимайся немедленно 🔥',
@@ -283,16 +283,16 @@ const SEG = [
 // ─── РЕКЛАМНЫЕ ТЕКСТЫ (закрываем возражения) ─────────────────────────────────
 const ADS = [
   { title:'🤔 «У меня нет времени на спорт»',
-    text:'Наши тренировки — от <strong>10 до 30 минут</strong>. Никуда ехать не нужно: встала, прошагала прямо дома, получила результат. Уже <strong>10 000 занятых женщин</strong> нашли время — и ты найдёшь!' },
+    text:'Наши тренировки — от <strong>10 до 30 минут</strong> прямо дома. Никуда ехать не надо! Участницы худеют на <strong>от -1 до -4 кг всего за неделю</strong> — просто шагая под видео. <strong>10 000 занятых женщин</strong> нашли время — найдёшь и ты!' },
   { title:'😟 «Я уже пробовала — не похудела»',
-    text:'Ходьба работает иначе, чем изнурительные тренировки. Она <strong>не стрессует тело</strong>, не вызывает срывов и подходит любому возрасту. Наши участницы в среднем теряют <strong>3–8 кг за первый месяц</strong>.' },
+    text:'Ходьба работает иначе! Она <strong>не стрессует тело</strong>, не вызывает срывов. Наши участницы показывают результат <strong>от -1 до -4 кг уже за первую неделю</strong> — без диет и изнурительных тренировок. Просто шаги!' },
   { title:'💸 «Это дорого, подожду»',
-    text:'Один поход в зал стоит дороже, чем месяц в нашем клубе. А здесь — <strong>неограниченный доступ</strong> к тренировкам, поддержка куратора и сообщество <strong>10 000 шагательниц</strong>, которые тебя поймут.' },
+    text:'Один поход в зал стоит дороже месяца в нашем клубе. Здесь — <strong>неограниченный доступ</strong> к тренировкам и сообщество <strong>10 000 шагательниц</strong>. Результат уже с первой недели: <strong>-1 до -4 кг</strong>. Пока ты ждёшь — другие уже худеют!' },
   { title:'😴 «Я слишком устаю, чтобы тренироваться»',
-    text:'Именно для усталых! Ходьба <strong>восстанавливает энергию</strong>, а не забирает её. После 15 минут прогулки дома ты почувствуешь прилив сил. Наши участницы говорят: <strong>«наконец-то тренировка, от которой не умираешь»</strong>.' },
+    text:'Именно для усталых! Ходьба <strong>восстанавливает энергию</strong>, а не забирает её. 15 минут шагов дома — и уже <strong>-1 до -4 кг за неделю</strong>. Наши участницы говорят: <strong>«наконец-то тренировка, от которой не умираешь»</strong>.' },
 ];
 
-const FINAL_AD = 'Это твой <strong>шанс войти в клуб прямо сейчас!</strong> Десятки тренировок, <strong>10 000 женщин-единомышленниц</strong> со всего мира, первый результат через 2–3 недели — всё прямо дома! <strong>Промокод действует 48 часов!</strong>';
+const FINAL_AD = 'Это твой <strong>шанс войти в клуб прямо сейчас!</strong> Участницы худеют на <strong>от -1 до -4 кг уже за первую неделю</strong> — просто шагая дома! <strong>10 000 женщин</strong> со всего мира уже в пути. <strong>Промокод LUCKY даёт -20% — действует 48 часов!</strong>';
 
 // ─── СОСТОЯНИЕ ────────────────────────────────────────────────────────────────
 let spinsLeft=5, busy=false, rot=0, spinNum=0, lastCode='';
@@ -354,8 +354,12 @@ function drawWheel(r){
   ctx.fillStyle='#fff'; ctx.fill();
   ctx.strokeStyle='rgba(232,25,44,.1)'; ctx.lineWidth=3; ctx.stroke();
 }
-drawWheel(rot);
-
+// Ждём шрифты перед первой отрисовкой — иначе текст рендерится пустым
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => { drawWheel(rot); setTimeout(()=>drawWheel(rot),800); });
+} else {
+  setTimeout(() => drawWheel(rot), 500);
+}
 // ─── PICK ─────────────────────────────────────────────────────────────────────
 function pickIdx(){
   if(spinsLeft===1) return SEG.findIndex(s=>s.isFinal);
@@ -423,27 +427,40 @@ function updateDots(){
 
 // ─── AD VIDEO ─────────────────────────────────────────────────────────────────
 function showAdVideo(callback){
-  document.getElementById('vframe').src=AD_VIDEO_URL;
-  document.getElementById('vcloseBtn').style.display='none';
-  document.getElementById('skipBtn').style.display='flex';
-  document.getElementById('skipCount').textContent='3';
+  const frame = document.getElementById('vframe');
+  const skipBtn = document.getElementById('skipBtn');
+  const skipCount = document.getElementById('skipCount');
+
+  // Скрываем кнопку пока видео не загрузилось
+  skipBtn.style.display = 'none';
+  skipBtn.disabled = true;
+  document.getElementById('vcloseBtn').style.display = 'none';
+  skipCount.textContent = '5';
+  frame.src = AD_VIDEO_URL;
   document.getElementById('voverlay').classList.add('show');
 
-  let sec=3;
-  const skipBtn=document.getElementById('skipBtn');
-  skipBtn.disabled=true;
-  skipTimer=setInterval(()=>{
-    sec--;
-    document.getElementById('skipCount').textContent=sec;
-    if(sec<=0){
-      clearInterval(skipTimer);
-      skipBtn.disabled=false;
-      skipBtn.innerHTML='Пропустить ✕';
-    }
-  },1000);
+  window._adCallback = callback;
 
-  // сохраняем колбэк
-  window._adCallback=callback;
+  // Запускаем отсчёт только после загрузки iframe
+  function startCountdown() {
+    skipBtn.style.display = 'flex';
+    let sec = 5;
+    skipCount.textContent = sec;
+    skipTimer = setInterval(() => {
+      sec--;
+      skipCount.textContent = sec;
+      if (sec <= 0) {
+        clearInterval(skipTimer);
+        skipBtn.disabled = false;
+        skipBtn.innerHTML = 'Пропустить ✕';
+      }
+    }, 1000);
+  }
+
+  // load срабатывает когда iframe получил ответ
+  frame.onload = startCountdown;
+  // Страховка: если onload не сработал за 4 сек — всё равно показываем кнопку
+  setTimeout(() => { if(skipBtn.style.display==='none') startCountdown(); }, 4000);
 }
 
 function skipAd(){
@@ -524,6 +541,17 @@ function showModal(idx){
         </button>
         <div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div>
       </div>`;
+
+  } else if(s.isMenuPdf){
+    const bt=document.createElement('button'); bt.className='btn-take';
+    bt.innerHTML='📥 Скачать рецепты PDF бесплатно!';
+    bt.onclick=()=>{
+      const a=document.createElement('a');
+      a.href='menu.pdf'; a.download='menu.pdf';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      closeModal();
+    };
+    acts.appendChild(bt);
 
   } else if(s.isTraining){
     // Кнопка просмотра тренировки
