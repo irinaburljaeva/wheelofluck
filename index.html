@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -19,7 +20,6 @@ border-radius:11px;display:flex;align-items:center;justify-content:center;
 font-size:20px;box-shadow:0 4px 14px rgba(232,25,44,.3)}
 .logo-name{font-family:'Unbounded',sans-serif;font-size:19px;font-weight:900;color:#1A1A2E}
 .logo-name span{color:#E8192C}
-.logo-sub{font-size:12px;color:#aaa;font-weight:700}
 .spins{margin:16px auto 0;display:flex;align-items:center;gap:10px;background:#fff;
 border-radius:50px;padding:9px 18px;width:fit-content;box-shadow:0 2px 14px rgba(0,0,0,.06)}
 .spins-lbl{font-size:12px;font-weight:800;color:#bbb}
@@ -121,11 +121,12 @@ flex-direction:column;justify-content:center;align-items:center}
 .voverlay.show{display:flex}
 .vframe-wrap{position:relative;width:100%;max-width:480px;aspect-ratio:9/16;background:#000}
 .vframe-wrap iframe{width:100%;height:100%;border:none;display:block}
-.skip-btn{position:absolute;bottom:24px;right:16px;background:rgba(0,0,0,.65);color:#fff;
+/* Кнопка пропустить — верхний ЛЕВЫЙ угол, подальше от кнопки звука VK (справа внизу) */
+.skip-btn{position:absolute;top:16px;left:16px;background:rgba(0,0,0,.65);color:#fff;
 border:2px solid rgba(255,255,255,.5);border-radius:50px;padding:8px 18px;
 font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;
-transition:all .2s;backdrop-filter:blur(4px)}
-.skip-btn:hover{background:rgba(255,255,255,.15)}
+transition:all .2s;backdrop-filter:blur(4px);display:none}
+.skip-btn:disabled{opacity:.6;cursor:not-allowed}
 .skip-countdown{display:inline-block;background:rgba(255,255,255,.2);border-radius:50%;
 width:22px;height:22px;line-height:22px;text-align:center;font-size:11px;font-weight:900;margin-left:4px}
 .vclose-btn{position:absolute;top:16px;right:16px;background:rgba(0,0,0,.5);color:#fff;
@@ -197,397 +198,425 @@ display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)
   </div>
 </div>
 <div class="voverlay" id="voverlay">
-  <div class="vframe-wrap" id="vframeWrap">
+  <div class="vframe-wrap">
     <iframe id="vframe" src="" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe>
     <button class="vclose-btn" id="vcloseBtn" onclick="closeVideo()" style="display:none">✕</button>
-    <button class="skip-btn" id="skipBtn" onclick="skipAd()" style="display:none">
+    <button class="skip-btn" id="skipBtn" onclick="skipAd()">
       Пропустить <span class="skip-countdown" id="skipCount">5</span>
     </button>
   </div>
 </div>
 <script>
-const FORMSPREE_URL = 'https://formspree.io/f/mvzvawok';
-const BUY_URL = 'https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel';
-const AD_VIDEO_URL    = 'https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1';
-const PRIZE_VIDEO_URL = 'https://vk.com/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1';
+var FORMSPREE_URL = 'https://formspree.io/f/mvzvawok';
+var BUY_URL       = 'https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel';
+var PROMO490_URL  = 'https://my.walk-walk.ru/promo_box_490?utm_source=website&utm_medium=game&utm_campaign=wheel';
+// Рекламное видео (embed VK)
+var AD_VIDEO_URL    = 'https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1';
+// Видео тренировки — прямой embed через vkvideo
+var PRIZE_VIDEO_URL = 'https://vkvideo.ru/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1';
 
-const SEG = [
-  { label:['Скидка','20%'],              emoji:'🏷️', bg:'#E8192C', fg:'#fff',
-    prize:'Скидка 20% на абонемент!',    promo:'LUCKY',
-    desc:'Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.',
-    w:25, isFinal:true, isDiscount:true },
-  { label:['Рецепты','от диетолога'],    emoji:'🥗', bg:'#FF6B35', fg:'#fff',
-    prize:'Рецепты от диетолога — PDF!',
-    desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
-    w:20, isMenuPdf:true },
-  { label:['Бесплатная','тренировка'],   emoji:'🎽', bg:'#FF4D5E', fg:'#fff',
-    prize:'Бесплатная тренировка!',
-    desc:'Ты выиграла целую тренировку прямо сейчас! Нажми кнопку ниже и занимайся немедленно 🔥',
-    w:18, isTraining:true },
-  { label:['Бесплатный','абонемент'],    emoji:'🏆', bg:'#F5A623', fg:'#3D2000',
-    prize:'🏆 Бесплатный абонемент!',
-    desc:'Невероятно! Ты выиграла бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
-    w:3, isJackpot:true },
-  { label:['Секретный','тариф 🕵️'],     emoji:'🕵️', bg:'#C01020', fg:'#fff',
-    prize:'Секретный тариф — 1 месяц!',
-    desc:'Закрытый тариф, которого нет в открытой продаже! Спец. условия на 1 месяц. Напиши нам.',
-    w:10 },
-  { label:['Секретный тариф','НАВСЕГДА'],emoji:'🔑', bg:'#D4162A', fg:'#fff',
-    prize:'Секретный тариф НАВСЕГДА!',
-    desc:'Уникальный тариф — доступ навсегда на особых условиях! Только для победителей колеса.',
-    w:8 },
-  { label:['Крути','ещё раз! 🔄'],      emoji:'🔄', bg:'#FFD166', fg:'#5A3A00',
-    prize:'Крути ещё раз!',
-    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
-    w:16, isRetry:true },
+var SEG = [
+{ label:[‘Скидка’,‘20%’],
+emoji:‘🏷️’, bg:’#E8192C’, fg:’#fff’,
+prize:‘Скидка 20% на абонемент!’, promo:‘LUCKY’,
+desc:‘Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.’,
+w:22, isFinal:true, isDiscount:true },
+{ label:[‘Рецепты’,‘от диетолога’],
+emoji:‘🥗’, bg:’#FF6B35’, fg:’#fff’,
+prize:‘Рецепты от диетолога — PDF!’,
+desc:‘Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗’,
+w:18, isMenuPdf:true },
+{ label:[‘Бесплатная’,‘тренировка’],
+emoji:‘🎽’, bg:’#FF4D5E’, fg:’#fff’,
+prize:‘Бесплатная тренировка!’,
+desc:‘Ты выиграла целую тренировку прямо сейчас! Нажми кнопку ниже и занимайся немедленно 🔥’,
+w:16, isTraining:true },
+{ label:[‘Бесплатный’,‘абонемент’],
+emoji:‘🏆’, bg:’#F5A623’, fg:’#3D2000’,
+prize:‘🏆 Бесплатный абонемент!’,
+desc:‘Невероятно! Ты выиграла бесплатный абонемент! Оставь свою почту — мы активируем доступ.’,
+w:3, isJackpot:true },
+{ label:[‘Промо-неделя’,‘всего 490 руб’],
+emoji:‘🎁’, bg:’#9B59B6’, fg:’#fff’,
+prize:‘Промо-неделя за 490 руб!’,
+desc:‘Эксклюзивное предложение специально для тебя! Попробуй клуб целую неделю за 490 руб — только для новых участниц.’,
+w:14, isPromo490:true },
+{ label:[‘Секретный’,‘тариф 1 мес’],
+emoji:‘🕵️’, bg:’#C01020’, fg:’#fff’,
+prize:‘Секретный тариф — 1 месяц!’,
+desc:‘Закрытый тариф, которого нет в открытой продаже! Спец. условия на 1 месяц. Напиши нам.’,
+w:10 },
+{ label:[‘Секретный’,‘тариф НАВСЕГДА’],
+emoji:‘🔑’, bg:’#D4162A’, fg:’#fff’,
+prize:‘Секретный тариф НАВСЕГДА!’,
+desc:‘Уникальный тариф — доступ навсегда на особых условиях! Только для победителей колеса.’,
+w:8 },
+{ label:[‘Крути’,‘ещё раз!’],
+emoji:‘🔄’, bg:’#FFD166’, fg:’#5A3A00’,
+prize:‘Крути ещё раз!’,
+desc:‘Не повезло — но удача совсем близко! Крути снова 🎯’,
+w:14, isRetry:true },
 ];
 
-// Каждый текст — своё возражение, фраза про похудение только в первом
-const ADS = [
-  { title:'🔥 От -1 до -4 кг уже за первую неделю!',
-    text:'Не диета, не изнурительный зал — просто <strong>ходьба дома под видео</strong>. Наши участницы видят результат уже на первой неделе. <strong>10 000 женщин</strong> со всего мира уже шагают — присоединяйся!' },
-  { title:'🤔 «У меня нет времени на спорт»',
-    text:'Тренировки от <strong>10 до 30 минут</strong> прямо дома — никуда ехать не нужно. Встала, включила видео, прошагала. <strong>10 000 занятых женщин</strong> нашли время — найдёшь и ты!' },
-  { title:'😟 «Я уже пробовала — не помогло»',
-    text:'Ходьба работает иначе, чем изнурительные тренировки. Она <strong>не стрессует тело</strong>, не вызывает срывов и подходит любому уровню подготовки. Просто шаги — и результат!' },
-  { title:'💸 «Пока подожду с покупкой»',
-    text:'Один поход в зал стоит дороже, чем <strong>целый месяц</strong> в нашем клубе. Пока ты ждёшь — участницы уже худеют. Не откладывай то, что работает!' },
+var ADS = [
+{ title:‘🔥 От -1 до -4 кг уже за первую неделю!’,
+text:‘Не диета, не изнурительный зал — просто <strong>ходьба дома под видео</strong>. Наши участницы видят результат уже на первой неделе. <strong>10 000 женщин</strong> со всего мира уже шагают — присоединяйся!’ },
+{ title:‘🤔 «У меня нет времени на спорт»’,
+text:‘Тренировки от <strong>10 до 30 минут</strong> прямо дома — никуда ехать не нужно. Встала, включила видео, прошагала. <strong>10 000 занятых женщин</strong> нашли время — найдёшь и ты!’ },
+{ title:‘😟 «Я уже пробовала — не помогло»’,
+text:‘Ходьба работает иначе, чем изнурительные тренировки. Она <strong>не стрессует тело</strong>, не вызывает срывов и подходит любому уровню подготовки. Просто шаги — и результат!’ },
+{ title:‘💸 «Пока подожду с покупкой»’,
+text:‘Один поход в зал стоит дороже, чем <strong>целый месяц</strong> в нашем клубе. Пока ты ждёшь — участницы уже худеют. Не откладывай то, что работает!’ },
 ];
 
-const FINAL_AD = 'Это твой <strong>шанс войти в клуб прямо сейчас!</strong> Десятки тренировок дома, <strong>10 000 женщин-единомышленниц</strong> со всего мира и твоя новая стройная жизнь. <strong>Промокод LUCKY даёт -20% — действует 48 часов!</strong>';
+var FINAL_AD = ‘Это твой <strong>шанс войти в клуб прямо сейчас!</strong> Десятки тренировок дома, <strong>10 000 женщин-единомышленниц</strong> со всего мира и твоя новая стройная жизнь. <strong>Промокод LUCKY даёт -20% — действует 48 часов!</strong>’;
 
-let spinsLeft=5, busy=false, rot=0, spinNum=0, lastCode='';
-let skipTimer=null;
-const N=SEG.length, ARC=2*Math.PI/N;
-const CV=document.getElementById('wc');
-const ctx=CV.getContext('2d');
-const SZ=640, CX=SZ/2, CY=SZ/2, R=SZ/2-10;
+var spinsLeft=5, busy=false, rot=0, spinNum=0, lastCode=’’;
+var skipTimer=null;
+var N=SEG.length, ARC=2*Math.PI/N;
+var CV=document.getElementById(‘wc’);
+var ctx=CV.getContext(‘2d’);
+var SZ=640, CX=SZ/2, CY=SZ/2, R=SZ/2-10;
 
 function drawWheel(r){
-  ctx.clearRect(0,0,SZ,SZ);
-  for(var i=0;i<N;i++){
-    var s=SEG[i];
-    var segAngle=r-Math.PI/2+i*ARC;
-    var a0=segAngle-ARC/2, a1=segAngle+ARC/2;
+ctx.clearRect(0,0,SZ,SZ);
+for(var i=0;i<N;i++){
+var s=SEG[i];
+var segAngle=r-Math.PI/2+i*ARC;
+var a0=segAngle-ARC/2, a1=segAngle+ARC/2;
 
-    // Весь сегмент рисуем внутри save/restore чтобы clip не влиял на другие сегменты
-    ctx.save();
+```
+// 1. Заливка сегмента (без clip)
+ctx.save();
+ctx.beginPath();
+ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1);
+ctx.closePath();
+ctx.fillStyle=s.bg;
+ctx.fill();
+// Блик
+var g=ctx.createRadialGradient(CX,CY,R*0.04,CX,CY,R);
+g.addColorStop(0,'rgba(255,255,255,.18)');
+g.addColorStop(0.5,'rgba(255,255,255,.04)');
+g.addColorStop(1,'rgba(0,0,0,.07)');
+ctx.beginPath();
+ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1);
+ctx.closePath();
+ctx.fillStyle=g;
+ctx.fill();
+// Разделитель
+ctx.beginPath();
+ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1);
+ctx.closePath();
+ctx.strokeStyle='rgba(255,255,255,.5)';
+ctx.lineWidth=2.5;
+ctx.stroke();
+ctx.restore();
 
-    // Заливка сегмента
-    ctx.beginPath();
-    ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1);
-    ctx.closePath();
-    ctx.fillStyle=s.bg;
-    ctx.fill();
+// 2. Текст — отдельный save с clip
+ctx.save();
+ctx.translate(CX,CY);
+ctx.rotate(segAngle+Math.PI/2);
+// Clip по сектору в повёрнутых координатах
+ctx.beginPath();
+ctx.moveTo(0,0);
+ctx.arc(0,0,R, a0-(segAngle+Math.PI/2), a1-(segAngle+Math.PI/2));
+ctx.closePath();
+ctx.clip();
+var lines=s.label;
+// Адаптивный размер шрифта: для 8 сегментов угол мал — шрифт меньше
+var maxFs=Math.round(R*0.058);
+var fs=Math.max(12, maxFs);
+var lh=fs*1.22;
+var totalH=(lines.length-1)*lh;
+// Центр текста — между 18% и 62% радиуса
+var midR=R*0.38;
+ctx.font='bold '+fs+'px Arial,sans-serif';
+ctx.textAlign='center';
+ctx.textBaseline='middle';
+ctx.fillStyle=s.fg;
+ctx.shadowColor='rgba(0,0,0,.35)';
+ctx.shadowBlur=3;
+lines.forEach(function(ln,li){
+  ctx.fillText(ln, 0, midR - totalH/2 + li*lh);
+});
+ctx.restore();
 
-    // Блик
-    var g=ctx.createRadialGradient(CX,CY,R*.04,CX,CY,R);
-    g.addColorStop(0,'rgba(255,255,255,.18)');
-    g.addColorStop(.5,'rgba(255,255,255,.04)');
-    g.addColorStop(1,'rgba(0,0,0,.07)');
-    ctx.beginPath();
-    ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1);
-    ctx.closePath();
-    ctx.fillStyle=g;
-    ctx.fill();
+// 3. Эмодзи у обода — отдельный save
+var eR=R*0.80;
+var ex=CX+eR*Math.cos(segAngle);
+var ey=CY+eR*Math.sin(segAngle);
+ctx.save();
+ctx.translate(ex,ey);
+ctx.rotate(segAngle+Math.PI/2);
+ctx.font=Math.round(R*0.082)+'px serif';
+ctx.textAlign='center';
+ctx.textBaseline='middle';
+ctx.shadowColor='rgba(0,0,0,.15)';
+ctx.shadowBlur=2;
+ctx.fillText(s.emoji,0,0);
+ctx.restore();
+```
 
-    // Разделитель
-    ctx.beginPath();
-    ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1);
-    ctx.closePath();
-    ctx.strokeStyle='rgba(255,255,255,.5)';
-    ctx.lineWidth=2.5;
-    ctx.stroke();
-
-    // Текст — клипируем только для него, внутри того же save
-    ctx.translate(CX,CY);
-    ctx.rotate(segAngle+Math.PI/2);
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.arc(0,0,R,a0-(segAngle+Math.PI/2),a1-(segAngle+Math.PI/2));
-    ctx.closePath();
-    ctx.clip();
-    var lines=s.label, fs=Math.max(16,Math.round(R*0.068)), lh=fs*1.28;
-    var midR=R*0.44, totalH=(lines.length-1)*lh;
-    ctx.font='bold '+fs+'px Arial,sans-serif';
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.fillStyle=s.fg;
-    ctx.shadowColor='rgba(0,0,0,.3)';
-    ctx.shadowBlur=3;
-    lines.forEach(function(ln,li){ctx.fillText(ln,0,midR-totalH/2+li*lh);});
-
-    ctx.restore(); // clip сброшен, сегмент завершён
-
-    // Эмодзи у обода (вне clip, поэтому отдельный save)
-    var eR=R*0.82;
-    var ex=CX+eR*Math.cos(segAngle);
-    var ey=CY+eR*Math.sin(segAngle);
-    ctx.save();
-    ctx.translate(ex,ey);
-    ctx.rotate(segAngle+Math.PI/2);
-    ctx.font=Math.round(R*0.09)+'px serif';
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.shadowColor='rgba(0,0,0,.15)';
-    ctx.shadowBlur=2;
-    ctx.fillText(s.emoji,0,0);
-    ctx.restore();
-  }
-
-  // Внешнее кольцо
-  ctx.beginPath();
-  ctx.arc(CX,CY,R,0,2*Math.PI);
-  ctx.strokeStyle='rgba(255,255,255,.7)';
-  ctx.lineWidth=5;
-  ctx.stroke();
-
-  // Центральный круг
-  ctx.beginPath();
-  ctx.arc(CX,CY,35,0,2*Math.PI);
-  ctx.fillStyle='#fff';
-  ctx.fill();
-  ctx.strokeStyle='rgba(232,25,44,.1)';
-  ctx.lineWidth=3;
-  ctx.stroke();
+}
+// Внешнее кольцо
+ctx.beginPath();
+ctx.arc(CX,CY,R,0,2*Math.PI);
+ctx.strokeStyle=‘rgba(255,255,255,.7)’;
+ctx.lineWidth=5;
+ctx.stroke();
+// Центральный круг
+ctx.beginPath();
+ctx.arc(CX,CY,35,0,2*Math.PI);
+ctx.fillStyle=’#fff’;
+ctx.fill();
+ctx.strokeStyle=‘rgba(232,25,44,.1)’;
+ctx.lineWidth=3;
+ctx.stroke();
 }
 
-// Рисуем сразу и несколько раз с задержкой — гарантия отрисовки в любом браузере
 drawWheel(rot);
-setTimeout(function(){drawWheel(rot);}, 200);
-setTimeout(function(){drawWheel(rot);}, 600);
-setTimeout(function(){drawWheel(rot);}, 1200);
-if(document.fonts && document.fonts.ready){
-  document.fonts.ready.then(function(){drawWheel(rot);});
+setTimeout(function(){drawWheel(rot);},200);
+setTimeout(function(){drawWheel(rot);},700);
+if(document.fonts&&document.fonts.ready){
+document.fonts.ready.then(function(){drawWheel(rot);});
 }
 
 function pickIdx(){
-  if(spinsLeft===1) return SEG.findIndex(function(s){return s.isFinal;});
-  var pool=[];
-  SEG.forEach(function(s,i){
-    if(s.isJackpot&&spinsLeft>2) return;
-    for(var j=0;j<s.w;j++) pool.push(i);
-  });
-  return pool[Math.floor(Math.random()*pool.length)];
+if(spinsLeft===1) return SEG.findIndex(function(s){return s.isFinal;});
+var pool=[];
+SEG.forEach(function(s,i){
+if(s.isJackpot&&spinsLeft>2) return;
+for(var j=0;j<s.w;j++) pool.push(i);
+});
+return pool[Math.floor(Math.random()*pool.length)];
 }
 
 function spin(){
-  if(busy||spinsLeft<=0) return;
-  busy=true; btnOff();
-  var ti=pickIdx();
-  var targetRot=((-ti*ARC)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
-  var jitter=(Math.random()-.5)*ARC*0.55;
-  var targetJ=(targetRot+jitter+2*Math.PI)%(2*Math.PI);
-  var curNorm=((rot%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
-  var delta=((targetJ-curNorm)+2*Math.PI)%(2*Math.PI);
-  if(delta<0.4) delta+=2*Math.PI;
-  var total=(5+Math.floor(Math.random()*4))*2*Math.PI+delta;
-  var startRot=rot, dur=4200+Math.random()*1100, t0=performance.now();
-  function ease(t){return 1-Math.pow(1-t,3.8);}
-  requestAnimationFrame(function go(now){
-    var t=Math.min((now-t0)/dur,1);
-    rot=startRot+total*ease(t);
-    drawWheel(rot);
-    if(t<1){requestAnimationFrame(go);return;}
-    busy=false; spinNum++; spinsLeft--;
-    updateDots();
-    var afterSpin=function(){
-      if(SEG[ti].isRetry){
-        if(spinsLeft>0){toast('🔄 Крути ещё раз! Удача близко!');btnOn();}
-        else showModal(SEG.findIndex(function(s){return s.isFinal;}));
-      } else {
-        showModal(ti);
-        if(spinsLeft>0) btnOn();
-      }
-      if(spinsLeft===0){
-        document.getElementById('sbtn').style.display='none';
-        document.getElementById('doneMsg').style.display='block';
-      }
-    };
-    if(spinNum===2&&!SEG[ti].isRetry){showAdVideo(afterSpin);}
-    else{afterSpin();}
-  });
+if(busy||spinsLeft<=0) return;
+busy=true; btnOff();
+var ti=pickIdx();
+var targetRot=((-ti*ARC)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+var jitter=(Math.random()-.5)*ARC*0.55;
+var targetJ=(targetRot+jitter+2*Math.PI)%(2*Math.PI);
+var curNorm=((rot%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+var delta=((targetJ-curNorm)+2*Math.PI)%(2*Math.PI);
+if(delta<0.4) delta+=2*Math.PI;
+var total=(5+Math.floor(Math.random()*4))*2*Math.PI+delta;
+var startRot=rot, dur=4200+Math.random()*1100, t0=performance.now();
+function ease(t){return 1-Math.pow(1-t,3.8);}
+requestAnimationFrame(function go(now){
+var t=Math.min((now-t0)/dur,1);
+rot=startRot+total*ease(t);
+drawWheel(rot);
+if(t<1){requestAnimationFrame(go);return;}
+busy=false; spinNum++; spinsLeft–;
+updateDots();
+var afterSpin=function(){
+if(SEG[ti].isRetry){
+if(spinsLeft>0){toast(‘🔄 Крути ещё раз! Удача близко!’);btnOn();}
+else showModal(SEG.findIndex(function(s){return s.isFinal;}));
+} else {
+showModal(ti);
+if(spinsLeft>0) btnOn();
+}
+if(spinsLeft===0){
+document.getElementById(‘sbtn’).style.display=‘none’;
+document.getElementById(‘doneMsg’).style.display=‘block’;
+}
+};
+if(spinNum===2&&!SEG[ti].isRetry){showAdVideo(afterSpin);}
+else{afterSpin();}
+});
 }
 
-function btnOff(){['sbtn','cbtn'].forEach(function(id){document.getElementById(id).disabled=true;});}
-function btnOn(){['sbtn','cbtn'].forEach(function(id){document.getElementById(id).disabled=false;});}
+function btnOff(){[‘sbtn’,‘cbtn’].forEach(function(id){document.getElementById(id).disabled=true;});}
+function btnOn(){[‘sbtn’,‘cbtn’].forEach(function(id){document.getElementById(id).disabled=false;});}
 function updateDots(){
-  var used=5-spinsLeft;
-  for(var i=1;i<=5;i++) document.getElementById('d'+i).classList.toggle('off',i<=used);
+var used=5-spinsLeft;
+for(var i=1;i<=5;i++) document.getElementById(‘d’+i).classList.toggle(‘off’,i<=used);
 }
 
 function showAdVideo(callback){
-  var frame=document.getElementById('vframe');
-  var skipBtn=document.getElementById('skipBtn');
-  var skipCount=document.getElementById('skipCount');
-  skipBtn.style.display='none';
-  skipBtn.disabled=true;
-  document.getElementById('vcloseBtn').style.display='none';
-  skipCount.textContent='5';
-  frame.src=AD_VIDEO_URL;
-  document.getElementById('voverlay').classList.add('show');
-  window._adCallback=callback;
-  function startCountdown(){
-    skipBtn.style.display='flex';
-    var sec=5;
-    skipCount.textContent=sec;
-    skipTimer=setInterval(function(){
-      sec--;
-      skipCount.textContent=sec;
-      if(sec<=0){
-        clearInterval(skipTimer);
-        skipBtn.disabled=false;
-        skipBtn.innerHTML='Пропустить ✕';
-      }
-    },1000);
-  }
-  frame.onload=startCountdown;
-  setTimeout(function(){if(skipBtn.style.display==='none') startCountdown();},4000);
+var frame=document.getElementById(‘vframe’);
+var skipBtn=document.getElementById(‘skipBtn’);
+var skipCount=document.getElementById(‘skipCount’);
+skipBtn.style.display=‘none’;
+skipBtn.disabled=true;
+skipBtn.innerHTML=‘Пропустить <span class="skip-countdown" id="skipCount">5</span>’;
+document.getElementById(‘vcloseBtn’).style.display=‘none’;
+frame.src=AD_VIDEO_URL;
+document.getElementById(‘voverlay’).classList.add(‘show’);
+window._adCallback=callback;
+function startCountdown(){
+skipBtn.style.display=‘flex’;
+var sec=5;
+document.getElementById(‘skipCount’).textContent=sec;
+skipTimer=setInterval(function(){
+sec–;
+var sc=document.getElementById(‘skipCount’);
+if(sc) sc.textContent=sec;
+if(sec<=0){
+clearInterval(skipTimer);
+skipBtn.disabled=false;
+skipBtn.innerHTML=‘Пропустить ✕’;
+}
+},1000);
+}
+frame.onload=startCountdown;
+setTimeout(function(){if(skipBtn.style.display===‘none’) startCountdown();},4000);
 }
 
 function skipAd(){
-  clearInterval(skipTimer);
-  document.getElementById('vframe').src='';
-  document.getElementById('voverlay').classList.remove('show');
-  if(window._adCallback){window._adCallback();window._adCallback=null;}
+clearInterval(skipTimer);
+document.getElementById(‘vframe’).src=’’;
+document.getElementById(‘voverlay’).classList.remove(‘show’);
+if(window._adCallback){window._adCallback();window._adCallback=null;}
 }
 
 function showPrizeVideo(){
-  document.getElementById('vframe').src=PRIZE_VIDEO_URL;
-  document.getElementById('skipBtn').style.display='none';
-  document.getElementById('vcloseBtn').style.display='flex';
-  document.getElementById('voverlay').classList.add('show');
+document.getElementById(‘vframe’).src=PRIZE_VIDEO_URL;
+document.getElementById(‘skipBtn’).style.display=‘none’;
+document.getElementById(‘vcloseBtn’).style.display=‘flex’;
+document.getElementById(‘voverlay’).classList.add(‘show’);
 }
 
 function closeVideo(){
-  document.getElementById('vframe').src='';
-  document.getElementById('voverlay').classList.remove('show');
+document.getElementById(‘vframe’).src=’’;
+document.getElementById(‘voverlay’).classList.remove(‘show’);
 }
 
 function showModal(idx){
-  var s=SEG[idx], fin=spinsLeft===0;
-  document.getElementById('mEmoji').textContent=s.emoji;
-  document.getElementById('mTag').textContent=fin?'🎊 Последнее вращение!':'🎉 Поздравляем!';
-  var tel=document.getElementById('mTitle');
-  tel.textContent=s.prize;
-  tel.className='m-title'+(s.isJackpot||fin?' red':'');
-  var pel=document.getElementById('mPromo');
-  if((s.promo||fin)&&!s.isJackpot){
-    pel.style.display='block';
-    lastCode=fin?'LUCKY':s.promo;
-    document.getElementById('mCode').textContent=lastCode;
-  } else pel.style.display='none';
-  document.getElementById('mDesc').textContent=s.desc;
-  var adCard=document.getElementById('mAd');
-  var adTtl=document.getElementById('adTtl');
-  if(fin){
-    adTtl.textContent='🚶‍♀️ О клубе ШАГАЙ ДОМА';
-    adCard.innerHTML=FINAL_AD;
-  } else {
-    var ad=ADS[(spinNum-1)%ADS.length];
-    adTtl.textContent=ad.title;
-    adCard.innerHTML=ad.text;
-  }
-  var badge=document.getElementById('mBadge');
-  if(spinsLeft>0){
-    badge.style.display='inline-flex';
-    document.getElementById('mBadgeTxt').textContent='Ещё '+spinsLeft+' вращени'+(spinsLeft===1?'е':'я');
-  } else badge.style.display='none';
-  var acts=document.getElementById('mActions'); acts.innerHTML='';
-  if(s.isJackpot){
-    acts.innerHTML='<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:\'Nunito\',sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:\'Unbounded\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>';
-  } else if(s.isMenuPdf){
-    var bt=document.createElement('button'); bt.className='btn-take';
-    bt.innerHTML='📥 Скачать рецепты PDF бесплатно!';
-    bt.onclick=function(){
-      var a=document.createElement('a'); a.href='menu.pdf'; a.download='menu.pdf';
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      closeModal();
-    };
-    acts.appendChild(bt);
-  } else if(s.isTraining){
-    var bt=document.createElement('button'); bt.className='btn-take';
-    bt.innerHTML='▶️ Смотреть тренировку прямо сейчас!';
-    bt.onclick=function(){closeModal(); showPrizeVideo();};
-    acts.appendChild(bt);
-  } else if(s.isDiscount||fin){
-    var bt=document.createElement('button'); bt.className='btn-take';
-    bt.innerHTML='🛒 Перейти к покупке со скидкой 20%';
-    bt.onclick=function(){window.open(BUY_URL,'_blank'); closeModal();};
-    acts.appendChild(bt);
-  } else {
-    var bt=document.createElement('button'); bt.className='btn-take';
-    bt.textContent='✅ Забрать приз!';
-    bt.onclick=function(){closeModal();};
-    acts.appendChild(bt);
-  }
-  if(spinsLeft>0&&!fin&&!s.isJackpot){
-    var br=document.createElement('button'); br.className='btn-respin';
-    br.textContent='🎯 Крутить ещё раз ('+spinsLeft+' вращени'+(spinsLeft===1?'е':'я')+')';
-    br.onclick=function(){closeModal();};
-    acts.appendChild(br);
-    var w=document.createElement('div'); w.className='respin-warn';
-    w.textContent='⚠️ Если крутишь снова — текущий приз сгорает!'; acts.appendChild(w);
-  }
-  document.getElementById('overlay').classList.add('show');
-  if(s.isJackpot||fin) confetti();
+var s=SEG[idx], fin=spinsLeft===0;
+document.getElementById(‘mEmoji’).textContent=s.emoji;
+document.getElementById(‘mTag’).textContent=fin?‘🎊 Последнее вращение!’:‘🎉 Поздравляем!’;
+var tel=document.getElementById(‘mTitle’);
+tel.textContent=s.prize;
+tel.className=‘m-title’+(s.isJackpot||fin?’ red’:’’);
+var pel=document.getElementById(‘mPromo’);
+if((s.promo||fin)&&!s.isJackpot){
+pel.style.display=‘block’;
+lastCode=fin?‘LUCKY’:s.promo;
+document.getElementById(‘mCode’).textContent=lastCode;
+} else pel.style.display=‘none’;
+document.getElementById(‘mDesc’).textContent=s.desc;
+var adCard=document.getElementById(‘mAd’);
+var adTtl=document.getElementById(‘adTtl’);
+if(fin){
+adTtl.textContent=‘🚶‍♀️ О клубе ШАГАЙ ДОМА’;
+adCard.innerHTML=FINAL_AD;
+} else {
+var ad=ADS[(spinNum-1)%ADS.length];
+adTtl.textContent=ad.title;
+adCard.innerHTML=ad.text;
+}
+var badge=document.getElementById(‘mBadge’);
+if(spinsLeft>0){
+badge.style.display=‘inline-flex’;
+document.getElementById(‘mBadgeTxt’).textContent=‘Ещё ‘+spinsLeft+’ вращени’+(spinsLeft===1?‘е’:‘я’);
+} else badge.style.display=‘none’;
+var acts=document.getElementById(‘mActions’); acts.innerHTML=’’;
+
+if(s.isJackpot){
+acts.innerHTML=’<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:Unbounded,sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>’;
+} else if(s.isMenuPdf){
+var bt=document.createElement(‘button’); bt.className=‘btn-take’;
+bt.innerHTML=‘📥 Скачать рецепты PDF бесплатно!’;
+bt.onclick=function(){
+var a=document.createElement(‘a’); a.href=‘menu.pdf’; a.download=‘menu.pdf’;
+document.body.appendChild(a); a.click(); document.body.removeChild(a);
+closeModal();
+};
+acts.appendChild(bt);
+} else if(s.isTraining){
+var bt=document.createElement(‘button’); bt.className=‘btn-take’;
+bt.innerHTML=‘▶️ Смотреть тренировку прямо сейчас!’;
+bt.onclick=function(){closeModal(); showPrizeVideo();};
+acts.appendChild(bt);
+} else if(s.isPromo490){
+var bt=document.createElement(‘button’); bt.className=‘btn-take’;
+bt.innerHTML=‘🎁 Получить промо-неделю за 490 руб!’;
+bt.onclick=function(){window.open(PROMO490_URL,’_blank’); closeModal();};
+acts.appendChild(bt);
+} else if(s.isDiscount||fin){
+var bt=document.createElement(‘button’); bt.className=‘btn-take’;
+bt.innerHTML=‘🛒 Перейти к покупке со скидкой 20%’;
+bt.onclick=function(){window.open(BUY_URL,’_blank’); closeModal();};
+acts.appendChild(bt);
+} else {
+var bt=document.createElement(‘button’); bt.className=‘btn-take’;
+bt.textContent=‘✅ Забрать приз!’;
+bt.onclick=function(){closeModal();};
+acts.appendChild(bt);
 }
 
-function closeModal(){document.getElementById('overlay').classList.remove('show');}
+if(spinsLeft>0&&!fin&&!s.isJackpot){
+var br=document.createElement(‘button’); br.className=‘btn-respin’;
+br.textContent=‘🎯 Крутить ещё раз (’+spinsLeft+’ вращени’+(spinsLeft===1?‘е’:‘я’)+’)’;
+br.onclick=function(){closeModal();};
+acts.appendChild(br);
+var w=document.createElement(‘div’); w.className=‘respin-warn’;
+w.textContent=‘⚠️ Если крутишь снова — текущий приз сгорает!’; acts.appendChild(w);
+}
+document.getElementById(‘overlay’).classList.add(‘show’);
+if(s.isJackpot||fin) confetti();
+}
+
+function closeModal(){document.getElementById(‘overlay’).classList.remove(‘show’);}
 
 function submitJackpot(){
-  var email=document.getElementById('jackpotEmail').value.trim();
-  var status=document.getElementById('jackpotStatus');
-  if(!email||!email.includes('@')||!email.includes('.')){
-    status.style.color='#E8192C';
-    status.textContent='Пожалуйста, введи корректный email 📧'; return;
-  }
-  status.style.color='#aaa'; status.textContent='Отправляем...';
-  fetch(FORMSPREE_URL,{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({email:email,prize:'🏆 Бесплатный абонемент',source:'Колесо удачи ШагайДома'})
-  })
-  .then(function(r){return r.json();})
-  .then(function(data){
-    if(data.ok){
-      document.getElementById('jackpotEmail').style.display='none';
-      document.querySelector('[onclick="submitJackpot()"]').style.display='none';
-      status.style.color='#22aa55'; status.style.fontSize='14px';
-      status.textContent='🎉 Готово! Мы скоро напишем тебе на почту!';
-    } else {status.style.color='#E8192C'; status.textContent='Что-то пошло не так. Попробуй ещё раз.';}
-  })
-  .catch(function(){status.style.color='#E8192C'; status.textContent='Ошибка сети. Напиши нам напрямую.';});
+var email=document.getElementById(‘jackpotEmail’).value.trim();
+var status=document.getElementById(‘jackpotStatus’);
+if(!email||!email.includes(’@’)||!email.includes(’.’)){
+status.style.color=’#E8192C’;
+status.textContent=‘Пожалуйста, введи корректный email 📧’; return;
+}
+status.style.color=’#aaa’; status.textContent=‘Отправляем…’;
+fetch(FORMSPREE_URL,{
+method:‘POST’,
+headers:{‘Content-Type’:‘application/json’,‘Accept’:‘application/json’},
+body:JSON.stringify({email:email,prize:‘Бесплатный абонемент’,source:‘Колесо удачи ШагайДома’})
+})
+.then(function(r){return r.json();})
+.then(function(data){
+if(data.ok){
+document.getElementById(‘jackpotEmail’).style.display=‘none’;
+document.querySelector(’[onclick=“submitJackpot()”]’).style.display=‘none’;
+status.style.color=’#22aa55’; status.style.fontSize=‘14px’;
+status.textContent=‘🎉 Готово! Мы скоро напишем тебе на почту!’;
+} else {status.style.color=’#E8192C’; status.textContent=‘Что-то пошло не так. Попробуй ещё раз.’;}
+})
+.catch(function(){status.style.color=’#E8192C’; status.textContent=‘Ошибка сети. Напиши нам напрямую.’;});
 }
 
 function copyCode(){
-  navigator.clipboard.writeText(lastCode).catch(function(){});
-  var el=document.getElementById('mCode'),o=el.textContent;
-  el.textContent='✅ Скопировано!'; setTimeout(function(){el.textContent=o;},2000);
+navigator.clipboard.writeText(lastCode).catch(function(){});
+var el=document.getElementById(‘mCode’),o=el.textContent;
+el.textContent=‘✅ Скопировано!’; setTimeout(function(){el.textContent=o;},2000);
 }
 function toast(msg){
-  var t=document.createElement('div');
-  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;border-radius:50px;padding:11px 20px;font-family:inherit;font-size:14px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;';
-  t.textContent=msg; document.body.appendChild(t); setTimeout(function(){t.remove();},2400);
+var t=document.createElement(‘div’);
+t.style.cssText=‘position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;border-radius:50px;padding:11px 20px;font-family:inherit;font-size:14px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;’;
+t.textContent=msg; document.body.appendChild(t); setTimeout(function(){t.remove();},2400);
 }
 function confetti(){
-  var cols=['#E8192C','#FF6B35','#F5A623','#FFD166','#FF4D5E','#fff'];
-  for(var i=0;i<65;i++) (function(i){setTimeout(function(){
-    var el=document.createElement('div'); el.className='cp';
-    el.style.left=Math.random()*100+'vw';
-    el.style.background=cols[Math.floor(Math.random()*cols.length)];
-    el.style.borderRadius=Math.random()>.4?'50%':'2px';
-    var sz=6+Math.random()*8; el.style.width=el.style.height=sz+'px';
-    document.body.appendChild(el);
-    el.animate([{top:'-20px',opacity:1,transform:'rotate(0)'},{top:'108vh',opacity:0,
-      transform:'rotate('+(400+Math.random()*360)+'deg) translateX('+(Math.random()-.5)*160+'px)'}],
-    {duration:2000+Math.random()*1500,easing:'cubic-bezier(.2,.8,.4,1)',fill:'forwards'})
-    .onfinish=function(){el.remove();};
-  },i*32);})(i);
+var cols=[’#E8192C’,’#FF6B35’,’#F5A623’,’#FFD166’,’#FF4D5E’,’#fff’];
+for(var i=0;i<65;i++) (function(i){setTimeout(function(){
+var el=document.createElement(‘div’); el.className=‘cp’;
+el.style.left=Math.random()*100+‘vw’;
+el.style.background=cols[Math.floor(Math.random()*cols.length)];
+el.style.borderRadius=Math.random()>.4?‘50%’:‘2px’;
+var sz=6+Math.random()*8; el.style.width=el.style.height=sz+‘px’;
+document.body.appendChild(el);
+el.animate([{top:’-20px’,opacity:1,transform:‘rotate(0)’},{top:‘108vh’,opacity:0,
+transform:‘rotate(’+(400+Math.random()*360)+‘deg) translateX(’+(Math.random()-.5)*160+‘px)’}],
+{duration:2000+Math.random()*1500,easing:‘cubic-bezier(.2,.8,.4,1)’,fill:‘forwards’})
+.onfinish=function(){el.remove();};
+},i*32);})(i);
 }
 </script>
+
 </body>
 </html>
