@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Колесо Удачи — Шагай Дома</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,700;0,800;0,900;1,700&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:'Nunito',sans-serif;background:#F8F4F4;min-height:100vh;
@@ -53,14 +53,14 @@ border:3px solid #fff;box-shadow:0 3px 9px rgba(232,25,44,.45)}
 .ptr-tri{width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;
 border-top:20px solid #E8192C;filter:drop-shadow(0 3px 4px rgba(232,25,44,.35));margin-top:-2px}
 .cbtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-width:60px;height:60px;border-radius:50%;background:#fff;
+width:62px;height:62px;border-radius:50%;background:#fff;
 border:3px solid rgba(232,25,44,.12);cursor:pointer;
 display:flex;flex-direction:column;align-items:center;justify-content:center;
-z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.1);transition:transform .2s;font-family:'Nunito',sans-serif}
+z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.12);transition:transform .2s;font-family:'Nunito',sans-serif}
 .cbtn:hover{transform:translate(-50%,-50%) scale(1.1)}
 .cbtn:active{transform:translate(-50%,-50%) scale(.92)}
 .cbtn:disabled{opacity:.4;cursor:not-allowed}
-.cbtn .ci{font-size:23px}.cbtn .ct{font-size:9px;font-weight:900;color:#E8192C;margin-top:1px}
+.cbtn .ci{font-size:22px}.cbtn .ct{font-size:9px;font-weight:900;color:#E8192C;margin-top:1px}
 .spinbtn{width:100%;max-width:300px;background:linear-gradient(135deg,#E8192C,#FF5C35);
 color:#fff;border:none;border-radius:14px;padding:16px 22px;
 font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;cursor:pointer;
@@ -77,7 +77,7 @@ animation:shine 3s ease-in-out infinite}
 backdrop-filter:blur(8px);z-index:100;justify-content:center;align-items:flex-end}
 .overlay.show{display:flex}
 .sheet{background:#fff;border-radius:26px 26px 0 0;width:100%;max-width:460px;
-max-height:88vh;overflow-y:auto;animation:shup .38s cubic-bezier(.34,1.3,.64,1);
+max-height:90vh;overflow-y:auto;animation:shup .38s cubic-bezier(.34,1.3,.64,1);
 padding-bottom:env(safe-area-inset-bottom,20px)}
 @keyframes shup{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
 .handle{width:36px;height:4px;background:#EBEBEB;border-radius:2px;margin:13px auto 0}
@@ -98,7 +98,9 @@ text-align:center;margin:8px 0 12px;cursor:pointer;transition:border-color .18s}
 .m-desc{font-size:13px;color:#666;line-height:1.65;font-weight:700;margin-bottom:11px}
 .divider{height:1px;background:#F0F0F0;margin:11px 0}
 .adcard{background:linear-gradient(135deg,#FFF5F6,#FFF8F0);border-radius:14px;
-padding:13px 15px;margin-bottom:16px;border-left:3px solid #E8192C}
+padding:0;margin-bottom:16px;border-left:3px solid #E8192C;overflow:hidden}
+.adcard-img{width:100%;height:160px;object-fit:cover;display:block}
+.adcard-body{padding:13px 15px}
 .adcard-ttl{font-size:11px;font-weight:900;color:#E8192C;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
 .adcard p{font-size:13px;color:#666;line-height:1.6;font-weight:700}
 .adcard p strong{color:#1A1A2E}
@@ -119,15 +121,15 @@ flex-direction:column;justify-content:center;align-items:center}
 .voverlay.show{display:flex}
 .vframe-wrap{position:relative;width:100%;max-width:480px;aspect-ratio:9/16;background:#000}
 .vframe-wrap iframe{width:100%;height:100%;border:none;display:block}
-/* Кнопка пропустить — верхний левый, малозаметная */
-.skip-btn{position:absolute;top:12px;left:12px;
-background:rgba(255,255,255,.08);color:rgba(255,255,255,.55);
-border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:6px 14px;
-font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;
-transition:all .3s;display:none}
-.skip-btn:not(:disabled):hover{background:rgba(255,255,255,.18);color:#fff}
-.skip-btn:disabled{opacity:.4;cursor:not-allowed}
-.skip-countdown{font-size:11px;margin-left:3px;opacity:.8}
+/* Кнопка пропустить — максимально незаметная, верх слева */
+.skip-btn{position:absolute;top:10px;left:10px;
+background:rgba(0,0,0,.25);color:rgba(255,255,255,.4);
+border:1px solid rgba(255,255,255,.15);border-radius:50px;padding:5px 12px;
+font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;cursor:pointer;
+transition:all .3s;display:none;letter-spacing:.3px}
+.skip-btn:not(:disabled):hover{color:rgba(255,255,255,.7);background:rgba(0,0,0,.4)}
+.skip-btn:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
+.skip-countdown{font-size:10px;margin-left:2px;opacity:.7}
 .vclose-btn{position:absolute;top:16px;right:16px;background:rgba(0,0,0,.5);color:#fff;
 border:none;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;
 display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
@@ -172,7 +174,6 @@ display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)
   <button class="spinbtn" id="sbtn" onclick="spin()">🎯 Крутить колесо!</button>
   <div class="done-msg" id="doneMsg">Вращения закончились. Спасибо! 🎉</div>
 </main>
-
 <div class="overlay" id="overlay">
   <div class="sheet">
     <div class="handle"></div>
@@ -188,16 +189,17 @@ display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)
       </div>
       <div class="m-desc" id="mDesc"></div>
       <div class="divider"></div>
-      <div class="adcard">
-        <div class="adcard-ttl" id="adTtl">🚶‍♀️ О клубе ШАГАЙ ДОМА</div>
-        <p id="mAd"></p>
+      <div class="adcard" id="adcard">
+        <div class="adcard-body">
+          <div class="adcard-ttl" id="adTtl">🚶‍♀️ О клубе ШАГАЙ ДОМА</div>
+          <p id="mAd"></p>
+        </div>
       </div>
       <div class="spins-badge" id="mBadge" style="display:none">🎯 <span id="mBadgeTxt"></span></div>
       <div class="actions" id="mActions"></div>
     </div>
   </div>
 </div>
-
 <div class="voverlay" id="voverlay">
   <div class="vframe-wrap">
     <iframe id="vframe" src="" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe>
@@ -207,70 +209,88 @@ display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)
     </button>
   </div>
 </div>
-
 <script>
-var FORMSPREE_URL  = 'https://formspree.io/f/mvzvawok';
-var BUY_URL        = 'https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel';
-var PROMO490_URL   = 'https://my.walk-walk.ru/promo_box_490?utm_source=website&utm_medium=game&utm_campaign=wheel';
-var URL_1MONTH     = 'https://my.walk-walk.ru/1mount_club_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
-var URL_FOREVER    = 'https://my.walk-walk.ru/alwaysclub_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
-var AD_VIDEO_URL   = 'https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1';
-var PRIZE_VIDEO_URL= 'https://vkvideo.ru/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1';
+var FORMSPREE_URL = 'https://formspree.io/f/mvzvawok';
+var BUY_URL       = 'https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel';
+var PROMO490_URL  = 'https://my.walk-walk.ru/promo_box_490?utm_source=website&utm_medium=game&utm_campaign=wheel';
+var URL_1MONTH    = 'https://my.walk-walk.ru/1mount_club_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
+var URL_FOREVER   = 'https://my.walk-walk.ru/alwaysclub_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
+// autoplay=1&mute=0 — автовоспроизведение со звуком
+var AD_VIDEO_URL    = 'https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1&mute=0';
+var PRIZE_VIDEO_URL = 'https://vkvideo.ru/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1&mute=0';
 
-// Контрастная палитра: красный / оранжевый / золотой / тёмно-красный / коралловый / медовый
-// Чередуем светлые и тёмные чтобы соседние сектора не сливались
+// ── ПАЛИТРА ──────────────────────────────────────────────────────────────────
+// 8 сегментов — чередуем тёмные/светлые чтобы соседи не сливались
+// Гамма: тёмно-красный → карминовый → оранжево-красный → янтарный → персиковый → малиновый → бордовый → золотой
+var COLORS = [
+  { bg:'#D91B2A', fg:'#fff' },  // 0 тёмно-красный
+  { bg:'#F5A623', fg:'#3D2000' },// 1 янтарный
+  { bg:'#B01020', fg:'#fff' },  // 2 бордовый
+  { bg:'#FFCF44', fg:'#3D2000' },// 3 золотой
+  { bg:'#E84545', fg:'#fff' },  // 4 карминовый
+  { bg:'#F07B1D', fg:'#fff' },  // 5 оранжевый
+  { bg:'#9A0E1C', fg:'#fff' },  // 6 тёмно-бордовый
+  { bg:'#FAB95B', fg:'#3D2000' },// 7 персиковый
+];
+
 var SEG = [
-  { label:['Скидка','20%'],
-    emoji:'🏷️', bg:'#E8192C', fg:'#fff',
+  { label:['Скидка','20%'],         emoji:'🏷️',
     prize:'Скидка 20% на абонемент!', promo:'LUCKY',
     desc:'Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.',
     w:22, isFinal:true, isDiscount:true },
-  { label:['Рецепты','диетолога'],
-    emoji:'🥗', bg:'#F5A623', fg:'#3D2000',
+  { label:['Рецепты','диетолога'],  emoji:'🥗',
     prize:'Рецепты от диетолога — PDF!',
     desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
     w:18, isMenuPdf:true },
-  { label:['Бесплатная','тренировка'],
-    emoji:'🎽', bg:'#C01020', fg:'#fff',
+  { label:['Бесплатная','тренировка'], emoji:'🎽',
     prize:'Бесплатная тренировка!',
     desc:'Ты выиграла целую тренировку прямо сейчас! Нажми кнопку ниже и занимайся немедленно 🔥',
     w:16, isTraining:true },
-  { label:['Бесплатный','абонемент'],
-    emoji:'🏆', bg:'#FFD166', fg:'#3D2000',
+  { label:['Бесплатный','абонемент'], emoji:'🏆',
     prize:'🏆 Бесплатный абонемент!',
     desc:'Невероятно! Ты выиграла бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
     w:3, isJackpot:true },
-  { label:['Промо-неделя','490 руб'],
-    emoji:'🎁', bg:'#FF6B35', fg:'#fff',
+  { label:['Промо-неделя','490 руб'], emoji:'🎁',
     prize:'Промо-неделя за 490 руб!',
     desc:'Эксклюзивное предложение! Попробуй клуб целую неделю за 490 руб — только для новых участниц.',
     w:14, isPromo490:true },
-  { label:['Секретный','тариф 1 мес'],
-    emoji:'🕵️', bg:'#F5A623', fg:'#3D2000',
+  { label:['Секретный','тариф 1 мес'], emoji:'🕵️',
     prize:'Секретный тариф — 1 месяц!',
     desc:'Закрытый тариф, которого нет в открытой продаже! Спец. условия на 1 месяц.',
     w:10, is1Month:true },
-  { label:['Секретный','тариф','НАВСЕГДА'],
-    emoji:'🔑', bg:'#E8192C', fg:'#fff',
+  { label:['Секретный','тариф','НАВСЕГДА'], emoji:'🔑',
     prize:'Секретный тариф НАВСЕГДА!',
     desc:'Уникальный тариф — доступ навсегда на особых условиях! Только для победителей колеса.',
     w:8, isForever:true },
-  { label:['Крути','ещё раз!'],
-    emoji:'🔄', bg:'#FF9A3C', fg:'#fff',
+  { label:['Крути','ещё раз!'],     emoji:'🔄',
     prize:'Крути ещё раз!',
     desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
     w:14, isRetry:true },
 ];
+// Назначаем цвета по порядку чередования
+for(var _i=0;_i<SEG.length;_i++){
+  SEG[_i].bg=COLORS[_i%COLORS.length].bg;
+  SEG[_i].fg=COLORS[_i%COLORS.length].fg;
+}
 
+// ── РЕКЛАМА (фото на 1, 3, 5 вращении) ──────────────────────────────────────
+// Положи файлы 1.JPG 2.JPG 3.jpg рядом с wheel.html в репозитории
 var ADS = [
   { title:'🔥 От -1 до -4 кг уже за первую неделю!',
-    text:'Не диета, не изнурительный зал — просто <strong>ходьба дома под видео</strong>. Наши участницы видят результат уже на первой неделе. <strong>10 000 женщин</strong> со всего мира уже шагают — присоединяйся!' },
+    text:'Не диета, не изнурительный зал — просто <strong>ходьба дома под видео</strong>. Наши участницы видят результат уже на первой неделе. <strong>10 000 женщин</strong> со всего мира уже шагают — присоединяйся!',
+    img:'1.JPG' },
   { title:'🤔 «У меня нет времени на спорт»',
-    text:'Тренировки от <strong>10 до 30 минут</strong> прямо дома — никуда ехать не нужно. Встала, включила видео, прошагала. <strong>10 000 занятых женщин</strong> нашли время — найдёшь и ты!' },
+    text:'Тренировки от <strong>10 до 30 минут</strong> прямо дома — никуда ехать не нужно. Встала, включила видео, прошагала. <strong>10 000 занятых женщин</strong> нашли время — найдёшь и ты!',
+    img:null },
   { title:'😟 «Я уже пробовала — не помогло»',
-    text:'Ходьба работает иначе, чем изнурительные тренировки. Она <strong>не стрессует тело</strong>, не вызывает срывов и подходит любому уровню подготовки. Просто шаги — и результат!' },
+    text:'Ходьба работает иначе, чем изнурительные тренировки. Она <strong>не стрессует тело</strong>, не вызывает срывов и подходит любому уровню. Просто шаги — и результат!',
+    img:'2.JPG' },
   { title:'💸 «Пока подожду с покупкой»',
-    text:'Один поход в зал стоит дороже, чем <strong>целый месяц</strong> в нашем клубе. Пока ты ждёшь — участницы уже худеют. Не откладывай то, что работает!' },
+    text:'Один поход в зал стоит дороже, чем <strong>целый месяц</strong> в нашем клубе. Пока ты ждёшь — участницы уже худеют. Не откладывай то, что работает!',
+    img:null },
+  { title:'💪 Уже 10 000 женщин со всего мира',
+    text:'Из России, Европы, США, Казахстана — все они шагают дома и видят результат. <strong>Присоединяйся к самому тёплому фитнес-сообществу</strong> и начни свой путь к стройности прямо сейчас!',
+    img:'3.jpg' },
 ];
 
 var FINAL_AD = 'Это твой <strong>шанс войти в клуб прямо сейчас!</strong> Десятки тренировок дома, <strong>10 000 женщин-единомышленниц</strong> со всего мира и твоя новая стройная жизнь. <strong>Промокод LUCKY даёт -20% — действует 48 часов!</strong>';
@@ -285,75 +305,67 @@ var SZ=640, CX=SZ/2, CY=SZ/2, R=SZ/2-10;
 function drawWheel(r){
   ctx.clearRect(0,0,SZ,SZ);
 
-  // Шаг 1: рисуем все сектора (без clip — чтобы заливки не мешали друг другу)
+  // Проход 1: только заливки (без clip — чистые границы)
   for(var i=0;i<N;i++){
     var s=SEG[i];
     var sa=r-Math.PI/2+i*ARC, a0=sa-ARC/2, a1=sa+ARC/2;
-
-    ctx.beginPath();
-    ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1);
-    ctx.closePath();
-    ctx.fillStyle=s.bg;
-    ctx.fill();
-
+    ctx.beginPath(); ctx.moveTo(CX,CY);
+    ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
+    ctx.fillStyle=s.bg; ctx.fill();
     // Блик
-    var g=ctx.createRadialGradient(CX,CY,R*0.05,CX,CY,R);
+    var g=ctx.createRadialGradient(CX,CY,R*0.04,CX,CY,R);
     g.addColorStop(0,'rgba(255,255,255,.2)');
-    g.addColorStop(0.5,'rgba(255,255,255,.04)');
-    g.addColorStop(1,'rgba(0,0,0,.08)');
-    ctx.beginPath();
-    ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1);
-    ctx.closePath();
-    ctx.fillStyle=g;
-    ctx.fill();
-
-    // Белый разделитель
-    ctx.beginPath();
-    ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1);
-    ctx.closePath();
-    ctx.strokeStyle='rgba(255,255,255,.6)';
-    ctx.lineWidth=3;
-    ctx.stroke();
+    g.addColorStop(0.45,'rgba(255,255,255,.04)');
+    g.addColorStop(1,'rgba(0,0,0,.09)');
+    ctx.beginPath(); ctx.moveTo(CX,CY);
+    ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
+    ctx.fillStyle=g; ctx.fill();
+    // Разделитель
+    ctx.beginPath(); ctx.moveTo(CX,CY);
+    ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
+    ctx.strokeStyle='rgba(255,255,255,.65)'; ctx.lineWidth=3; ctx.stroke();
   }
 
-  // Шаг 2: текст и эмодзи поверх (без clip совсем — просто позиционируем в центр сектора)
+  // Проход 2: текст и эмодзи
   for(var i=0;i<N;i++){
     var s=SEG[i];
     var sa=r-Math.PI/2+i*ARC;
 
-    // Эмодзи у обода
-    var eR=R*0.78;
+    // Эмодзи — у обода
+    var eR=R*0.76;
     ctx.save();
     ctx.translate(CX+eR*Math.cos(sa), CY+eR*Math.sin(sa));
     ctx.rotate(sa+Math.PI/2);
-    ctx.font=Math.round(R*0.076)+'px serif';
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.shadowColor='rgba(0,0,0,.2)';
-    ctx.shadowBlur=2;
+    // Рисуем через Image для цветных эмодзи
+    ctx.font=Math.round(R*0.082)+'px serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    // Убираем shadow чтобы не было серого ореола вокруг эмодзи
+    ctx.shadowColor='transparent'; ctx.shadowBlur=0;
     ctx.fillText(s.emoji,0,0);
     ctx.restore();
 
-    // Текст — размещаем в центре сектора без clip
+    // Текст — между центром и эмодзи, шрифт Nunito (загружен)
     var lines=s.label;
-    // Расстояние от центра: ближе к центру чем эмодзи
-    var tR=R*0.40;
-    var fs=Math.max(11, Math.round(R*0.054));
-    var lh=fs*1.25;
+    var tR=R*0.41;
+    var fs=Math.max(12, Math.round(R*0.056));
+    var lh=fs*1.22;
     var totalH=(lines.length-1)*lh;
-
     ctx.save();
     ctx.translate(CX+tR*Math.cos(sa), CY+tR*Math.sin(sa));
     ctx.rotate(sa+Math.PI/2);
-    ctx.font='900 '+fs+'px Arial,sans-serif';
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.fillStyle=s.fg;
-    ctx.shadowColor='rgba(0,0,0,.4)';
-    ctx.shadowBlur=4;
+    ctx.font='900 '+fs+'px Nunito,Arial,sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    // Весь текст — белый с тёмной обводкой для читаемости на любом фоне
+    // Сначала обводка
+    ctx.strokeStyle='rgba(0,0,0,.35)';
+    ctx.lineWidth=3;
+    ctx.lineJoin='round';
+    lines.forEach(function(ln,li){
+      ctx.strokeText(ln, 0, -totalH/2+li*lh);
+    });
+    // Потом заливка белым
+    ctx.fillStyle='#fff';
+    ctx.shadowColor='rgba(0,0,0,.3)'; ctx.shadowBlur=3;
     lines.forEach(function(ln,li){
       ctx.fillText(ln, 0, -totalH/2+li*lh);
     });
@@ -361,25 +373,17 @@ function drawWheel(r){
   }
 
   // Внешнее кольцо
-  ctx.beginPath();
-  ctx.arc(CX,CY,R,0,2*Math.PI);
-  ctx.strokeStyle='rgba(255,255,255,.8)';
-  ctx.lineWidth=6;
-  ctx.stroke();
-
+  ctx.beginPath(); ctx.arc(CX,CY,R,0,2*Math.PI);
+  ctx.strokeStyle='rgba(255,255,255,.8)'; ctx.lineWidth=6; ctx.stroke();
   // Центральный круг
-  ctx.beginPath();
-  ctx.arc(CX,CY,36,0,2*Math.PI);
-  ctx.fillStyle='#fff';
-  ctx.fill();
-  ctx.strokeStyle='rgba(232,25,44,.15)';
-  ctx.lineWidth=3;
-  ctx.stroke();
+  ctx.beginPath(); ctx.arc(CX,CY,36,0,2*Math.PI);
+  ctx.fillStyle='#fff'; ctx.fill();
+  ctx.strokeStyle='rgba(232,25,44,.15)'; ctx.lineWidth=3; ctx.stroke();
 }
 
 drawWheel(rot);
-setTimeout(function(){drawWheel(rot);},150);
-setTimeout(function(){drawWheel(rot);},600);
+setTimeout(function(){drawWheel(rot);},200);
+setTimeout(function(){drawWheel(rot);},700);
 if(document.fonts&&document.fonts.ready){
   document.fonts.ready.then(function(){drawWheel(rot);});
 }
@@ -457,12 +461,7 @@ function showAdVideo(callback){
     function tick(){
       var sc=document.getElementById('skipCount');
       if(sc) sc.textContent=sec;
-      if(sec<=0){
-        clearInterval(skipTimer);
-        skipBtn.disabled=false;
-        skipBtn.innerHTML='Пропустить ✕';
-        return;
-      }
+      if(sec<=0){clearInterval(skipTimer);skipBtn.disabled=false;skipBtn.innerHTML='Пропустить ✕';return;}
       sec--;
     }
     tick();
@@ -485,7 +484,6 @@ function showPrizeVideo(){
   document.getElementById('vcloseBtn').style.display='flex';
   document.getElementById('voverlay').classList.add('show');
 }
-
 function closeVideo(){
   document.getElementById('vframe').src='';
   document.getElementById('voverlay').classList.remove('show');
@@ -506,37 +504,53 @@ function showModal(idx){
     document.getElementById('mCode').textContent=lastCode;
   } else pel.style.display='none';
   document.getElementById('mDesc').textContent=s.desc;
-  var adCard=document.getElementById('mAd'), adTtl=document.getElementById('adTtl');
-  if(fin){ adTtl.textContent='🚶‍♀️ О клубе ШАГАЙ ДОМА'; adCard.innerHTML=FINAL_AD; }
-  else { var ad=ADS[(spinNum-1)%ADS.length]; adTtl.textContent=ad.title; adCard.innerHTML=ad.text; }
+
+  // Рекламная карточка с фото
+  var adcard=document.getElementById('adcard');
+  var adTtl=document.getElementById('adTtl');
+  var adP=document.getElementById('mAd');
+  // Убираем старое фото если было
+  var oldImg=adcard.querySelector('.adcard-img');
+  if(oldImg) oldImg.remove();
+
+  if(fin){
+    adTtl.textContent='🚶‍♀️ О клубе ШАГАЙ ДОМА';
+    adP.innerHTML=FINAL_AD;
+  } else {
+    var ad=ADS[(spinNum-1)%ADS.length];
+    adTtl.textContent=ad.title;
+    adP.innerHTML=ad.text;
+    if(ad.img){
+      var img=document.createElement('img');
+      img.src=ad.img; img.className='adcard-img'; img.alt='';
+      adcard.insertBefore(img, adcard.querySelector('.adcard-body'));
+    }
+  }
+
   var badge=document.getElementById('mBadge');
   if(spinsLeft>0){
     badge.style.display='inline-flex';
     document.getElementById('mBadgeTxt').textContent='Ещё '+spinsLeft+' вращени'+(spinsLeft===1?'е':'я');
   } else badge.style.display='none';
-  var acts=document.getElementById('mActions'); acts.innerHTML='';
 
+  var acts=document.getElementById('mActions'); acts.innerHTML='';
   if(s.isJackpot){
     acts.innerHTML='<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:Unbounded,sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>';
   } else if(s.isMenuPdf){
-    makeTakeBtn(acts,'📥 Скачать рецепты PDF бесплатно!', function(){
-      var a=document.createElement('a'); a.href='menu.pdf'; a.download='menu.pdf';
-      document.body.appendChild(a); a.click(); document.body.removeChild(a); closeModal();
-    });
+    mkBtn(acts,'📥 Скачать рецепты PDF бесплатно!',function(){var a=document.createElement('a');a.href='menu.pdf';a.download='menu.pdf';document.body.appendChild(a);a.click();document.body.removeChild(a);closeModal();});
   } else if(s.isTraining){
-    makeTakeBtn(acts,'▶️ Смотреть тренировку прямо сейчас!', function(){closeModal(); showPrizeVideo();});
+    mkBtn(acts,'▶️ Смотреть тренировку прямо сейчас!',function(){closeModal();showPrizeVideo();});
   } else if(s.isPromo490){
-    makeTakeBtn(acts,'🎁 Получить промо-неделю за 490 руб!', function(){window.open(PROMO490_URL,'_blank'); closeModal();});
+    mkBtn(acts,'🎁 Получить промо-неделю за 490 руб!',function(){window.open(PROMO490_URL,'_blank');closeModal();});
   } else if(s.is1Month){
-    makeTakeBtn(acts,'🕵️ Забрать секретный тариф на месяц!', function(){window.open(URL_1MONTH,'_blank'); closeModal();});
+    mkBtn(acts,'🕵️ Забрать секретный тариф на месяц!',function(){window.open(URL_1MONTH,'_blank');closeModal();});
   } else if(s.isForever){
-    makeTakeBtn(acts,'🔑 Забрать тариф НАВСЕГДА!', function(){window.open(URL_FOREVER,'_blank'); closeModal();});
+    mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){window.open(URL_FOREVER,'_blank');closeModal();});
   } else if(s.isDiscount||fin){
-    makeTakeBtn(acts,'🛒 Перейти к покупке со скидкой 20%', function(){window.open(BUY_URL,'_blank'); closeModal();});
+    mkBtn(acts,'🛒 Перейти к покупке со скидкой 20%',function(){window.open(BUY_URL,'_blank');closeModal();});
   } else {
-    makeTakeBtn(acts,'✅ Забрать приз!', function(){closeModal();});
+    mkBtn(acts,'✅ Забрать приз!',function(){closeModal();});
   }
-
   if(spinsLeft>0&&!fin&&!s.isJackpot){
     var br=document.createElement('button'); br.className='btn-respin';
     br.textContent='🎯 Крутить ещё раз ('+spinsLeft+' вращени'+(spinsLeft===1?'е':'я')+')';
@@ -548,57 +562,45 @@ function showModal(idx){
   if(s.isJackpot||fin) confetti();
 }
 
-function makeTakeBtn(parent, label, fn){
-  var bt=document.createElement('button'); bt.className='btn-take';
-  bt.innerHTML=label; bt.onclick=fn; parent.appendChild(bt);
-}
-
+function mkBtn(p,l,fn){var b=document.createElement('button');b.className='btn-take';b.innerHTML=l;b.onclick=fn;p.appendChild(b);}
 function closeModal(){document.getElementById('overlay').classList.remove('show');}
 
 function submitJackpot(){
   var email=document.getElementById('jackpotEmail').value.trim();
   var status=document.getElementById('jackpotStatus');
-  if(!email||!email.includes('@')||!email.includes('.')){
-    status.style.color='#E8192C'; status.textContent='Пожалуйста, введи корректный email 📧'; return;
-  }
-  status.style.color='#aaa'; status.textContent='Отправляем...';
+  if(!email||!email.includes('@')||!email.includes('.')){status.style.color='#E8192C';status.textContent='Пожалуйста, введи корректный email 📧';return;}
+  status.style.color='#aaa';status.textContent='Отправляем...';
   fetch(FORMSPREE_URL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
     body:JSON.stringify({email:email,prize:'Бесплатный абонемент',source:'Колесо удачи ШагайДома'})})
   .then(function(r){return r.json();})
   .then(function(d){
-    if(d.ok){
-      document.getElementById('jackpotEmail').style.display='none';
-      document.querySelector('[onclick="submitJackpot()"]').style.display='none';
-      status.style.color='#22aa55'; status.style.fontSize='14px';
-      status.textContent='🎉 Готово! Мы скоро напишем тебе на почту!';
-    } else { status.style.color='#E8192C'; status.textContent='Что-то пошло не так. Попробуй ещё раз.'; }
+    if(d.ok){document.getElementById('jackpotEmail').style.display='none';document.querySelector('[onclick="submitJackpot()"]').style.display='none';status.style.color='#22aa55';status.style.fontSize='14px';status.textContent='🎉 Готово! Мы скоро напишем тебе на почту!';}
+    else{status.style.color='#E8192C';status.textContent='Что-то пошло не так. Попробуй ещё раз.';}
   })
-  .catch(function(){status.style.color='#E8192C'; status.textContent='Ошибка сети. Напиши нам напрямую.';});
+  .catch(function(){status.style.color='#E8192C';status.textContent='Ошибка сети. Напиши нам напрямую.';});
 }
 
 function copyCode(){
   navigator.clipboard.writeText(lastCode).catch(function(){});
   var el=document.getElementById('mCode'),o=el.textContent;
-  el.textContent='✅ Скопировано!'; setTimeout(function(){el.textContent=o;},2000);
+  el.textContent='✅ Скопировано!';setTimeout(function(){el.textContent=o;},2000);
 }
 function toast(msg){
   var t=document.createElement('div');
   t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;border-radius:50px;padding:11px 20px;font-family:inherit;font-size:14px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;';
-  t.textContent=msg; document.body.appendChild(t); setTimeout(function(){t.remove();},2400);
+  t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove();},2400);
 }
 function confetti(){
   var cols=['#E8192C','#FF6B35','#F5A623','#FFD166','#FF4D5E','#fff'];
   for(var i=0;i<65;i++)(function(i){setTimeout(function(){
-    var el=document.createElement('div'); el.className='cp';
+    var el=document.createElement('div');el.className='cp';
     el.style.left=Math.random()*100+'vw';
     el.style.background=cols[Math.floor(Math.random()*cols.length)];
     el.style.borderRadius=Math.random()>.4?'50%':'2px';
-    var sz=6+Math.random()*8; el.style.width=el.style.height=sz+'px';
+    var sz=6+Math.random()*8;el.style.width=el.style.height=sz+'px';
     document.body.appendChild(el);
-    el.animate([{top:'-20px',opacity:1,transform:'rotate(0)'},{top:'108vh',opacity:0,
-      transform:'rotate('+(400+Math.random()*360)+'deg) translateX('+(Math.random()-.5)*160+'px)'}],
-    {duration:2000+Math.random()*1500,easing:'cubic-bezier(.2,.8,.4,1)',fill:'forwards'})
-    .onfinish=function(){el.remove();};
+    el.animate([{top:'-20px',opacity:1,transform:'rotate(0)'},{top:'108vh',opacity:0,transform:'rotate('+(400+Math.random()*360)+'deg) translateX('+(Math.random()-.5)*160+'px)'}],
+    {duration:2000+Math.random()*1500,easing:'cubic-bezier(.2,.8,.4,1)',fill:'forwards'}).onfinish=function(){el.remove();};
   },i*32);})(i);
 }
 </script>
