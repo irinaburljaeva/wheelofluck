@@ -249,7 +249,7 @@ var SEG = [
   { label:['Бесплатный','абонемент'], emoji:'🏆',
     prize:'🏆 Бесплатный абонемент!',
     desc:'Невероятно! Ты выиграла супер приз: бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
-    w:3, isJackpot:true },
+    w:0, isJackpot:true },
   { label:['Промо-бокс'], emoji:'🎁',
     prize:'Промо-бокс за 490 руб!',
     desc:'Эксклюзивное предложение, которого нет в продаже! Всего 490 руб — и ты получишь набор шагательных тренировок, трекеры привычек, вкусное меню и схемы и рецепты обертываний.',
@@ -392,11 +392,11 @@ function pickIdx(){
   if(spinsLeft===1) return SEG.findIndex(function(s){return s.isFinal;});
   var pool=[];
   SEG.forEach(function(s,i){
-    if(s.isJackpot&&spinsLeft>2) return;
     for(var j=0;j<s.w;j++) pool.push(i);
   });
   return pool[Math.floor(Math.random()*pool.length)];
 }
+
 
 function spin(){
   if(busy||spinsLeft<=0) return;
