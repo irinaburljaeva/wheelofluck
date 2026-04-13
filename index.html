@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -73,6 +74,11 @@ animation:shine 3s ease-in-out infinite}
 .spinbtn:active{transform:translateY(1px)}
 .spinbtn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .done-msg{display:none;margin-top:12px;font-size:13px;color:#bbb;font-weight:700;text-align:center}
+/* Экран «вращения на сегодня исчерпаны» */
+.exhausted{display:none;text-align:center;padding:30px 20px}
+.exhausted h2{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;color:#1A1A2E;margin-bottom:10px}
+.exhausted p{font-size:14px;color:#999;font-weight:700;line-height:1.6}
+.exhausted .comeback{margin-top:18px;font-size:13px;color:#E8192C;font-weight:800}
 .overlay{display:none;position:fixed;inset:0;background:rgba(12,5,7,.6);
 backdrop-filter:blur(8px);z-index:100;justify-content:center;align-items:flex-end}
 .overlay.show{display:flex}
@@ -121,7 +127,6 @@ flex-direction:column;justify-content:center;align-items:center}
 .voverlay.show{display:flex}
 .vframe-wrap{position:relative;width:100%;max-width:480px;aspect-ratio:9/16;background:#000}
 .vframe-wrap iframe{width:100%;height:100%;border:none;display:block}
-/* Кнопка пропустить — максимально незаметная, верх слева */
 .skip-btn{position:absolute;top:10px;left:10px;
 background:rgba(0,0,0,.25);color:rgba(255,255,255,.4);
 border:1px solid rgba(255,255,255,.15);border-radius:50px;padding:5px 12px;
@@ -173,6 +178,13 @@ display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)
   </div>
   <button class="spinbtn" id="sbtn" onclick="spin()">🎯 Крутить колесо!</button>
   <div class="done-msg" id="doneMsg">Вращения закончились. Спасибо! 🎉</div>
+  <!-- Показывается когда все попытки на сегодня использованы -->
+  <div class="exhausted" id="exhausted">
+    <div style="font-size:52px;margin-bottom:12px">🌙</div>
+    <h2>Попытки на сегодня закончились</h2>
+    <p>Ты уже использовала все 5 вращений сегодня.<br>Возвращайся завтра — тебя ждут новые призы!</p>
+    <div class="comeback">Новые вращения появятся завтра утром 🎯</div>
+  </div>
 </main>
 <div class="overlay" id="overlay">
   <div class="sheet">
@@ -215,384 +227,417 @@ var BUY_URL       = 'https://walk-walk.ru/?utm_source=website&utm_medium=game&ut
 var PROMO490_URL  = 'https://my.walk-walk.ru/promo_box_490?utm_source=website&utm_medium=game&utm_campaign=wheel';
 var URL_1MONTH    = 'https://my.walk-walk.ru/1mount_club_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
 var URL_FOREVER   = 'https://my.walk-walk.ru/alwaysclub_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
-// autoplay=1&mute=0 — автовоспроизведение со звуком
 var AD_VIDEO_URL    = 'https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1&mute=0';
 var PRIZE_VIDEO_URL = 'https://vksport.vkvideo.ru/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1&mute=0';
 
-// ── ПАЛИТРА ──────────────────────────────────────────────────────────────────
-// 8 сегментов — чередуем тёмные/светлые чтобы соседи не сливались
-// Гамма: тёмно-красный → карминовый → оранжево-красный → янтарный → персиковый → малиновый → бордовый → золотой
-var COLORS = [
-  { bg:'#D91B2A', fg:'#fff' },  // 0 тёмно-красный
-  { bg:'#F5A623', fg:'#3D2000' },// 1 янтарный
-  { bg:'#B01020', fg:'#fff' },  // 2 бордовый
-  { bg:'#FFCF44', fg:'#3D2000' },// 3 золотой
-  { bg:'#E84545', fg:'#fff' },  // 4 карминовый
-  { bg:'#F07B1D', fg:'#fff' },  // 5 оранжевый
-  { bg:'#9A0E1C', fg:'#fff' },  // 6 тёмно-бордовый
-  { bg:'#FAB95B', fg:'#3D2000' },// 7 персиковый
-];
+// ── ЛИМИТ 5 ВРАЩЕНИЙ В ДЕНЬ ───────────────────────────────────────────────────
+var LS_DATE  = ‘shd_wheel_date’;
+var LS_SPINS = ‘shd_wheel_spins’;
+var LS_SNUM  = ‘shd_wheel_spinnum’;
+var MAX_SPINS = 5;
 
-var SEG = [
-  { label:['Скидка','20%'],         emoji:'🏷️',
-    prize:'Скидка 20% на абонемент!', promo:'LUCKY',
-    desc:'Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.',
-    w:22, isFinal:true, isDiscount:true },
-  { label:['Рецепты','диетолога'],  emoji:'🥗',
-    prize:'Рецепты от диетолога — PDF!',
-    desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
-    w:18, isMenuPdf:true },
-  { label:['Бесплатная','тренировка'], emoji:'🎽',
-    prize:'Бесплатная тренировка!',
-    desc:'Ты выиграла одну из лучших тренировок клуба ШАГАЙ ДОМА! Нажми кнопку ниже, чтобы начать шагать! 🔥',
-    w:16, isTraining:true },
-  { label:['Бесплатный','абонемент'], emoji:'🏆',
-    prize:'🏆 Бесплатный абонемент!',
-    desc:'Невероятно! Ты выиграла супер приз: бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
-    w:0, isJackpot:true },
-  { label:['Промо-бокс'], emoji:'🎁',
-    prize:'Промо-бокс за 490 руб!',
-    desc:'Эксклюзивное предложение, которого нет в продаже! Всего 490 руб — и ты получишь набор шагательных тренировок, трекеры привычек, вкусное меню и схемы и рецепты обертываний.',
-    w:14, isPromo490:true },
-  { label:['Секретный','тариф 1 мес'], emoji:'🕵️',
-    prize:'Секретный тариф — 1 месяц!',
-    desc:'Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.',
-    w:10, is1Month:true },
-  { label:['Секретный','тариф','НАВСЕГДА'], emoji:'🔑',
-    prize:'Секретный тариф НАВСЕГДА!',
-    desc:'Уникальный тариф, которого нет в продаже — доступ навсегда на особых условиях! Только для счастливчиков в колесе удачи. Получи ВЕЧНЫЙ доступ к тренировкам за 8990 руб.',
-    w:8, isForever:true },
-  { label:['Крути','ещё раз!'],     emoji:'🔄',
-    prize:'Крути ещё раз!',
-    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
-    w:14, isRetry:true },
-];
-// Назначаем цвета по порядку чередования
-for(var _i=0;_i<SEG.length;_i++){
-  SEG[_i].bg=COLORS[_i%COLORS.length].bg;
-  SEG[_i].fg=COLORS[_i%COLORS.length].fg;
+function todayStr() {
+var d = new Date();
+return d.getFullYear() + ‘-’ + (d.getMonth()+1) + ‘-’ + d.getDate();
+}
+function loadState() {
+try {
+var date  = localStorage.getItem(LS_DATE);
+var spins = parseInt(localStorage.getItem(LS_SPINS), 10);
+var snum  = parseInt(localStorage.getItem(LS_SNUM),  10) || 0;
+if (date === todayStr() && !isNaN(spins)) {
+return { spins: spins, spinNum: snum };
+}
+} catch(e) {}
+// новый день или первый заход
+saveState(MAX_SPINS, 0);
+return { spins: MAX_SPINS, spinNum: 0 };
+}
+function saveState(spins, snum) {
+try {
+localStorage.setItem(LS_DATE,  todayStr());
+localStorage.setItem(LS_SPINS, spins);
+localStorage.setItem(LS_SNUM,  snum);
+} catch(e) {}
 }
 
-// ── РЕКЛАМА (фото на 1, 3, 5 вращении) ──────────────────────────────────────
-var ADS = [
-  { title:'🔥 От -1 до -4 кг уже за первую неделю!',
-    text:'Не диета, не изнурительный зал — просто <strong>ходьба дома под видео</strong>. Наши участницы видят результат уже на первой неделе. <strong>10 000 женщин</strong> со всего мира уже шагают — присоединяйся!',
-    img:'1.JPG' },
-  { title:'🤔 «У меня нет времени на спорт»',
-    text:'Тренировки от <strong>10 до 30 минут</strong> прямо дома — никуда ехать не нужно. Встала, включила видео, прошагала. <strong>10 000 занятых женщин</strong> нашли время — найдёшь и ты!',
-    img:'4.png' },
-  { title:'😟 «Я уже пробовала — не помогло»',
-    text:'Ходьба работает иначе, чем изнурительные тренировки. Она <strong>не создает кортизол в теле</strong>, не вызывает срывов и подходит любому уровню. Просто шаги — и результат тут как тут!',
-    img:'2.JPG' },
-  { title:'💸 «Пока подожду с покупкой»',
-    text:'Один поход в зал стоит дороже, чем <strong>целый месяц</strong> в нашем клубе. Пока ты ждёшь — наши участницы уже худеют. Не откладывай то, что работает!',
-    img:'5.jpg' },
-  { title:'💪 Уже 10 000 женщин со всего мира',
-    text:'Из России, Европы, США, Казахстана — все они шагают дома и видят результат. <strong>Присоединяйся к самому тёплому фитнес-сообществу</strong> и начни свой путь к стройности прямо сейчас!',
-    img:'3.jpg' },
+// Инициализируем из localStorage
+var _state   = loadState();
+var spinsLeft = _state.spins;
+var spinNum   = _state.spinNum;
+
+// ── ПАЛИТРА ───────────────────────────────────────────────────────────────────
+var COLORS = [
+{ bg:’#D91B2A’, fg:’#fff’ },
+{ bg:’#F5A623’, fg:’#3D2000’ },
+{ bg:’#B01020’, fg:’#fff’ },
+{ bg:’#FFCF44’, fg:’#3D2000’ },
+{ bg:’#E84545’, fg:’#fff’ },
+{ bg:’#F07B1D’, fg:’#fff’ },
+{ bg:’#9A0E1C’, fg:’#fff’ },
+{ bg:’#FAB95B’, fg:’#3D2000’ },
 ];
+var SEG = [
+{ label:[‘Скидка’,‘20%’], emoji:‘🏷️’,
+prize:‘Скидка 20% на абонемент!’, promo:‘LUCKY’,
+desc:‘Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.’,
+w:22, isFinal:true, isDiscount:true },
+{ label:[‘Рецепты’,‘диетолога’], emoji:‘🥗’,
+prize:‘Рецепты от диетолога — PDF!’,
+desc:‘Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗’,
+w:18, isMenuPdf:true },
+{ label:[‘Бесплатная’,‘тренировка’], emoji:‘🎽’,
+prize:‘Бесплатная тренировка!’,
+desc:‘Ты выиграла одну из лучших тренировок клуба ШАГАЙ ДОМА! Нажми кнопку ниже, чтобы начать шагать! 🔥’,
+w:16, isTraining:true },
+{ label:[‘Бесплатный’,‘абонемент’], emoji:‘🏆’,
+prize:‘🏆 Бесплатный абонемент!’,
+desc:‘Невероятно! Ты выиграла супер приз: бесплатный абонемент! Оставь свою почту — мы активируем доступ.’,
+w:0, isJackpot:true },
+{ label:[‘Промо-бокс’], emoji:‘🎁’,
+prize:‘Промо-бокс за 490 руб!’,
+desc:‘Эксклюзивное предложение, которого нет в продаже! Всего 490 руб — набор тренировок, трекеры привычек, меню и рецепты.’,
+w:14, isPromo490:true },
+{ label:[‘Секретный’,‘тариф 1 мес’], emoji:‘🕵️’,
+prize:‘Секретный тариф — 1 месяц!’,
+desc:‘Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.’,
+w:10, is1Month:true },
+{ label:[‘Секретный’,‘тариф’,‘НАВСЕГДА’], emoji:‘🔑’,
+prize:‘Секретный тариф НАВСЕГДА!’,
+desc:‘Уникальный тариф, которого нет в продаже — доступ навсегда на особых условиях! Только для счастливчиков в колесе удачи.’,
+w:8, isForever:true },
+{ label:[‘Крути’,‘ещё раз!’], emoji:‘🔄’,
+prize:‘Крути ещё раз!’,
+desc:‘Не повезло — но удача совсем близко! Крути снова 🎯’,
+w:14, isRetry:true },
+];
+for(var _i=0;_i<SEG.length;_i++){
+SEG[_i].bg=COLORS[_i%COLORS.length].bg;
+SEG[_i].fg=COLORS[_i%COLORS.length].fg;
+}
 
-var FINAL_AD = 'Это твой <strong>шанс войти в клуб выгодно прямо сейчас!</strong> 350+ тренировок дома, <strong>+10 000 женщин-единомышленниц</strong> со всего мира и твоя новая стройная жизнь. <strong>Промокод LUCKY даёт -20% — действует 48 часов!</strong>';
+var ADS = [
+{ title:‘🔥 От -1 до -4 кг уже за первую неделю!’,
+text:‘Не диета, не изнурительный зал — просто <strong>ходьба дома под видео</strong>. Наши участницы видят результат уже на первой неделе. <strong>10 000 женщин</strong> со всего мира уже шагают — присоединяйся!’,
+img:‘1.JPG’ },
+{ title:‘🤔 «У меня нет времени на спорт»’,
+text:‘Тренировки от <strong>10 до 30 минут</strong> прямо дома — никуда ехать не нужно. Встала, включила видео, прошагала. <strong>10 000 занятых женщин</strong> нашли время — найдёшь и ты!’,
+img:‘4.png’ },
+{ title:‘😟 «Я уже пробовала — не помогло»’,
+text:‘Ходьба работает иначе, чем изнурительные тренировки. Она <strong>не создает кортизол в теле</strong>, не вызывает срывов и подходит любому уровню. Просто шаги — и результат тут как тут!’,
+img:‘2.JPG’ },
+{ title:‘💸 «Пока подожду с покупкой»’,
+text:‘Один поход в зал стоит дороже, чем <strong>целый месяц</strong> в нашем клубе. Пока ты ждёшь — наши участницы уже худеют. Не откладывай то, что работает!’,
+img:‘5.jpg’ },
+{ title:‘💪 Уже 10 000 женщин со всего мира’,
+text:‘Из России, Европы, США, Казахстана — все они шагают дома и видят результат. <strong>Присоединяйся к самому тёплому фитнес-сообществу</strong> и начни свой путь к стройности прямо сейчас!’,
+img:‘3.jpg’ },
+];
+var FINAL_AD = ‘Это твой <strong>шанс войти в клуб выгодно прямо сейчас!</strong> 350+ тренировок дома, <strong>+10 000 женщин-единомышленниц</strong> со всего мира и твоя новая стройная жизнь. <strong>Промокод LUCKY даёт -20% — действует 48 часов!</strong>’;
 
-var spinsLeft=5, busy=false, rot=0, spinNum=0, lastCode='', skipTimer=null;
+var busy=false, rot=0, lastCode=’’, skipTimer=null;
 var N=SEG.length, ARC=2*Math.PI/N;
-var CV=document.getElementById('wc');
-var ctx=CV.getContext('2d');
+var CV=document.getElementById(‘wc’);
+var ctx=CV.getContext(‘2d’);
 var SZ=640, CX=SZ/2, CY=SZ/2, R=SZ/2-10;
+
+// ── ИНИЦИАЛИЗАЦИЯ UI ──────────────────────────────────────────────────────────
+function initUI() {
+// Восстанавливаем точки
+var used = MAX_SPINS - spinsLeft;
+for(var i=1;i<=MAX_SPINS;i++) {
+document.getElementById(‘d’+i).classList.toggle(‘off’, i<=used);
+}
+
+if(spinsLeft <= 0) {
+// Все попытки исчерпаны — прячем колесо, показываем заглушку
+document.querySelector(’.wheel-wrap’).style.display=‘none’;
+document.getElementById(‘sbtn’).style.display=‘none’;
+document.getElementById(‘exhausted’).style.display=‘block’;
+// Баннер тоже можно убрать
+document.querySelector(’.jbanner’).style.display=‘none’;
+} else if(spinNum > 0) {
+// Вернулись с частично использованными попытками — просто показываем актуальное состояние
+// (колесо уже нарисовано, всё ок)
+}
+}
 
 // ── DRAW ──────────────────────────────────────────────────────────────────────
 function drawWheel(r){
-  ctx.clearRect(0,0,SZ,SZ);
-
-  // Проход 1: только заливки (без clip — чистые границы)
-  for(var i=0;i<N;i++){
-    var s=SEG[i];
-    var sa=r-Math.PI/2+i*ARC, a0=sa-ARC/2, a1=sa+ARC/2;
-    ctx.beginPath(); ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
-    ctx.fillStyle=s.bg; ctx.fill();
-    // Блик
-    var g=ctx.createRadialGradient(CX,CY,R*0.04,CX,CY,R);
-    g.addColorStop(0,'rgba(255,255,255,.2)');
-    g.addColorStop(0.45,'rgba(255,255,255,.04)');
-    g.addColorStop(1,'rgba(0,0,0,.09)');
-    ctx.beginPath(); ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
-    ctx.fillStyle=g; ctx.fill();
-    // Разделитель
-    ctx.beginPath(); ctx.moveTo(CX,CY);
-    ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
-    ctx.strokeStyle='rgba(255,255,255,.65)'; ctx.lineWidth=3; ctx.stroke();
-  }
-
-  // Проход 2: текст и эмодзи
-  for(var i=0;i<N;i++){
-    var s=SEG[i];
-    var sa=r-Math.PI/2+i*ARC;
-
-    // Эмодзи — у обода
-    var eR=R*0.76;
-    ctx.save();
-    ctx.translate(CX+eR*Math.cos(sa), CY+eR*Math.sin(sa));
-    ctx.rotate(sa+Math.PI/2);
-    // Рисуем через Image для цветных эмодзи
-    ctx.font=Math.round(R*0.082)+'px serif';
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    // Убираем shadow чтобы не было серого ореола вокруг эмодзи
-    ctx.shadowColor='transparent'; ctx.shadowBlur=0;
-    ctx.fillText(s.emoji,0,0);
-    ctx.restore();
-    // Текст — чёрный, без обводки, поднят ближе к иконке
-    var lines=s.label;
-    var tR=R*0.52;
-    var fs=Math.max(12, Math.round(R*0.056));
-    var lh=fs*1.22;
-    var totalH=(lines.length-1)*lh;
-    ctx.save();
-    ctx.translate(CX+tR*Math.cos(sa), CY+tR*Math.sin(sa));
-    ctx.rotate(sa+Math.PI/2);
-    ctx.font='900 '+fs+'px Nunito,Arial,sans-serif';
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.shadowColor='transparent'; ctx.shadowBlur=0;
-    ctx.fillStyle='#1A1A2E';
-    lines.forEach(function(ln,li){
-      ctx.fillText(ln, 0, -totalH/2+li*lh);
-    });
-    ctx.restore();
-
-  }
-
-  // Внешнее кольцо
-  ctx.beginPath(); ctx.arc(CX,CY,R,0,2*Math.PI);
-  ctx.strokeStyle='rgba(255,255,255,.8)'; ctx.lineWidth=6; ctx.stroke();
-  // Центральный круг
-  ctx.beginPath(); ctx.arc(CX,CY,36,0,2*Math.PI);
-  ctx.fillStyle='#fff'; ctx.fill();
-  ctx.strokeStyle='rgba(232,25,44,.15)'; ctx.lineWidth=3; ctx.stroke();
+ctx.clearRect(0,0,SZ,SZ);
+for(var i=0;i<N;i++){
+var s=SEG[i];
+var sa=r-Math.PI/2+i*ARC, a0=sa-ARC/2, a1=sa+ARC/2;
+ctx.beginPath(); ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
+ctx.fillStyle=s.bg; ctx.fill();
+var g=ctx.createRadialGradient(CX,CY,R*0.04,CX,CY,R);
+g.addColorStop(0,‘rgba(255,255,255,.2)’);
+g.addColorStop(0.45,‘rgba(255,255,255,.04)’);
+g.addColorStop(1,‘rgba(0,0,0,.09)’);
+ctx.beginPath(); ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
+ctx.fillStyle=g; ctx.fill();
+ctx.beginPath(); ctx.moveTo(CX,CY);
+ctx.arc(CX,CY,R,a0,a1); ctx.closePath();
+ctx.strokeStyle=‘rgba(255,255,255,.65)’; ctx.lineWidth=3; ctx.stroke();
+}
+for(var i=0;i<N;i++){
+var s=SEG[i];
+var sa=r-Math.PI/2+i*ARC;
+var eR=R*0.76;
+ctx.save();
+ctx.translate(CX+eR*Math.cos(sa), CY+eR*Math.sin(sa));
+ctx.rotate(sa+Math.PI/2);
+ctx.font=Math.round(R*0.082)+‘px serif’;
+ctx.textAlign=‘center’; ctx.textBaseline=‘middle’;
+ctx.shadowColor=‘transparent’; ctx.shadowBlur=0;
+ctx.fillText(s.emoji,0,0);
+ctx.restore();
+var lines=s.label;
+var tR=R*0.52;
+var fs=Math.max(12, Math.round(R*0.056));
+var lh=fs*1.22;
+var totalH=(lines.length-1)*lh;
+ctx.save();
+ctx.translate(CX+tR*Math.cos(sa), CY+tR*Math.sin(sa));
+ctx.rotate(sa+Math.PI/2);
+ctx.font=‘900 ‘+fs+‘px Nunito,Arial,sans-serif’;
+ctx.textAlign=‘center’; ctx.textBaseline=‘middle’;
+ctx.shadowColor=‘transparent’; ctx.shadowBlur=0;
+ctx.fillStyle=’#1A1A2E’;
+lines.forEach(function(ln,li){
+ctx.fillText(ln, 0, -totalH/2+li*lh);
+});
+ctx.restore();
+}
+ctx.beginPath(); ctx.arc(CX,CY,R,0,2*Math.PI);
+ctx.strokeStyle=‘rgba(255,255,255,.8)’; ctx.lineWidth=6; ctx.stroke();
+ctx.beginPath(); ctx.arc(CX,CY,36,0,2*Math.PI);
+ctx.fillStyle=’#fff’; ctx.fill();
+ctx.strokeStyle=‘rgba(232,25,44,.15)’; ctx.lineWidth=3; ctx.stroke();
 }
 
 drawWheel(rot);
 setTimeout(function(){drawWheel(rot);},200);
 setTimeout(function(){drawWheel(rot);},700);
 if(document.fonts&&document.fonts.ready){
-  document.fonts.ready.then(function(){drawWheel(rot);});
+document.fonts.ready.then(function(){drawWheel(rot);});
 }
+
+// Применяем UI после отрисовки
+initUI();
 
 // ── LOGIC ─────────────────────────────────────────────────────────────────────
 function pickIdx(){
-  if(spinsLeft===1) return SEG.findIndex(function(s){return s.isFinal;});
-  var pool=[];
-  SEG.forEach(function(s,i){
-    for(var j=0;j<s.w;j++) pool.push(i);
-  });
-  return pool[Math.floor(Math.random()*pool.length)];
+if(spinsLeft===1) return SEG.findIndex(function(s){return s.isFinal;});
+var pool=[];
+SEG.forEach(function(s,i){
+for(var j=0;j<s.w;j++) pool.push(i);
+});
+return pool[Math.floor(Math.random()*pool.length)];
 }
-
 
 function spin(){
-  if(busy||spinsLeft<=0) return;
-  busy=true; btnOff();
-  var ti=pickIdx();
-  var targetRot=((-ti*ARC)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
-  var jitter=(Math.random()-.5)*ARC*0.55;
-  var targetJ=(targetRot+jitter+2*Math.PI)%(2*Math.PI);
-  var curNorm=((rot%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
-  var delta=((targetJ-curNorm)+2*Math.PI)%(2*Math.PI);
-  if(delta<0.4) delta+=2*Math.PI;
-  var total=(5+Math.floor(Math.random()*4))*2*Math.PI+delta;
-  var startRot=rot, dur=4200+Math.random()*1100, t0=performance.now();
-  function ease(t){return 1-Math.pow(1-t,3.8);}
-  requestAnimationFrame(function go(now){
-    var t=Math.min((now-t0)/dur,1);
-    rot=startRot+total*ease(t);
-    drawWheel(rot);
-    if(t<1){requestAnimationFrame(go);return;}
-    busy=false; spinNum++; spinsLeft--;
-    updateDots();
-    var afterSpin=function(){
-      if(SEG[ti].isRetry){
-        if(spinsLeft>0){toast('🔄 Крути ещё раз! Удача близко!');btnOn();}
-        else showModal(SEG.findIndex(function(s){return s.isFinal;}));
-      } else {
-        showModal(ti);
-        if(spinsLeft>0) btnOn();
-      }
-      if(spinsLeft===0){
-        document.getElementById('sbtn').style.display='none';
-        document.getElementById('doneMsg').style.display='block';
-      }
-    };
-    if(spinNum===2&&!SEG[ti].isRetry){showAdVideo(afterSpin);}
-    else{afterSpin();}
-  });
+if(busy||spinsLeft<=0) return;
+busy=true; btnOff();
+var ti=pickIdx();
+var targetRot=((-ti*ARC)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+var jitter=(Math.random()-.5)*ARC*0.55;
+var targetJ=(targetRot+jitter+2*Math.PI)%(2*Math.PI);
+var curNorm=((rot%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+var delta=((targetJ-curNorm)+2*Math.PI)%(2*Math.PI);
+if(delta<0.4) delta+=2*Math.PI;
+var total=(5+Math.floor(Math.random()*4))*2*Math.PI+delta;
+var startRot=rot, dur=4200+Math.random()*1100, t0=performance.now();
+function ease(t){return 1-Math.pow(1-t,3.8);}
+requestAnimationFrame(function go(now){
+var t=Math.min((now-t0)/dur,1);
+rot=startRot+total*ease(t);
+drawWheel(rot);
+if(t<1){requestAnimationFrame(go);return;}
+busy=false; spinNum++; spinsLeft–;
+
+```
+// Сохраняем в localStorage сразу после каждого вращения
+saveState(spinsLeft, spinNum);
+
+updateDots();
+var afterSpin=function(){
+  if(SEG[ti].isRetry){
+    if(spinsLeft>0){toast('🔄 Крути ещё раз! Удача близко!');btnOn();}
+    else showModal(SEG.findIndex(function(s){return s.isFinal;}));
+  } else {
+    showModal(ti);
+    if(spinsLeft>0) btnOn();
+  }
+  if(spinsLeft===0){
+    document.getElementById('sbtn').style.display='none';
+    document.getElementById('doneMsg').style.display='block';
+  }
+};
+if(spinNum===2&&!SEG[ti].isRetry){showAdVideo(afterSpin);}
+else{afterSpin();}
+```
+
+});
 }
 
-function btnOff(){['sbtn','cbtn'].forEach(function(id){document.getElementById(id).disabled=true;});}
-function btnOn(){['sbtn','cbtn'].forEach(function(id){document.getElementById(id).disabled=false;});}
+function btnOff(){[‘sbtn’,‘cbtn’].forEach(function(id){document.getElementById(id).disabled=true;});}
+function btnOn(){[‘sbtn’,‘cbtn’].forEach(function(id){document.getElementById(id).disabled=false;});}
 function updateDots(){
-  var used=5-spinsLeft;
-  for(var i=1;i<=5;i++) document.getElementById('d'+i).classList.toggle('off',i<=used);
+var used=MAX_SPINS-spinsLeft;
+for(var i=1;i<=MAX_SPINS;i++) document.getElementById(‘d’+i).classList.toggle(‘off’,i<=used);
 }
 
 // ── VIDEO ─────────────────────────────────────────────────────────────────────
 function showAdVideo(callback){
-  var frame=document.getElementById('vframe');
-  var skipBtn=document.getElementById('skipBtn');
-  skipBtn.style.display='none';
-  skipBtn.disabled=true;
-  skipBtn.innerHTML='Пропустить <span class="skip-countdown" id="skipCount">5</span>';
-  document.getElementById('vcloseBtn').style.display='none';
-  frame.src=AD_VIDEO_URL;
-  document.getElementById('voverlay').classList.add('show');
-  window._adCallback=callback;
-  function startCountdown(){
-    skipBtn.style.display='block';
-    var sec=5;
-    function tick(){
-      var sc=document.getElementById('skipCount');
-      if(sc) sc.textContent=sec;
-      if(sec<=0){clearInterval(skipTimer);skipBtn.disabled=false;skipBtn.innerHTML='Пропустить ✕';return;}
-      sec--;
-    }
-    tick();
-    skipTimer=setInterval(tick,1000);
-  }
-  frame.onload=startCountdown;
-  setTimeout(function(){if(skipBtn.style.display==='none') startCountdown();},4000);
+var frame=document.getElementById(‘vframe’);
+var skipBtn=document.getElementById(‘skipBtn’);
+skipBtn.style.display=‘none’;
+skipBtn.disabled=true;
+skipBtn.innerHTML=‘Пропустить <span class="skip-countdown" id="skipCount">5</span>’;
+document.getElementById(‘vcloseBtn’).style.display=‘none’;
+frame.src=AD_VIDEO_URL;
+document.getElementById(‘voverlay’).classList.add(‘show’);
+window._adCallback=callback;
+function startCountdown(){
+skipBtn.style.display=‘block’;
+var sec=5;
+function tick(){
+var sc=document.getElementById(‘skipCount’);
+if(sc) sc.textContent=sec;
+if(sec<=0){clearInterval(skipTimer);skipBtn.disabled=false;skipBtn.innerHTML=‘Пропустить ✕’;return;}
+sec–;
 }
-
+tick(); skipTimer=setInterval(tick,1000);
+}
+frame.onload=startCountdown;
+setTimeout(function(){if(skipBtn.style.display===‘none’) startCountdown();},4000);
+}
 function skipAd(){
-  clearInterval(skipTimer);
-  document.getElementById('vframe').src='';
-  document.getElementById('voverlay').classList.remove('show');
-  if(window._adCallback){window._adCallback();window._adCallback=null;}
+clearInterval(skipTimer);
+document.getElementById(‘vframe’).src=’’;
+document.getElementById(‘voverlay’).classList.remove(‘show’);
+if(window._adCallback){window._adCallback();window._adCallback=null;}
 }
-
 function showPrizeVideo(){
-  document.getElementById('vframe').src=PRIZE_VIDEO_URL;
-  document.getElementById('skipBtn').style.display='none';
-  document.getElementById('vcloseBtn').style.display='flex';
-  document.getElementById('voverlay').classList.add('show');
+document.getElementById(‘vframe’).src=PRIZE_VIDEO_URL;
+document.getElementById(‘skipBtn’).style.display=‘none’;
+document.getElementById(‘vcloseBtn’).style.display=‘flex’;
+document.getElementById(‘voverlay’).classList.add(‘show’);
 }
 function closeVideo(){
-  document.getElementById('vframe').src='';
-  document.getElementById('voverlay').classList.remove('show');
+document.getElementById(‘vframe’).src=’’;
+document.getElementById(‘voverlay’).classList.remove(‘show’);
 }
 
 // ── MODAL ─────────────────────────────────────────────────────────────────────
 function showModal(idx){
-  var s=SEG[idx], fin=spinsLeft===0;
-  document.getElementById('mEmoji').textContent=s.emoji;
-  document.getElementById('mTag').textContent=fin?'🎊 Последнее вращение!':'🎉 Поздравляем!';
-  var tel=document.getElementById('mTitle');
-  tel.textContent=s.prize;
-  tel.className='m-title'+(s.isJackpot||fin?' red':'');
-  var pel=document.getElementById('mPromo');
-  if((s.promo||fin)&&!s.isJackpot){
-    pel.style.display='block';
-    lastCode=fin?'LUCKY':s.promo;
-    document.getElementById('mCode').textContent=lastCode;
-  } else pel.style.display='none';
-  document.getElementById('mDesc').textContent=s.desc;
-
-  // Рекламная карточка с фото
-  var adcard=document.getElementById('adcard');
-  var adTtl=document.getElementById('adTtl');
-  var adP=document.getElementById('mAd');
-  // Убираем старое фото если было
-  var oldImg=adcard.querySelector('.adcard-img');
-  if(oldImg) oldImg.remove();
-
-  if(fin){
-    adTtl.textContent='🚶‍♀️ О клубе ШАГАЙ ДОМА';
-    adP.innerHTML=FINAL_AD;
-  } else {
-    var ad=ADS[(spinNum-1)%ADS.length];
-    adTtl.textContent=ad.title;
-    adP.innerHTML=ad.text;
-    if(ad.img){
-      var img=document.createElement('img');
-      img.src=ad.img; img.className='adcard-img'; img.alt='';
-      adcard.insertBefore(img, adcard.querySelector('.adcard-body'));
-    }
-  }
-
-  var badge=document.getElementById('mBadge');
-  if(spinsLeft>0){
-    badge.style.display='inline-flex';
-    document.getElementById('mBadgeTxt').textContent='Ещё '+spinsLeft+' вращени'+(spinsLeft===1?'е':'я');
-  } else badge.style.display='none';
-
-  var acts=document.getElementById('mActions'); acts.innerHTML='';
-  if(s.isJackpot){
-    acts.innerHTML='<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:Unbounded,sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>';
-  } else if(s.isMenuPdf){
-    mkBtn(acts,'📥 Скачать рецепты PDF бесплатно!',function(){var a=document.createElement('a');a.href='menu.pdf';a.download='menu.pdf';document.body.appendChild(a);a.click();document.body.removeChild(a);closeModal();});
-  } else if(s.isTraining){
-    mkBtn(acts,'▶️ Смотреть тренировку прямо сейчас!',function(){closeModal();showPrizeVideo();});
-  } else if(s.isPromo490){
-    mkBtn(acts,'🎁 Получить промо-неделю за 490 руб!',function(){window.open(PROMO490_URL,'_blank');closeModal();});
-  } else if(s.is1Month){
-    mkBtn(acts,'🕵️ Забрать секретный тариф на месяц!',function(){window.open(URL_1MONTH,'_blank');closeModal();});
-  } else if(s.isForever){
-    mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){window.open(URL_FOREVER,'_blank');closeModal();});
-  } else if(s.isDiscount||fin){
-    mkBtn(acts,'🛒 Перейти к покупке со скидкой 20%',function(){window.open(BUY_URL,'_blank');closeModal();});
-  } else {
-    mkBtn(acts,'✅ Забрать приз!',function(){closeModal();});
-  }
-  if(spinsLeft>0&&!fin&&!s.isJackpot){
-    var br=document.createElement('button'); br.className='btn-respin';
-    br.textContent='🎯 Крутить ещё раз ('+spinsLeft+' вращени'+(spinsLeft===1?'е':'я')+')';
-    br.onclick=function(){closeModal();}; acts.appendChild(br);
-    var w=document.createElement('div'); w.className='respin-warn';
-    w.textContent='⚠️ Если крутишь снова — текущий приз сгорает!'; acts.appendChild(w);
-  }
-  document.getElementById('overlay').classList.add('show');
-  if(s.isJackpot||fin) confetti();
+var s=SEG[idx], fin=spinsLeft===0;
+document.getElementById(‘mEmoji’).textContent=s.emoji;
+document.getElementById(‘mTag’).textContent=fin?‘🎊 Последнее вращение!’:‘🎉 Поздравляем!’;
+var tel=document.getElementById(‘mTitle’);
+tel.textContent=s.prize;
+tel.className=‘m-title’+(s.isJackpot||fin?’ red’:’’);
+var pel=document.getElementById(‘mPromo’);
+if((s.promo||fin)&&!s.isJackpot){
+pel.style.display=‘block’;
+lastCode=fin?‘LUCKY’:s.promo;
+document.getElementById(‘mCode’).textContent=lastCode;
+} else pel.style.display=‘none’;
+document.getElementById(‘mDesc’).textContent=s.desc;
+var adcard=document.getElementById(‘adcard’);
+var adTtl=document.getElementById(‘adTtl’);
+var adP=document.getElementById(‘mAd’);
+var oldImg=adcard.querySelector(’.adcard-img’);
+if(oldImg) oldImg.remove();
+if(fin){
+adTtl.textContent=‘🚶‍♀️ О клубе ШАГАЙ ДОМА’;
+adP.innerHTML=FINAL_AD;
+} else {
+var ad=ADS[(spinNum-1)%ADS.length];
+adTtl.textContent=ad.title;
+adP.innerHTML=ad.text;
+if(ad.img){
+var img=document.createElement(‘img’);
+img.src=ad.img; img.className=‘adcard-img’; img.alt=’’;
+adcard.insertBefore(img, adcard.querySelector(’.adcard-body’));
 }
-
-function mkBtn(p,l,fn){var b=document.createElement('button');b.className='btn-take';b.innerHTML=l;b.onclick=fn;p.appendChild(b);}
-function closeModal(){document.getElementById('overlay').classList.remove('show');}
-
+}
+var badge=document.getElementById(‘mBadge’);
+if(spinsLeft>0){
+badge.style.display=‘inline-flex’;
+document.getElementById(‘mBadgeTxt’).textContent=‘Ещё ‘+spinsLeft+’ вращени’+(spinsLeft===1?‘е’:‘я’);
+} else badge.style.display=‘none’;
+var acts=document.getElementById(‘mActions’); acts.innerHTML=’’;
+if(s.isJackpot){
+acts.innerHTML=’<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:Unbounded,sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>’;
+} else if(s.isMenuPdf){
+mkBtn(acts,‘📥 Скачать рецепты PDF бесплатно!’,function(){var a=document.createElement(‘a’);a.href=‘menu.pdf’;a.download=‘menu.pdf’;document.body.appendChild(a);a.click();document.body.removeChild(a);closeModal();});
+} else if(s.isTraining){
+mkBtn(acts,‘▶️ Смотреть тренировку прямо сейчас!’,function(){closeModal();showPrizeVideo();});
+} else if(s.isPromo490){
+mkBtn(acts,‘🎁 Получить промо-бокс за 490 руб!’,function(){window.open(PROMO490_URL,’_blank’);closeModal();});
+} else if(s.is1Month){
+mkBtn(acts,‘🕵️ Забрать секретный тариф на месяц!’,function(){window.open(URL_1MONTH,’_blank’);closeModal();});
+} else if(s.isForever){
+mkBtn(acts,‘🔑 Забрать тариф НАВСЕГДА!’,function(){window.open(URL_FOREVER,’_blank’);closeModal();});
+} else if(s.isDiscount||fin){
+mkBtn(acts,‘🛒 Перейти к покупке со скидкой 20%’,function(){window.open(BUY_URL,’_blank’);closeModal();});
+} else {
+mkBtn(acts,‘✅ Забрать приз!’,function(){closeModal();});
+}
+if(spinsLeft>0&&!fin&&!s.isJackpot){
+var br=document.createElement(‘button’); br.className=‘btn-respin’;
+br.textContent=‘🎯 Крутить ещё раз (’+spinsLeft+’ вращени’+(spinsLeft===1?‘е’:‘я’)+’)’;
+br.onclick=function(){closeModal();}; acts.appendChild(br);
+var w=document.createElement(‘div’); w.className=‘respin-warn’;
+w.textContent=‘⚠️ Если крутишь снова — текущий приз сгорает!’; acts.appendChild(w);
+}
+document.getElementById(‘overlay’).classList.add(‘show’);
+if(s.isJackpot||fin) confetti();
+}
+function mkBtn(p,l,fn){var b=document.createElement(‘button’);b.className=‘btn-take’;b.innerHTML=l;b.onclick=fn;p.appendChild(b);}
+function closeModal(){document.getElementById(‘overlay’).classList.remove(‘show’);}
 function submitJackpot(){
-  var email=document.getElementById('jackpotEmail').value.trim();
-  var status=document.getElementById('jackpotStatus');
-  if(!email||!email.includes('@')||!email.includes('.')){status.style.color='#E8192C';status.textContent='Пожалуйста, введи корректный email 📧';return;}
-  status.style.color='#aaa';status.textContent='Отправляем...';
-  fetch(FORMSPREE_URL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({email:email,prize:'Бесплатный абонемент',source:'Колесо удачи ШагайДома'})})
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(d.ok){document.getElementById('jackpotEmail').style.display='none';document.querySelector('[onclick="submitJackpot()"]').style.display='none';status.style.color='#22aa55';status.style.fontSize='14px';status.textContent='🎉 Готово! Мы скоро напишем тебе на почту!';}
-    else{status.style.color='#E8192C';status.textContent='Что-то пошло не так. Попробуй ещё раз.';}
-  })
-  .catch(function(){status.style.color='#E8192C';status.textContent='Ошибка сети. Напиши нам напрямую.';});
+var email=document.getElementById(‘jackpotEmail’).value.trim();
+var status=document.getElementById(‘jackpotStatus’);
+if(!email||!email.includes(’@’)||!email.includes(’.’)){status.style.color=’#E8192C’;status.textContent=‘Пожалуйста, введи корректный email 📧’;return;}
+status.style.color=’#aaa’;status.textContent=‘Отправляем…’;
+fetch(FORMSPREE_URL,{method:‘POST’,headers:{‘Content-Type’:‘application/json’,‘Accept’:‘application/json’},
+body:JSON.stringify({email:email,prize:‘Бесплатный абонемент’,source:‘Колесо удачи ШагайДома’})})
+.then(function(r){return r.json();})
+.then(function(d){
+if(d.ok){document.getElementById(‘jackpotEmail’).style.display=‘none’;document.querySelector(’[onclick=“submitJackpot()”]’).style.display=‘none’;status.style.color=’#22aa55’;status.style.fontSize=‘14px’;status.textContent=‘🎉 Готово! Мы скоро напишем тебе на почту!’;}
+else{status.style.color=’#E8192C’;status.textContent=‘Что-то пошло не так. Попробуй ещё раз.’;}
+})
+.catch(function(){status.style.color=’#E8192C’;status.textContent=‘Ошибка сети. Напиши нам напрямую.’;});
 }
-
 function copyCode(){
-  navigator.clipboard.writeText(lastCode).catch(function(){});
-  var el=document.getElementById('mCode'),o=el.textContent;
-  el.textContent='✅ Скопировано!';setTimeout(function(){el.textContent=o;},2000);
+navigator.clipboard.writeText(lastCode).catch(function(){});
+var el=document.getElementById(‘mCode’),o=el.textContent;
+el.textContent=‘✅ Скопировано!’;setTimeout(function(){el.textContent=o;},2000);
 }
 function toast(msg){
-  var t=document.createElement('div');
-  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;border-radius:50px;padding:11px 20px;font-family:inherit;font-size:14px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;';
-  t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove();},2400);
+var t=document.createElement(‘div’);
+t.style.cssText=‘position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;border-radius:50px;padding:11px 20px;font-family:inherit;font-size:14px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;’;
+t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove();},2400);
 }
 function confetti(){
-  var cols=['#E8192C','#FF6B35','#F5A623','#FFD166','#FF4D5E','#fff'];
-  for(var i=0;i<65;i++)(function(i){setTimeout(function(){
-    var el=document.createElement('div');el.className='cp';
-    el.style.left=Math.random()*100+'vw';
-    el.style.background=cols[Math.floor(Math.random()*cols.length)];
-    el.style.borderRadius=Math.random()>.4?'50%':'2px';
-    var sz=6+Math.random()*8;el.style.width=el.style.height=sz+'px';
-    document.body.appendChild(el);
-    el.animate([{top:'-20px',opacity:1,transform:'rotate(0)'},{top:'108vh',opacity:0,transform:'rotate('+(400+Math.random()*360)+'deg) translateX('+(Math.random()-.5)*160+'px)'}],
-    {duration:2000+Math.random()*1500,easing:'cubic-bezier(.2,.8,.4,1)',fill:'forwards'}).onfinish=function(){el.remove();};
-  },i*32);})(i);
+var cols=[’#E8192C’,’#FF6B35’,’#F5A623’,’#FFD166’,’#FF4D5E’,’#fff’];
+for(var i=0;i<65;i++)(function(i){setTimeout(function(){
+var el=document.createElement(‘div’);el.className=‘cp’;
+el.style.left=Math.random()*100+‘vw’;
+el.style.background=cols[Math.floor(Math.random()*cols.length)];
+el.style.borderRadius=Math.random()>.4?‘50%’:‘2px’;
+var sz=6+Math.random()*8;el.style.width=el.style.height=sz+‘px’;
+document.body.appendChild(el);
+el.animate([{top:’-20px’,opacity:1,transform:‘rotate(0)’},{top:‘108vh’,opacity:0,transform:‘rotate(’+(400+Math.random()*360)+‘deg) translateX(’+(Math.random()-.5)*160+‘px)’}],
+{duration:2000+Math.random()*1500,easing:‘cubic-bezier(.2,.8,.4,1)’,fill:‘forwards’}).onfinish=function(){el.remove();};
+},i*32);})(i);
 }
 </script>
+
 </body>
 </html>
