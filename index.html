@@ -346,7 +346,9 @@ var PROMO490_URL  = 'https://my.walk-walk.ru/promo_box_490?utm_source=website&ut
 var URL_1MONTH    = 'https://my.walk-walk.ru/1mount_club_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
 var URL_FOREVER   = 'https://my.walk-walk.ru/alwaysclub_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
 var AD_VIDEO_URL    = 'https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1&mute=0';
+var AD_VIDEO_DIRECT  = 'https://vk.com/video-222534261_456241523';
 var PRIZE_VIDEO_URL = 'https://vk.com/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1&mute=0';
+var PRIZE_VIDEO_DIRECT = 'https://vk.com/video-222534261_456239060';
 
 // ── ЛИМИТ ─────────────────────────────────────────────────────────────────────
 var LS_DATE='shd_wheel_date', LS_SPINS='shd_wheel_spins', LS_SNUM='shd_wheel_spinnum', MAX_SPINS=5;
@@ -444,10 +446,10 @@ function drawWheel(r){
   for(var i=0;i<N;i++){
     var s=SEG[i], sa=r-Math.PI/2+i*ARC;
     ctx.save();ctx.translate(CX+R*0.80*Math.cos(sa),CY+R*0.80*Math.sin(sa));
-    ctx.rotate(sa+Math.PI/2);ctx.font=Math.round(R*0.072)+'px serif';
+    ctx.rotate(sa+Math.PI/2);ctx.font=Math.round(R*0.072)+'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",serif';
     ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='transparent';ctx.shadowBlur=0;
     ctx.fillText(s.emoji,0,0);ctx.restore();
-    var lines=s.label, tR=R*0.44, fs=Math.max(11,Math.round(R*0.048)), lh=fs*1.22, totalH=(lines.length-1)*lh;
+    var lines=s.label, tR=R*0.35, fs=Math.max(11,Math.round(R*0.048)), lh=fs*1.22, totalH=(lines.length-1)*lh;
     ctx.save();ctx.translate(CX+tR*Math.cos(sa),CY+tR*Math.sin(sa));ctx.rotate(sa+Math.PI/2);
     ctx.font='900 '+fs+'px Nunito,Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
     ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.fillStyle='#1A1A2E';
@@ -510,19 +512,55 @@ function updateDots(){var used=MAX_SPINS-spinsLeft;for(var i=1;i<=MAX_SPINS;i++)
 
 // ── VIDEO ─────────────────────────────────────────────────────────────────────
 function showAdVideo(callback){
-  var frame=document.getElementById('vframe'), skipBtn=document.getElementById('skipBtn');
-  skipBtn.style.display='none';skipBtn.disabled=true;
+  window._adCallback=callback;
+  var frame=document.getElementById('vframe');
+  var fw=document.querySelector('.vframe-wrap');
+  var skipBtn=document.getElementById('skipBtn');
+  skipBtn.style.display='none'; skipBtn.disabled=true;
   skipBtn.innerHTML='Пропустить <span class="skip-countdown" id="skipCount">5</span>';
   document.getElementById('vcloseBtn').style.display='none';
-  frame.src=AD_VIDEO_URL;document.getElementById('voverlay').classList.add('show');
-  window._adCallback=callback;
-  function startCountdown(){
-    skipBtn.style.display='block';var sec=5;
-    function tick(){var sc=document.getElementById('skipCount');if(sc) sc.textContent=sec;if(sec<=0){clearInterval(skipTimer);skipBtn.disabled=false;skipBtn.innerHTML='Пропустить ✕';return;}sec--;}
-    tick();skipTimer=setInterval(tick,1000);
+  document.getElementById('voverlay').classList.add('show');
+
+  var oldFb=document.getElementById('vFallback'); if(oldFb) oldFb.remove();
+  var fb=document.createElement('div'); fb.id='vFallback';
+  fb.style.cssText='position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;gap:16px;padding:24px;z-index:2';
+
+  var title=document.createElement('div');
+  title.style.cssText='font-size:13px;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase;letter-spacing:1px';
+  title.textContent='Реклама';
+
+  var desc=document.createElement('div');
+  desc.style.cssText='font-size:15px;color:#fff;font-weight:800;text-align:center;line-height:1.5';
+  desc.innerHTML='Посмотри короткое видео<br>о клубе Шагай Дома';
+
+  var btn=document.createElement('button');
+  btn.style.cssText='background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:Nunito,sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(232,25,44,.4)';
+  btn.textContent='▶️ Смотреть видео';
+  btn.onclick=function(){ window.open(AD_VIDEO_DIRECT,'_blank'); };
+
+  var skipWrap=document.createElement('div'); skipWrap.id='vFbSkipWrap';
+
+  fb.appendChild(title); fb.appendChild(desc); fb.appendChild(btn); fb.appendChild(skipWrap);
+  fw.appendChild(fb);
+
+  frame.src=AD_VIDEO_URL;
+  frame.onload=function(){ fb.style.display='none'; frame.style.zIndex='3'; };
+
+  var sec=5;
+  function renderSkip(){
+    if(sec>0){
+      skipWrap.innerHTML='<span style="font-size:12px;color:rgba(255,255,255,.35);font-weight:700">Пропустить через '+sec+'...</span>';
+      sec--; setTimeout(renderSkip,1000);
+    } else {
+      var sb=document.createElement('button');
+      sb.style.cssText='background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:7px 18px;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;cursor:pointer';
+      sb.textContent='Пропустить ✕';
+      sb.onclick=skipAd;
+      skipWrap.innerHTML=''; skipWrap.appendChild(sb);
+      skipBtn.style.display='block'; skipBtn.disabled=false; skipBtn.innerHTML='Пропустить ✕';
+    }
   }
-  frame.onload=startCountdown;
-  setTimeout(function(){if(skipBtn.style.display==='none') startCountdown();},4000);
+  setTimeout(renderSkip,0);
 }
 function skipAd(){
   clearInterval(skipTimer);document.getElementById('vframe').src='';
@@ -530,12 +568,38 @@ function skipAd(){
   if(window._adCallback){window._adCallback();window._adCallback=null;}
 }
 function showPrizeVideo(){
-  document.getElementById('vframe').src=PRIZE_VIDEO_URL;
+  var frame=document.getElementById('vframe');
+  var fw=document.querySelector('.vframe-wrap');
   document.getElementById('skipBtn').style.display='none';
   document.getElementById('vcloseBtn').style.display='flex';
   document.getElementById('voverlay').classList.add('show');
+
+  var oldFb=document.getElementById('vFallback'); if(oldFb) oldFb.remove();
+  var fb=document.createElement('div'); fb.id='vFallback';
+  fb.style.cssText='position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;gap:16px;padding:24px;z-index:2';
+
+  var ico=document.createElement('div'); ico.style.fontSize='42px'; ico.textContent='🎽';
+
+  var title=document.createElement('div');
+  title.style.cssText='font-size:16px;color:#fff;font-weight:800;text-align:center;line-height:1.5';
+  title.innerHTML='Твоя бесплатная<br>тренировка готова!';
+
+  var hint=document.createElement('div');
+  hint.style.cssText='font-size:13px;color:rgba(255,255,255,.55);text-align:center;font-weight:700';
+  hint.textContent='Нажми чтобы открыть видео';
+
+  var btn=document.createElement('button');
+  btn.style.cssText='background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:14px;padding:15px 30px;font-family:Nunito,sans-serif;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(232,25,44,.4)';
+  btn.textContent='▶️ Смотреть тренировку';
+  btn.onclick=function(){ window.open(PRIZE_VIDEO_DIRECT,'_blank'); };
+
+  fb.appendChild(ico); fb.appendChild(title); fb.appendChild(hint); fb.appendChild(btn);
+  fw.appendChild(fb);
+
+  frame.src=PRIZE_VIDEO_URL;
+  frame.onload=function(){ fb.style.display='none'; frame.style.zIndex='3'; };
 }
-function closeVideo(){document.getElementById('vframe').src='';document.getElementById('voverlay').classList.remove('show');}
+function closeVideo(){document.getElementById('vframe').src='';document.getElementById('voverlay').classList.remove('show');var fb=document.getElementById('vFallback');if(fb) fb.remove();}
 
 // ── ЛАЙТБОКС ─────────────────────────────────────────────────────────────────
 function openLightbox(src){
