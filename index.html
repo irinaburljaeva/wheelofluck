@@ -346,7 +346,7 @@ var PROMO490_URL  = 'https://my.walk-walk.ru/promo_box_490?utm_source=website&ut
 var URL_1MONTH    = 'https://my.walk-walk.ru/1mount_club_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
 var URL_FOREVER   = 'https://my.walk-walk.ru/alwaysclub_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
 var AD_VIDEO_URL    = 'https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1&mute=0';
-var PRIZE_VIDEO_URL = 'https://vksport.vkvideo.ru/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1&mute=0';
+var PRIZE_VIDEO_URL = 'https://vk.com/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1&mute=0';
 
 // ── ЛИМИТ ─────────────────────────────────────────────────────────────────────
 var LS_DATE='shd_wheel_date', LS_SPINS='shd_wheel_spins', LS_SNUM='shd_wheel_spinnum', MAX_SPINS=5;
@@ -443,11 +443,11 @@ function drawWheel(r){
   }
   for(var i=0;i<N;i++){
     var s=SEG[i], sa=r-Math.PI/2+i*ARC;
-    ctx.save();ctx.translate(CX+R*0.76*Math.cos(sa),CY+R*0.76*Math.sin(sa));
-    ctx.rotate(sa+Math.PI/2);ctx.font=Math.round(R*0.082)+'px serif';
+    ctx.save();ctx.translate(CX+R*0.80*Math.cos(sa),CY+R*0.80*Math.sin(sa));
+    ctx.rotate(sa+Math.PI/2);ctx.font=Math.round(R*0.072)+'px serif';
     ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='transparent';ctx.shadowBlur=0;
     ctx.fillText(s.emoji,0,0);ctx.restore();
-    var lines=s.label, tR=R*0.52, fs=Math.max(12,Math.round(R*0.056)), lh=fs*1.22, totalH=(lines.length-1)*lh;
+    var lines=s.label, tR=R*0.44, fs=Math.max(11,Math.round(R*0.048)), lh=fs*1.22, totalH=(lines.length-1)*lh;
     ctx.save();ctx.translate(CX+tR*Math.cos(sa),CY+tR*Math.sin(sa));ctx.rotate(sa+Math.PI/2);
     ctx.font='900 '+fs+'px Nunito,Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
     ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.fillStyle='#1A1A2E';
@@ -628,7 +628,7 @@ function showModal(idx){
   } else if(s.isTraining){
     addTimer(acts,20*60,'Тренировка доступна ограниченное время');
     mkBtn(acts,'▶️ Смотреть тренировку прямо сейчас!',function(){closeModal();showPrizeVideo();});
-    addUpsell(acts,'💡 Понравилась тренировка? В клубе таких 350+','🏃‍♀️ Вступить в клуб со скидкой 20%',function(){window.open(BUY_URL,'_blank');closeModal();});
+    addUpsell(acts,'💡 Понравилась тренировка? В клубе таких 350+ — 3 месяца за 2990 руб!','🏃‍♀️ Вступить в клуб за 2990 руб',function(){window.open(BUY_URL,'_blank');closeModal();});
   } else if(s.isPromo490){
     addTimer(acts,30*60,'Спецпредложение сгорит через');
     mkBtn(acts,'🎁 Получить промо-бокс за 490 руб!',function(){window.open(PROMO490_URL,'_blank');closeModal();});
