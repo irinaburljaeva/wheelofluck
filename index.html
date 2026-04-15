@@ -138,6 +138,42 @@ transition:all .3s;display:none;letter-spacing:.3px}
 border:none;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;
 display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .cp{position:fixed;top:-20px;opacity:0;pointer-events:none;z-index:9999;border-radius:2px}
+
+/* ── ЛАЙТБОКС для фото ── */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);
+z-index:500;justify-content:center;align-items:center;cursor:zoom-out}
+.lightbox.show{display:flex}
+.lightbox img{max-width:95vw;max-height:92vh;border-radius:12px;
+box-shadow:0 20px 60px rgba(0,0,0,.5);object-fit:contain}
+.lightbox-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);
+color:#fff;border:none;border-radius:50%;width:38px;height:38px;font-size:20px;
+cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* Картинка кликабельная */
+.adcard-img{cursor:zoom-in;transition:opacity .2s}
+.adcard-img:hover{opacity:.9}
+
+/* ── ТАЙМЕР ── */
+.prize-timer{background:linear-gradient(135deg,#1A1A2E,#2D1A1A);
+border-radius:12px;padding:11px 14px;margin-bottom:14px;
+display:flex;align-items:center;gap:10px}
+.timer-icon{font-size:20px;flex-shrink:0;animation:pulse-ico 1s ease-in-out infinite}
+@keyframes pulse-ico{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.timer-label{font-size:11px;font-weight:800;color:rgba(255,255,255,.6);
+text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px}
+.timer-digits{font-family:'Unbounded',sans-serif;font-size:17px;font-weight:900;
+color:#fff;letter-spacing:1px}
+.timer-digits span{color:#FF6B35}
+
+/* ── Вторичная CTA для бесплатных призов ── */
+.upsell-block{background:linear-gradient(135deg,#FFF5F6,#FFF0F1);
+border-radius:13px;padding:13px 14px;margin-top:6px;
+border:1px solid rgba(232,25,44,.15)}
+.upsell-text{font-size:12px;color:#888;font-weight:700;margin-bottom:8px;line-height:1.5}
+.btn-upsell{width:100%;background:#fff;color:#E8192C;
+border:2px solid #E8192C;border-radius:11px;padding:12px;
+font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;
+cursor:pointer;transition:all .2s}
+.btn-upsell:hover{background:#E8192C;color:#fff}
 </style>
 </head>
 <body>
@@ -558,6 +594,8 @@ function showModal(idx){
     if(ad.img){
       var img=document.createElement('img');
       img.src=ad.img; img.className='adcard-img'; img.alt='';
+      img.title='Нажми чтобы увеличить';
+      img.onclick=function(e){e.stopPropagation();openLightbox(ad.img);};
       adcard.insertBefore(img, adcard.querySelector('.adcard-body'));
     }
   }
@@ -570,16 +608,24 @@ function showModal(idx){
   if(s.isJackpot){
     acts.innerHTML='<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:Unbounded,sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>';
   } else if(s.isMenuPdf){
+    addTimer(acts, 15*60, 'Забери рецепты, пока предложение активно');
     mkBtn(acts,'📥 Скачать рецепты PDF бесплатно!',function(){var a=document.createElement('a');a.href='menu.pdf';a.download='menu.pdf';document.body.appendChild(a);a.click();document.body.removeChild(a);closeModal();});
+    addUpsell(acts,'💡 Хочешь худеть ещё быстрее? Попробуй тренировки клуба!', '🚶‍♀️ Попробовать клуб за 490 руб', function(){window.open(PROMO490_URL,'_blank');closeModal();});
   } else if(s.isTraining){
+    addTimer(acts, 20*60, 'Тренировка доступна ограниченное время');
     mkBtn(acts,'▶️ Смотреть тренировку прямо сейчас!',function(){closeModal();showPrizeVideo();});
+    addUpsell(acts,'💡 Понравилась тренировка? В клубе таких 350+', '🏃‍♀️ Вступить в клуб со скидкой 20%', function(){window.open(BUY_URL,'_blank');closeModal();});
   } else if(s.isPromo490){
+    addTimer(acts, 30*60, 'Спецпредложение сгорит через');
     mkBtn(acts,'🎁 Получить промо-бокс за 490 руб!',function(){window.open(PROMO490_URL,'_blank');closeModal();});
   } else if(s.is1Month){
+    addTimer(acts, 25*60, 'Секретный тариф действует');
     mkBtn(acts,'🕵️ Забрать секретный тариф на месяц!',function(){window.open(URL_1MONTH,'_blank');closeModal();});
   } else if(s.isForever){
+    addTimer(acts, 20*60, 'Уникальное предложение исчезнет через');
     mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){window.open(URL_FOREVER,'_blank');closeModal();});
   } else if(s.isDiscount||fin){
+    addTimer(acts, 48*60*60, 'Промокод LUCKY сгорит через');
     mkBtn(acts,'🛒 Перейти к покупке со скидкой 20%',function(){window.open(BUY_URL,'_blank');closeModal();});
   } else {
     mkBtn(acts,'✅ Забрать приз!',function(){closeModal();});
@@ -634,5 +680,11 @@ function confetti(){
   },i*32);})(i);
 }
 </script>
+
+<!-- ЛАЙТБОКС -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
 </body>
 </html>
