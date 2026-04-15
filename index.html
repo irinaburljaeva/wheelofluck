@@ -169,6 +169,87 @@ transition:all .3s;display:none;letter-spacing:.3px}
 border:none;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;
 display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .cp{position:fixed;top:-20px;opacity:0;pointer-events:none;z-index:9999;border-radius:2px}
+
+/* ── ФИНАЛЬНЫЙ ЭКРАН ── */
+.final-screen{display:none;position:fixed;inset:0;background:linear-gradient(160deg,#1A0A0E 0%,#2D0E14 50%,#1A0A0E 100%);
+z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+.final-screen.show{display:flex}
+.final-logo{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:900;color:rgba(255,255,255,.5);
+letter-spacing:3px;text-transform:uppercase;margin-bottom:24px}
+.final-fire{font-size:52px;margin-bottom:8px;animation:pulse-ico 1.2s ease-in-out infinite}
+.final-headline{font-family:'Unbounded',sans-serif;font-size:clamp(20px,5.5vw,28px);font-weight:900;
+color:#fff;text-align:center;line-height:1.2;margin-bottom:6px}
+.final-headline em{font-style:normal;color:#FF6B35}
+.final-sub{font-size:14px;color:rgba(255,255,255,.6);font-weight:700;text-align:center;margin-bottom:22px}
+.final-promo-wrap{background:rgba(255,255,255,.07);border:2px dashed rgba(255,107,53,.5);
+border-radius:16px;padding:14px 20px;text-align:center;cursor:pointer;margin-bottom:18px;
+transition:background .2s;width:100%;max-width:340px}
+.final-promo-wrap:hover{background:rgba(255,255,255,.12)}
+.final-promo-label{font-size:11px;color:rgba(255,255,255,.5);font-weight:800;letter-spacing:1.5px;
+text-transform:uppercase;margin-bottom:4px}
+.final-promo-code{font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;
+color:#FF6B35;letter-spacing:5px}
+.final-promo-hint{font-size:11px;color:rgba(255,255,255,.35);margin-top:4px}
+.final-timer-wrap{text-align:center;margin-bottom:22px}
+.final-timer-label{font-size:11px;color:rgba(255,255,255,.45);font-weight:800;
+text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.final-timer-digits{font-family:'Unbounded',sans-serif;font-size:32px;font-weight:900;color:#fff}
+.final-timer-digits .ftd{color:#FF6B35}
+.final-cta{width:100%;max-width:340px;background:linear-gradient(135deg,#E8192C,#FF5C35);
+color:#fff;border:none;border-radius:16px;padding:18px;font-family:'Unbounded',sans-serif;
+font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 28px rgba(232,25,44,.45);
+transition:all .2s;margin-bottom:12px;position:relative;overflow:hidden}
+.final-cta::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+animation:shine 2.5s ease-in-out infinite}
+.final-cta:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(232,25,44,.55)}
+.final-tg{width:100%;max-width:340px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);
+border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:14px;
+font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;
+transition:all .2s;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+.final-tg:hover{background:rgba(255,255,255,.14);color:#fff}
+/* Цитаты на финальном экране */
+.final-reviews{width:100%;max-width:340px;margin-bottom:8px}
+.final-review{background:rgba(255,255,255,.06);border-radius:12px;padding:12px 14px;margin-bottom:8px;
+border-left:3px solid #FF6B35}
+.final-review-text{font-size:13px;color:rgba(255,255,255,.85);font-weight:700;
+line-height:1.5;margin-bottom:5px;font-style:italic}
+.final-review-author{font-size:11px;color:#FF6B35;font-weight:800}
+
+/* ── ЦИТАТЫ В МОДАЛКЕ ── */
+.reviews-block{margin:0 0 14px}
+.review-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;
+box-shadow:0 2px 10px rgba(0,0,0,.06);border-left:3px solid #E8192C;display:flex;gap:10px;align-items:flex-start}
+.review-ava{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#E8192C,#FF9A3C);
+flex-shrink:0;display:flex;align-items:center;justify-content:center;
+font-size:15px;font-weight:900;color:#fff;font-family:'Unbounded',sans-serif}
+.review-body{}
+.review-text{font-size:12px;color:#444;font-weight:700;line-height:1.55;font-style:italic;margin-bottom:3px}
+.review-author{font-size:11px;color:#E8192C;font-weight:800}
+.review-result{display:inline-block;background:#FFF0F1;color:#E8192C;font-size:10px;
+font-weight:900;padding:2px 7px;border-radius:20px;margin-left:4px}
+
+/* ── EXIT-INTENT ПОПАП ── */
+.exit-popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);
+backdrop-filter:blur(6px);z-index:400;justify-content:center;align-items:center;padding:20px}
+.exit-popup.show{display:flex}
+.exit-card{background:#fff;border-radius:22px;padding:28px 22px;max-width:360px;width:100%;
+text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:modal-pop .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes modal-pop{from{opacity:0;transform:scale(.75)}to{opacity:1;transform:scale(1)}}
+.exit-emoji{font-size:44px;margin-bottom:10px;display:block}
+.exit-headline{font-family:'Unbounded',sans-serif;font-size:17px;font-weight:900;
+color:#1A1A2E;margin-bottom:6px;line-height:1.3}
+.exit-sub{font-size:13px;color:#888;font-weight:700;line-height:1.55;margin-bottom:16px}
+.exit-promo{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;
+color:#E8192C;letter-spacing:4px;background:#FFF0F1;border-radius:10px;
+padding:10px;margin-bottom:16px;cursor:pointer}
+.exit-cta{width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;
+border:none;border-radius:13px;padding:15px;font-family:'Unbounded',sans-serif;
+font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(232,25,44,.3);
+margin-bottom:10px;transition:all .2s}
+.exit-cta:hover{transform:translateY(-2px)}
+.exit-dismiss{font-size:12px;color:#bbb;cursor:pointer;font-weight:700;display:block;padding:4px}
+.exit-dismiss:hover{color:#999}
 </style>
 </head>
 <body>
@@ -408,7 +489,7 @@ function spin(){
     rot=startRot+total*ease(t);drawWheel(rot);
     if(t<1){requestAnimationFrame(go);return;}
     busy=false;spinNum++;spinsLeft--;
-    saveState(spinsLeft,spinNum);updateDots();
+    saveState(spinsLeft,spinNum);updateDots();enableExitIntent();
     var afterSpin=function(){
       if(SEG[ti].isRetry){
         if(spinsLeft>0){toast('🔄 Крути ещё раз! Удача близко!');btnOn();}
@@ -417,7 +498,7 @@ function spin(){
         showModal(ti);
         if(spinsLeft>0) btnOn();
       }
-      if(spinsLeft===0){document.getElementById('sbtn').style.display='none';document.getElementById('doneMsg').style.display='block';}
+      if(spinsLeft===0){document.getElementById('sbtn').style.display='none';document.getElementById('doneMsg').style.display='block';setTimeout(function(){showFinalScreen();},1800);}
     };
     if(spinNum===2&&!SEG[ti].isRetry) showAdVideo(afterSpin);
     else afterSpin();
@@ -533,12 +614,17 @@ function showModal(idx){
 
   var acts=document.getElementById('mActions');acts.innerHTML='';
 
+  // Цитаты добавляем для призов связанных с покупкой (не для retry и не для jackpot у которого своя форма)
+  if(!s.isRetry && !s.isJackpot && (s.isDiscount||s.isFinal||fin||s.is1Month||s.isForever||s.isPromo490)) {
+    addReviews(document.getElementById('mActions'));
+  }
+
   if(s.isJackpot){
     acts.innerHTML='<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:Unbounded,sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>';
   } else if(s.isMenuPdf){
     addTimer(acts,15*60,'Забери рецепты, пока предложение активно');
     mkBtn(acts,'📥 Скачать рецепты PDF бесплатно!',function(){var a=document.createElement('a');a.href='menu.pdf';a.download='menu.pdf';document.body.appendChild(a);a.click();document.body.removeChild(a);closeModal();});
-    addUpsell(acts,'💡 Хочешь худеть ещё быстрее? Попробуй тренировки клуба!','🚶‍♀️ Попробовать клуб за 490 руб',function(){window.open(PROMO490_URL,'_blank');closeModal();});
+    addUpsell(acts,'💡 Хочешь худеть ещё быстрее? Попробуй клуб 3 месяца за 2990 руб!','🚶‍♀️ Попробовать клуб за 2990 руб',function(){window.open(BUY_URL,'_blank');closeModal();});
   } else if(s.isTraining){
     addTimer(acts,20*60,'Тренировка доступна ограниченное время');
     mkBtn(acts,'▶️ Смотреть тренировку прямо сейчас!',function(){closeModal();showPrizeVideo();});
@@ -608,6 +694,118 @@ function confetti(){
     {duration:2000+Math.random()*1500,easing:'cubic-bezier(.2,.8,.4,1)',fill:'forwards'}).onfinish=function(){el.remove();};
   },i*32);})(i);
 }
+
+// ── ЦИТАТЫ УЧАСТНИЦ ──────────────────────────────────────────────────────────
+var REVIEWS = [
+  {ava:'К', text:'«Вышла замуж через 8 месяцев и влезла в то же свадебное платье что было на первой свадьбе 20 лет назад»', author:'Катерина Косенко', result:'-16 кг'},
+  {ava:'Г', text:'«Уже 3 года с вами. Никогда не думала что обычная ходьба может так изменить жизнь»', author:'Галина, Рига', result:'-38 кг'},
+  {ava:'Ю', text:'«Просто шагала каждый день под видео — и за полтора года моя жизнь изменилась»', author:'Юлия Тимур', result:'-24 кг'},
+];
+function addReviews(parent){
+  var block=document.createElement('div');block.className='reviews-block';
+  REVIEWS.forEach(function(r){
+    var card=document.createElement('div');card.className='review-card';
+    card.innerHTML='<div class="review-ava">'+r.ava+'</div><div class="review-body"><div class="review-text">'+r.text+'</div><div class="review-author">'+r.author+'<span class="review-result">'+r.result+'</span></div></div>';
+    block.appendChild(card);
+  });
+  parent.appendChild(block);
+}
+
+// ── ФИНАЛЬНЫЙ ЭКРАН ───────────────────────────────────────────────────────────
+var finalTimerInterval=null;
+function showFinalScreen(){
+  document.getElementById('finalScreen').classList.add('show');
+  document.body.style.overflow='hidden';
+  startFinalTimer(48*60*60);
+}
+function startFinalTimer(seconds){
+  clearInterval(finalTimerInterval);
+  var el=document.getElementById('finalTimerDigits');
+  function fmt(s){
+    var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;
+    return '<span class="ftd">'+(h<10?'0':'')+h+'</span>:<span class="ftd">'+(m<10?'0':'')+m+'</span>:<span class="ftd">'+(ss<10?'0':'')+ss+'</span>';
+  }
+  if(el) el.innerHTML=fmt(seconds);
+  finalTimerInterval=setInterval(function(){
+    seconds--;if(seconds<0){clearInterval(finalTimerInterval);return;}
+    if(el) el.innerHTML=fmt(seconds);
+  },1000);
+}
+function copyFinalPromo(){
+  navigator.clipboard.writeText('LUCKY').catch(function(){});
+  var el=document.getElementById('finalPromoCopied');
+  el.textContent='✅ Скопировано!';
+  setTimeout(function(){el.textContent='👆 Нажми, чтобы скопировать';},2000);
+}
+
+// ── EXIT-INTENT ────────────────────────────────────────────────────────────────
+var exitShown=false, exitEnabled=false;
+function enableExitIntent(){exitEnabled=true;}
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden&&exitEnabled&&!exitShown) showExitPopup();
+});
+document.addEventListener('mouseleave',function(e){
+  if(e.clientY<10&&exitEnabled&&!exitShown) showExitPopup();
+});
+(function(){
+  history.pushState(null,'',location.href);
+  window.addEventListener('popstate',function(){
+    if(exitEnabled&&!exitShown){showExitPopup();history.pushState(null,'',location.href);}
+  });
+})();
+function showExitPopup(){exitShown=true;document.getElementById('exitPopup').classList.add('show');}
+function closeExitPopup(){document.getElementById('exitPopup').classList.remove('show');}
+function copyExitPromo(){
+  navigator.clipboard.writeText('LUCKY').catch(function(){});
+  var el=document.querySelector('.exit-promo'),orig=el.textContent;
+  el.textContent='✅ СКОПИРОВАНО!';setTimeout(function(){el.textContent=orig;},2000);
+}
+
 </script>
+
+<!-- ФИНАЛЬНЫЙ ЭКРАН -->
+<div class="final-screen" id="finalScreen">
+  <div class="final-logo">ШАГАЙ ДОМА</div>
+  <div class="final-fire">🎉</div>
+  <div class="final-headline">Поздравляем!<br>Твой приз <em>готов</em></div>
+  <div class="final-sub">Промокод на скидку 20% — только для тебя</div>
+  <div class="final-promo-wrap" onclick="copyFinalPromo()">
+    <div class="final-promo-label">Твой промокод</div>
+    <div class="final-promo-code">LUCKY</div>
+    <div class="final-promo-hint" id="finalPromoCopied">👆 Нажми, чтобы скопировать</div>
+  </div>
+  <div class="final-timer-wrap">
+    <div class="final-timer-label">Промокод сгорит через</div>
+    <div class="final-timer-digits" id="finalTimerDigits">47:59:59</div>
+  </div>
+  <button class="final-cta" onclick="window.open('https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel_final','_blank')">
+    🛒 Купить со скидкой 20% прямо сейчас!
+  </button>
+  <div class="final-reviews">
+    <div class="final-review">
+      <div class="final-review-text">«Вышла замуж через 8 месяцев, и влезла в то же свадебное платье, что было на первой свадьбе 20 лет назад»</div>
+      <div class="final-review-author">Катерина Косенко — минус 16 кг</div>
+    </div>
+    <div class="final-review">
+      <div class="final-review-text">«Уже 3 года с вами и минус 38 кг»</div>
+      <div class="final-review-author">Галина, Рига</div>
+    </div>
+    <div class="final-review">
+      <div class="final-review-text">«-24 кг за 1.5 года ходьбы»</div>
+      <div class="final-review-author">Юлия Тимур</div>
+    </div>
+  </div>
+</div>
+
+<!-- EXIT-INTENT ПОПАП -->
+<div class="exit-popup" id="exitPopup">
+  <div class="exit-card">
+    <span class="exit-emoji">⏰</span>
+    <div class="exit-headline">Подожди!<br>Твой промокод сгорит</div>
+    <div class="exit-sub">Ты заработала скидку 20% на весь клуб.<br>Она действует только 48 часов — не упусти!</div>
+    <div class="exit-promo" onclick="copyExitPromo()">LUCKY</div>
+    <span class="exit-dismiss" onclick="closeExitPopup()">Нет, я подожду до завтра</span>
+  </div>
+</div>
 </body>
 </html>
