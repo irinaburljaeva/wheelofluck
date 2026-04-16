@@ -189,9 +189,9 @@ text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
 .final-timer-digits{font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;color:#fff}
 .final-timer-digits .ftd{color:#FF6B35}
 .final-cta{width:100%;max-width:340px;background:linear-gradient(135deg,#E8192C,#FF5C35);
-color:#fff;border:none;border-radius:16px;padding:18px;font-family:'Unbounded',sans-serif;
-font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 28px rgba(232,25,44,.45);
-transition:all .2s;margin-bottom:12px;position:relative;overflow:hidden}
+color:#fff;border:none;border-radius:16px;padding:16px;font-family:'Unbounded',sans-serif;
+font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 8px 28px rgba(232,25,44,.45);
+transition:all .2s;margin-bottom:16px;position:relative;overflow:hidden}
 .final-cta::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
 background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
 animation:shine 2.5s ease-in-out infinite}
@@ -370,7 +370,7 @@ var SEG=[
   {label:['Скидка','20%'],emoji:'🏷️',icon:'discount.PNG',prize:'Скидка 20% на абонемент!',promo:'LUCKY',
    desc:'Укажи промокод при оформлении — и скидка 20% применится автоматически! Промокод действует 48 часов.',
    w:22,isFinal:true,isDiscount:true},
-  {label:['Рецепты','диетолога'],emoji:'🥗',icon:'menu.PNG',prize:'Рецепты от диетолога — PDF!',
+  {label:['Рецепты','диетолога'],emoji:'🥗',icon:'menú.png',prize:'Рецепты от диетолога — PDF!',
    desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
    w:18,isMenuPdf:true},
   {label:['Бесплатная','тренировка'],emoji:'🎽',icon:'free.PNG',prize:'Бесплатная тренировка!',
@@ -414,28 +414,16 @@ var CV=document.getElementById('wc'),ctx=CV.getContext('2d');
 var SZ=640,CX=SZ/2,CY=SZ/2,R=SZ/2-10;
 
 // ── PNG ИКОНКИ — загружаем через new Image(), рисуем через drawImage ──────────
-// drawImage гарантирует цвет на всех платформах: iOS, macOS, Windows.
-// Эмодзи через fillText на компьютере рендерятся чёрными — PNG решает проблему.
+// drawImage даёт гарантированный цвет на всех платформах (iOS, macOS, Windows).
 var _icons={};
 var _iconsLoaded=0;
-var _iconNames=SEG.map(function(s){return s.icon;});
-// Убираем дубли (если вдруг одна иконка у нескольких сегментов)
-var _uniqueIcons=_iconNames.filter(function(v,i,a){return a.indexOf(v)===i;});
+var _uniqueIcons=SEG.map(function(s){return s.icon;}).filter(function(v,i,a){return a.indexOf(v)===i;});
 (function preloadIcons(){
   if(!_uniqueIcons.length){drawWheel(rot);return;}
   _uniqueIcons.forEach(function(name){
     var img=new Image();
-    img.onload=function(){
-      _icons[name]=img;
-      _iconsLoaded++;
-      if(_iconsLoaded>=_uniqueIcons.length) drawWheel(rot);
-    };
-    img.onerror=function(){
-      // PNG не нашёлся — ставим null, колесо покажет пустое место вместо битой иконки
-      _icons[name]=null;
-      _iconsLoaded++;
-      if(_iconsLoaded>=_uniqueIcons.length) drawWheel(rot);
-    };
+    img.onload=function(){_icons[name]=img;_iconsLoaded++;if(_iconsLoaded>=_uniqueIcons.length) drawWheel(rot);};
+    img.onerror=function(){_icons[name]=null;_iconsLoaded++;if(_iconsLoaded>=_uniqueIcons.length) drawWheel(rot);};
     img.src=name;
   });
 })();
@@ -485,7 +473,7 @@ function drawWheel(r){
     ctx.restore();
   }
 
-  // Проход 3: PNG-иконки через drawImage — цветные на iOS и на компьютере
+  // Проход 3: PNG-иконки через drawImage — цветные на всех платформах
   var iconPx=Math.round(R*0.19);
   ctx.shadowColor='transparent';ctx.shadowBlur=0;
   for(var i=0;i<N;i++){
@@ -494,9 +482,7 @@ function drawWheel(r){
     ctx.save();
     ctx.translate(ex,ey);
     ctx.rotate(sa+Math.PI/2);
-    if(s.icon&&_icons[s.icon]){
-      ctx.drawImage(_icons[s.icon],-iconPx/2,-iconPx/2,iconPx,iconPx);
-    }
+    if(s.icon&&_icons[s.icon]) ctx.drawImage(_icons[s.icon],-iconPx/2,-iconPx/2,iconPx,iconPx);
     ctx.restore();
   }
 
@@ -507,9 +493,8 @@ function drawWheel(r){
   ctx.strokeStyle='rgba(232,25,44,.15)';ctx.lineWidth=3;ctx.stroke();
 }
 
-// Первая отрисовка сразу (без иконок — они догрузятся и перерисуют)
+// Первая отрисовка сразу (иконки догрузятся и перерисуют)
 drawWheel(rot);
-// Перерисовка после загрузки веб-шрифтов (текст на секторах)
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){drawWheel(rot);});
 initUI();
 
@@ -525,9 +510,7 @@ function openPurchaseUrl(url){
   suppressExitFor(4000);
   window.open(url,'_blank');
 }
-
 function enableExitIntent(){exitEnabled=true;}
-
 document.addEventListener('visibilitychange',function(){
   if(document.hidden&&exitEnabled&&!exitShown&&!_suppressExit) showExitPopup();
 });
@@ -790,14 +773,42 @@ var REVIEWS=[
   {ava:'К',text:'«Вышла замуж через 8 месяцев и влезла в то же свадебное платье что было на первой свадьбе 20 лет назад»',author:'Катерина Косенко',result:'-16 кг'},
   {ava:'Г',text:'«Уже 3 года с вами. Никогда не думала что обычная ходьба может так изменить жизнь»',author:'Галина, Рига',result:'-38 кг'},
   {ava:'Ю',text:'«Просто шагала каждый день под видео — и за полтора года моя жизнь изменилась»',author:'Юлия Тимур',result:'-24 кг'},
+  {ava:'Н',text:'«Была уверена что это очередная ерунда. Теперь агитирую всех подруг — уже троих затащила!»',author:'Наталья, Москва',result:'-11 кг'},
+  {ava:'О',text:'«У меня больная спина, думала спорт вообще не для меня. Шагай Дома стала настоящим спасением»',author:'Ольга Прохорова',result:'-9 кг'},
+  {ava:'И',text:'«Первую неделю не верила, что это работает. На второй неделе влезла в любимые джинсы»',author:'Ирина, Краснодар',result:'-7 кг'},
+  {ava:'М',text:'«Тренируюсь пока дети спят — 20 минут и всё. Муж говорит что я похорошела»',author:'Марина Белова',result:'-14 кг'},
+  {ava:'Е',text:'«Живу в маленькой квартире, думала негде заниматься. Оказывается хватает двух метров!»',author:'Елена, Екатеринбург',result:'-18 кг'},
+  {ava:'Т',text:'«После родов никак не могла сбросить вес. За 3 месяца ушло 12 кг и это без диет»',author:'Татьяна Коваль',result:'-12 кг'},
+  {ava:'А',text:'«Работаю из дома, много сижу. Шагай Дома помогла расшевелиться и перестать есть от скуки»',author:'Анастасия, СПб',result:'-8 кг'},
+  {ava:'В',text:'«Мне 58 лет, думала в моём возрасте уже не похудеть. Клуб доказал обратное!»',author:'Валентина Д.',result:'-21 кг'},
+  {ava:'С',text:'«Скептик по натуре, но результат говорит сам за себя. Рекомендую всем у кого нет времени»',author:'Светлана, Казань',result:'-15 кг'},
 ];
+function shuffle(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
+  return a;
+}
 function addReviews(parent){
   var block=document.createElement('div');block.className='reviews-block';
-  REVIEWS.forEach(function(r){var card=document.createElement('div');card.className='review-card';card.innerHTML='<div class="review-ava">'+r.ava+'</div><div class="review-body"><div class="review-text">'+r.text+'</div><div class="review-author">'+r.author+'<span class="review-result">'+r.result+'</span></div></div>';block.appendChild(card);});
+  var pick=shuffle(REVIEWS).slice(0,3);
+  pick.forEach(function(r){var card=document.createElement('div');card.className='review-card';card.innerHTML='<div class="review-ava">'+r.ava+'</div><div class="review-body"><div class="review-text">'+r.text+'</div><div class="review-author">'+r.author+'<span class="review-result">'+r.result+'</span></div></div>';block.appendChild(card);});
   parent.appendChild(block);
 }
 var finalTimerInterval=null;
-function showFinalScreen(){document.getElementById('finalScreen').classList.add('show');document.body.style.overflow='hidden';clearLastPrize();startFinalTimer(48*60*60);}
+function showFinalScreen(){
+  document.getElementById('finalScreen').classList.add('show');
+  document.body.style.overflow='hidden';
+  clearLastPrize();
+  startFinalTimer(48*60*60);
+  // случайные отзывы в финале
+  var fr=document.getElementById('finalReviews');
+  fr.innerHTML='';
+  shuffle(REVIEWS).slice(0,3).forEach(function(r){
+    var d=document.createElement('div');d.className='final-review';
+    d.innerHTML='<div class="final-review-text">'+r.text+'</div><div class="final-review-author">'+r.author+' — '+r.result+'</div>';
+    fr.appendChild(d);
+  });
+}
 function startFinalTimer(seconds){
   clearInterval(finalTimerInterval);var el=document.getElementById('finalTimerDigits');
   function fmt(s){var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;return '<span class="ftd">'+(h<10?'0':'')+h+'</span>:<span class="ftd">'+(m<10?'0':'')+m+'</span>:<span class="ftd">'+(ss<10?'0':'')+ss+'</span>';}
@@ -828,20 +839,7 @@ function copyFinalPromo(){
   <button class="final-cta" onclick="openPurchaseUrl('https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel_final')">
     🛒 Купить со скидкой 20% прямо сейчас!
   </button>
-  <div class="final-reviews">
-    <div class="final-review">
-      <div class="final-review-text">«Вышла замуж через 8 месяцев, и влезла в то же свадебное платье, что было на первой свадьбе 20 лет назад»</div>
-      <div class="final-review-author">Катерина Косенко — минус 16 кг</div>
-    </div>
-    <div class="final-review">
-      <div class="final-review-text">«Уже 3 года с вами и минус 38 кг»</div>
-      <div class="final-review-author">Галина, Рига</div>
-    </div>
-    <div class="final-review">
-      <div class="final-review-text">«-24 кг за 1.5 года ходьбы»</div>
-      <div class="final-review-author">Юлия Тимур</div>
-    </div>
-  </div>
+  <div class="final-reviews" id="finalReviews"></div>
 </div>
 
 <!-- EXIT-INTENT ПОПАП -->
