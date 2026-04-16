@@ -746,11 +746,13 @@ function showModal(idx,isReturn){
     mkBtn(acts,'✅ Забрать приз!',function(){closeModal();clearLastPrize();});
   }
 
-  if(spinsLeft>0&&!fin&&!s.isJackpot&&!isReturn){
+  if(spinsLeft>0&&!fin&&!s.isJackpot){
     var br=document.createElement('button');br.className='btn-respin';
     br.textContent='🎯 Крутить ещё раз ('+spinsLeft+' вращени'+(spinsLeft===1?'е':'я')+')';
-    br.onclick=function(){clearLastPrize();closeModal();};acts.appendChild(br);
-    var w=document.createElement('div');w.className='respin-warn';w.textContent='⚠️ Если крутишь снова — текущий приз сгорает!';acts.appendChild(w);
+    br.onclick=function(){clearLastPrize();closeModal();btnOn();};acts.appendChild(br);
+    if(!isReturn){
+      var w=document.createElement('div');w.className='respin-warn';w.textContent='⚠️ Если крутишь снова — текущий приз сгорает!';acts.appendChild(w);
+    }
   }
   document.getElementById('overlay').classList.add('show');
   if(s.isJackpot||fin) confetti();
