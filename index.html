@@ -366,28 +366,28 @@ var COLORS=[
   {bg:'#9A0E1C',fg:'#fff'},{bg:'#FAB95B',fg:'#3D2000'},
 ];
 var SEG=[
-  {label:['Скидка','20%'],emoji:'🏷️',prize:'Скидка 20% на абонемент!',promo:'LUCKY',
+  {label:['Скидка','20%'],emoji:'🏷️',icon:'discount.PNG',prize:'Скидка 20% на абонемент!',promo:'LUCKY',
    desc:'Укажи промокод при оформлении — и скидка 20% применится автоматически! Промокод действует 48 часов.',
    w:22,isFinal:true,isDiscount:true},
-  {label:['Рецепты','диетолога'],emoji:'🥗',prize:'Рецепты от диетолога — PDF!',
+  {label:['Рецепты','диетолога'],emoji:'🥗',icon:'menu.PNG',prize:'Рецепты от диетолога — PDF!',
    desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
    w:18,isMenuPdf:true},
-  {label:['Бесплатная','тренировка'],emoji:'🎽',prize:'Бесплатная тренировка!',
+  {label:['Бесплатная','тренировка'],emoji:'🎽',icon:'free.PNG',prize:'Бесплатная тренировка!',
    desc:'Ты выиграла одну из лучших тренировок клуба ШАГАЙ ДОМА! Нажми кнопку ниже, чтобы начать шагать! 🔥',
    w:16,isTraining:true},
-  {label:['Бесплатный','абонемент'],emoji:'🏆',prize:'🏆 Бесплатный абонемент!',
+  {label:['Бесплатный','абонемент'],emoji:'🏆',icon:'prize.PNG',prize:'🏆 Бесплатный абонемент!',
    desc:'Невероятно! Ты выиграла супер приз: бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
    w:0,isJackpot:true},
-  {label:['Промо-бокс'],emoji:'🎁',prize:'Промо-бокс за 490 руб!',
+  {label:['Промо-бокс'],emoji:'🎁',icon:'promo.PNG',prize:'Промо-бокс за 490 руб!',
    desc:'Эксклюзивное предложение, которого нет в продаже! Всего 490 руб — набор тренировок, трекеры привычек, меню и рецепты.',
    w:14,isPromo490:true},
-  {label:['Секретный','тариф 1 мес'],emoji:'🕵️',prize:'Секретный тариф — 1 месяц!',
+  {label:['Секретный','тариф 1 мес'],emoji:'🕵️',icon:'secret1.PNG',prize:'Секретный тариф — 1 месяц!',
    desc:'Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.',
    w:10,is1Month:true},
-  {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',prize:'Секретный тариф НАВСЕГДА!',
+  {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',icon:'secretalways.PNG',prize:'Секретный тариф НАВСЕГДА!',
    desc:'Уникальный тариф, которого нет в продаже — доступ НАВСЕГДА за 8990 руб.! Только для счастливчиков в колесе удачи.',
    w:8,isForever:true},
-  {label:['Крути','ещё раз!'],emoji:'🔄',prize:'Крути ещё раз!',
+  {label:['Крути','ещё раз!'],emoji:'🔄',icon:'again.PNG',prize:'Крути ещё раз!',
    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
    w:14,isRetry:true},
 ];
@@ -412,22 +412,32 @@ var N=SEG.length,ARC=2*Math.PI/N;
 var CV=document.getElementById('wc'),ctx=CV.getContext('2d');
 var SZ=640,CX=SZ/2,CY=SZ/2,R=SZ/2-10;
 
-// ── EMOJI через offscreen canvas — единственный надёжный способ на iOS Safari ──
-// ctx.fillText(emoji) на основном canvas даёт серые символы на iOS.
-// Решение: рисуем каждый эмодзи на маленьком temp canvas, кешируем, вставляем через drawImage.
-var _emojiCache={};
-function getEmojiCanvas(emoji,px){
-  var k=emoji+'_'+px;
-  if(_emojiCache[k]) return _emojiCache[k];
-  var oc=document.createElement('canvas');
-  oc.width=px;oc.height=px;
-  var oc2=oc.getContext('2d');
-  oc2.font=Math.round(px*0.78)+'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",serif';
-  oc2.textAlign='center';oc2.textBaseline='middle';
-  oc2.fillText(emoji,px/2,px/2+px*0.04);
-  _emojiCache[k]=oc;
-  return oc;
-}
+// ── PNG ИКОНКИ — загружаем через new Image(), рисуем через drawImage ──────────
+// drawImage гарантирует цвет на всех платформах: iOS, macOS, Windows.
+// Эмодзи через fillText на компьютере рендерятся чёрными — PNG решает проблему.
+var _icons={};
+var _iconsLoaded=0;
+var _iconNames=SEG.map(function(s){return s.icon;});
+// Убираем дубли (если вдруг одна иконка у нескольких сегментов)
+var _uniqueIcons=_iconNames.filter(function(v,i,a){return a.indexOf(v)===i;});
+(function preloadIcons(){
+  if(!_uniqueIcons.length){drawWheel(rot);return;}
+  _uniqueIcons.forEach(function(name){
+    var img=new Image();
+    img.onload=function(){
+      _icons[name]=img;
+      _iconsLoaded++;
+      if(_iconsLoaded>=_uniqueIcons.length) drawWheel(rot);
+    };
+    img.onerror=function(){
+      // PNG не нашёлся — ставим null, колесо покажет пустое место вместо битой иконки
+      _icons[name]=null;
+      _iconsLoaded++;
+      if(_iconsLoaded>=_uniqueIcons.length) drawWheel(rot);
+    };
+    img.src=name;
+  });
+})();
 
 function initUI(){
   var used=MAX_SPINS-spinsLeft;
@@ -474,8 +484,8 @@ function drawWheel(r){
     ctx.restore();
   }
 
-  // Проход 3: эмодзи через offscreen canvas (цветные на iOS)
-  var emojiPx=Math.round(R*0.17);
+  // Проход 3: PNG-иконки через drawImage — цветные на iOS и на компьютере
+  var iconPx=Math.round(R*0.19);
   ctx.shadowColor='transparent';ctx.shadowBlur=0;
   for(var i=0;i<N;i++){
     var s=SEG[i],sa=r-Math.PI/2+i*ARC;
@@ -483,7 +493,9 @@ function drawWheel(r){
     ctx.save();
     ctx.translate(ex,ey);
     ctx.rotate(sa+Math.PI/2);
-    ctx.drawImage(getEmojiCanvas(s.emoji,emojiPx),-emojiPx/2,-emojiPx/2,emojiPx,emojiPx);
+    if(s.icon&&_icons[s.icon]){
+      ctx.drawImage(_icons[s.icon],-iconPx/2,-iconPx/2,iconPx,iconPx);
+    }
     ctx.restore();
   }
 
@@ -494,33 +506,20 @@ function drawWheel(r){
   ctx.strokeStyle='rgba(232,25,44,.15)';ctx.lineWidth=3;ctx.stroke();
 }
 
-// Прогрев кэша эмодзи до отрисовки
-(function warmEmoji(){
-  var px=Math.round(R*0.17);
-  SEG.forEach(function(s){getEmojiCanvas(s.emoji,px);});
-})();
-
+// Первая отрисовка сразу (без иконок — они догрузятся и перерисуют)
 drawWheel(rot);
-setTimeout(function(){drawWheel(rot);},200);
-setTimeout(function(){drawWheel(rot);},800);
-if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){
-  _emojiCache={};  // сброс кэша после загрузки шрифтов
-  var px=Math.round(R*0.17);SEG.forEach(function(s){getEmojiCanvas(s.emoji,px);});
-  drawWheel(rot);
-});
+// Перерисовка после загрузки веб-шрифтов (текст на секторах)
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){drawWheel(rot);});
 initUI();
 
 // ── EXIT-INTENT ───────────────────────────────────────────────────────────────
 var exitShown=false,exitEnabled=false;
-// FIX: подавляем exit-intent на 4 секунды после любого клика по кнопке покупки.
-// Иначе переход на внешний сайт вызывает visibilitychange → попап скидки.
 var _suppressExit=false;
 function suppressExitFor(ms){
   _suppressExit=true;
   clearTimeout(window._suppressTimer);
   window._suppressTimer=setTimeout(function(){_suppressExit=false;},ms||4000);
 }
-// Используем эту функцию вместо window.open для всех кнопок покупки
 function openPurchaseUrl(url){
   suppressExitFor(4000);
   window.open(url,'_blank');
