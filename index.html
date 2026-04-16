@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Колесо Удачи — Шагай Дома</title>
+<title>Колесо Удачи от ШАГАЙ ДОМА</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,700;0,800;0,900;1,700&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -289,11 +289,11 @@ margin-bottom:10px;transition:all .2s}
     <canvas id="wc" width="640" height="640"></canvas>
     <div class="ptr"><div class="ptr-ball"></div><div class="ptr-tri"></div></div>
     <button class="cbtn" id="cbtn" onclick="spin()">
-      <span class="ci">🍀</span><span class="ct">КРУТИ!</span>
+      <span class="ci">⚡️</span><span class="ct">КРУТИ!</span>
     </button>
   </div>
   <button class="spinbtn" id="sbtn" onclick="spin()">🎯 Крутить колесо!</button>
-  <div class="done-msg" id="doneMsg">Вращения закончились. Спасибо! 🎉</div>
+  <div class="done-msg" id="doneMsg">Вращения закончились. Спасибо! </div>
   <div class="exhausted" id="exhausted">
     <div style="font-size:52px;margin-bottom:12px">🌙</div>
     <h2>Попытки на сегодня закончились</h2>
@@ -319,7 +319,7 @@ margin-bottom:10px;transition:all .2s}
       <div class="divider"></div>
       <div class="adcard" id="adcard">
         <div class="adcard-body">
-          <div class="adcard-ttl" id="adTtl">🚶‍♀️ О клубе ШАГАЙ ДОМА</div>
+          <div class="adcard-ttl" id="adTtl"> О клубе ШАГАЙ ДОМА⚡️</div>
           <p id="mAd"></p>
         </div>
       </div>
@@ -398,7 +398,7 @@ var COLORS=[
 ];
 var SEG=[
   {label:['Скидка','20%'],emoji:'🏷️',prize:'Скидка 20% на абонемент!',promo:'LUCKY',
-   desc:'Укажи промокод при оформлении — и 20% скидка применится автоматически! Промокод действует 48 часов.',
+   desc:'Укажи промокод при оформлении — и скидка 20% применится автоматически! Промокод действует 48 часов.',
    w:22,isFinal:true,isDiscount:true},
   {label:['Рецепты','диетолога'],emoji:'🥗',prize:'Рецепты от диетолога — PDF!',
    desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
@@ -416,7 +416,7 @@ var SEG=[
    desc:'Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.',
    w:10,is1Month:true},
   {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',prize:'Секретный тариф НАВСЕГДА!',
-   desc:'Уникальный тариф, которого нет в продаже — доступ навсегда на особых условиях! Только для счастливчиков в колесе удачи.',
+   desc:'Уникальный тариф, которого нет в продаже — доступ НАВСЕГДА за 8990 руб.! Только для счастливчиков в колесе удачи.',
    w:8,isForever:true},
   {label:['Крути','ещё раз!'],emoji:'🔄',prize:'Крути ещё раз!',
    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
@@ -478,7 +478,7 @@ function drawWheel(r){
   // Первый проход — ТЕКСТ (без иконок)
   for(var i=0;i<N;i++){
     var s=SEG[i], sa=r-Math.PI/2+i*ARC;
-    var lines=s.label, tR=R*0.38, fs=Math.max(11,Math.round(R*0.048)), lh=fs*1.22, totalH=(lines.length-1)*lh;
+    var lines=s.label, tR=R*0.55, fs=Math.max(11,Math.round(R*0.048)), lh=fs*1.22, totalH=(lines.length-1)*lh;
     ctx.save();
     ctx.translate(CX+tR*Math.cos(sa),CY+tR*Math.sin(sa));
     ctx.rotate(sa+Math.PI/2);
