@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Колесо Удачи от ШАГАЙ ДОМА</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,700;0,800;0,900;1,700&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:#F8F4F4;min-height:100vh;
+display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:.08;pointer-events:none;z-index:0}
+.b1{width:500px;height:500px;background:#E8192C;top:-140px;right:-120px}
+.b2{width:420px;height:420px;background:#F5A623;bottom:-100px;left:-100px}
+header{width:100%;max-width:460px;padding:26px 22px 0;text-align:center;position:relative;z-index:1}
+.logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:3px}
+.logo-ico{width:40px;height:40px;background:linear-gradient(135deg,#E8192C,#FF4D5E);
+border-radius:11px;display:flex;align-items:center;justify-content:center;
+font-size:20px;box-shadow:0 4px 14px rgba(232,25,44,.3)}
+.logo-name{font-family:'Unbounded',sans-serif;font-size:19px;font-weight:900;color:#1A1A2E}
+.logo-name span{color:#E8192C}
+.spins{margin:16px auto 0;display:flex;align-items:center;gap:10px;background:#fff;
+border-radius:50px;padding:9px 18px;width:fit-content;box-shadow:0 2px 14px rgba(0,0,0,.06)}
+.spins-lbl{font-size:12px;font-weight:800;color:#bbb}
+.dots{display:flex;gap:6px}
+.dot{width:11px;height:11px;border-radius:50%;background:#E8192C;
+box-shadow:0 2px 5px rgba(232,25,44,.35);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.dot.off{background:#E0E0E0;box-shadow:none;transform:scale(.7)}
+main{width:100%;max-width:460px;padding:16px 18px 50px;
+display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
+.headline{text-align:center;margin-bottom:14px}
+.headline h1{font-family:'Unbounded',sans-serif;font-size:clamp(15px,4.2vw,20px);
+font-weight:900;color:#1A1A2E;line-height:1.3}
+.headline h1 em{font-style:normal;color:#E8192C}
+.headline p{font-size:12px;color:#bbb;font-weight:700;margin-top:5px}
+.jbanner{width:100%;background:linear-gradient(135deg,#E8192C 0%,#FF5C35 100%);
+border-radius:16px;padding:13px 16px;display:flex;align-items:center;gap:13px;
+margin-bottom:20px;box-shadow:0 8px 26px rgba(232,25,44,.28);overflow:hidden;position:relative}
+.jbanner::after{content:'';position:absolute;top:-25px;right:-15px;
+width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07)}
+.jico{font-size:36px;flex-shrink:0;animation:jb 2.5s ease-in-out infinite}
+@keyframes jb{0%,100%{transform:rotate(-6deg) scale(1)}50%{transform:rotate(6deg) scale(1.1)}}
+.jlbl{font-size:8px;font-weight:800;color:rgba(255,255,255,.7);letter-spacing:1.8px;text-transform:uppercase}
+.jmain{font-family:'Unbounded',sans-serif;font-size:clamp(13px,3.8vw,16px);font-weight:900;color:#fff;line-height:1.2}
+.jsub{font-size:11px;color:rgba(255,255,255,.8);font-weight:700;margin-top:2px}
+.wheel-wrap{position:relative;width:min(320px,84vw);height:min(320px,84vw);margin-bottom:20px}
+canvas#wc{width:100%;height:100%;border-radius:50%;display:block;
+box-shadow:0 0 0 5px #fff,0 0 0 9px rgba(232,25,44,.13),0 18px 50px rgba(0,0,0,.14)}
+.ptr{position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+z-index:10;display:flex;flex-direction:column;align-items:center}
+.ptr-ball{width:17px;height:17px;background:#E8192C;border-radius:50%;
+border:3px solid #fff;box-shadow:0 3px 9px rgba(232,25,44,.45)}
+.ptr-tri{width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;
+border-top:20px solid #E8192C;filter:drop-shadow(0 3px 4px rgba(232,25,44,.35));margin-top:-2px}
+.cbtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+width:62px;height:62px;border-radius:50%;background:#fff;
+border:3px solid rgba(232,25,44,.12);cursor:pointer;
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.12);transition:transform .2s;font-family:'Nunito',sans-serif}
+.cbtn:hover{transform:translate(-50%,-50%) scale(1.1)}
+.cbtn:active{transform:translate(-50%,-50%) scale(.92)}
+.cbtn:disabled{opacity:.4;cursor:not-allowed}
+.cbtn .ci{font-size:22px}.cbtn .ct{font-size:9px;font-weight:900;color:#E8192C;margin-top:1px}
+.spinbtn{width:100%;max-width:300px;background:linear-gradient(135deg,#E8192C,#FF5C35);
+color:#fff;border:none;border-radius:14px;padding:16px 22px;
+font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;cursor:pointer;
+box-shadow:0 8px 26px rgba(232,25,44,.36);transition:all .2s;position:relative;overflow:hidden}
+.spinbtn::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+animation:shine 3s ease-in-out infinite}
+@keyframes shine{0%{left:-100%}40%,100%{left:150%}}
+.spinbtn:hover{transform:translateY(-3px);box-shadow:0 12px 34px rgba(232,25,44,.44)}
+.spinbtn:active{transform:translateY(1px)}
+.spinbtn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.done-msg{display:none;margin-top:12px;font-size:13px;color:#bbb;font-weight:700;text-align:center}
+.exhausted{display:none;text-align:center;padding:30px 20px}
+.exhausted h2{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;color:#1A1A2E;margin-bottom:10px}
+.exhausted p{font-size:14px;color:#999;font-weight:700;line-height:1.6}
+.exhausted .comeback{margin-top:18px;font-size:13px;color:#E8192C;font-weight:800}
+.overlay{display:none;position:fixed;inset:0;background:rgba(12,5,7,.6);
+backdrop-filter:blur(8px);z-index:100;justify-content:center;align-items:flex-end}
+.overlay.show{display:flex}
+.sheet{background:#fff;border-radius:26px 26px 0 0;width:100%;max-width:460px;
+max-height:90vh;overflow-y:auto;animation:shup .38s cubic-bezier(.34,1.3,.64,1);
+padding-bottom:env(safe-area-inset-bottom,20px)}
+@keyframes shup{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.handle{width:36px;height:4px;background:#EBEBEB;border-radius:2px;margin:13px auto 0}
+.si{padding:16px 20px 24px}
+.m-emoji{font-size:54px;text-align:center;display:block;margin-bottom:5px}
+.m-tag{display:inline-block;background:#FFF0F1;color:#E8192C;font-size:10px;
+font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;
+border-radius:50px;margin-bottom:7px}
+.m-title{font-family:'Unbounded',sans-serif;font-size:clamp(16px,4.5vw,21px);
+font-weight:900;color:#1A1A2E;line-height:1.25;margin-bottom:10px}
+.m-title.red{color:#E8192C}
+.promo{background:linear-gradient(135deg,#FFF5F6,#FFF0F2);
+border:2px dashed rgba(232,25,44,.22);border-radius:13px;padding:12px 16px;
+text-align:center;margin:8px 0 12px;cursor:pointer;transition:border-color .18s}
+.promo:hover{border-color:#E8192C}
+.pcode{font-family:'Unbounded',sans-serif;font-size:21px;font-weight:900;color:#E8192C;letter-spacing:4px}
+.phint{font-size:11px;color:#bbb;font-weight:700;margin-top:3px;display:block}
+.m-desc{font-size:13px;color:#666;line-height:1.65;font-weight:700;margin-bottom:11px}
+.divider{height:1px;background:#F0F0F0;margin:11px 0}
+.adcard{background:linear-gradient(135deg,#FFF5F6,#FFF8F0);border-radius:14px;
+padding:0;margin-bottom:16px;border-left:3px solid #E8192C;overflow:hidden}
+.adcard-img{width:100%;height:160px;object-fit:cover;display:block;cursor:zoom-in;transition:opacity .2s}
+.adcard-img:hover{opacity:.9}
+.adcard-body{padding:13px 15px}
+.adcard-ttl{font-size:11px;font-weight:900;color:#E8192C;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
+.adcard p{font-size:13px;color:#666;line-height:1.6;font-weight:700}
+.adcard p strong{color:#1A1A2E}
+.spins-badge{display:inline-flex;align-items:center;gap:5px;background:#FFF0F1;
+border-radius:50px;padding:5px 13px;font-size:12px;font-weight:900;color:#E8192C;margin-bottom:13px}
+.actions{display:flex;flex-direction:column;gap:10px}
+.btn-take{width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;
+border:none;border-radius:13px;padding:15px;font-family:'Unbounded',sans-serif;
+font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(232,25,44,.3);transition:all .2s}
+.btn-take:hover{transform:translateY(-2px)}
+.btn-respin{width:100%;background:#fff;color:#666;border:2px solid #E8E8E8;
+border-radius:13px;padding:13px;font-family:'Nunito',sans-serif;font-size:14px;
+font-weight:800;cursor:pointer;transition:all .2s}
+.btn-respin:hover{border-color:#ccc;color:#1A1A2E}
+.respin-warn{font-size:11px;color:#E8192C;font-weight:700;text-align:center;margin-top:-4px;opacity:.75}
+.prize-timer{display:inline-flex;align-items:center;gap:6px;margin-bottom:10px;
+background:#FFF0F1;border-radius:50px;padding:6px 14px;border:1px solid rgba(232,25,44,.15)}
+.timer-icon{font-size:13px;flex-shrink:0}
+.timer-label{font-size:11px;font-weight:800;color:#bbb;text-transform:uppercase;letter-spacing:.5px}
+.timer-sep{font-size:11px;color:#ddd;font-weight:700}
+.timer-digits{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:900;color:#E8192C;letter-spacing:.5px}
+.timer-digits .ts{color:#E8192C}
+@keyframes pulse-ico{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.upsell-block{background:linear-gradient(135deg,#FFF5F6,#FFF0F1);
+border-radius:13px;padding:13px 14px;margin-top:2px;
+border:1px solid rgba(232,25,44,.15)}
+.upsell-text{font-size:12px;color:#888;font-weight:700;margin-bottom:8px;line-height:1.5}
+.btn-upsell{width:100%;background:#fff;color:#E8192C;
+border:2px solid #E8192C;border-radius:11px;padding:12px;
+font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;
+cursor:pointer;transition:all .2s}
+.btn-upsell:hover{background:#E8192C;color:#fff}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);
+z-index:500;justify-content:center;align-items:center;cursor:zoom-out}
+.lightbox.show{display:flex}
+.lightbox img{max-width:95vw;max-height:92vh;border-radius:12px;
+box-shadow:0 20px 60px rgba(0,0,0,.5);object-fit:contain}
+.lightbox-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);
+color:#fff;border:none;border-radius:50%;width:38px;height:38px;font-size:20px;
+cursor:pointer;display:flex;align-items:center;justify-content:center}
+.voverlay{display:none;position:fixed;inset:0;background:#000;z-index:200;
+flex-direction:column;justify-content:center;align-items:center}
+.voverlay.show{display:flex}
+.vframe-wrap{position:relative;width:100%;max-width:480px;aspect-ratio:9/16;background:#000}
+.vframe-wrap iframe{width:100%;height:100%;border:none;display:block;position:absolute;inset:0;z-index:1;opacity:0;transition:opacity .3s}
+.vframe-wrap iframe.loaded{opacity:1}
+.skip-btn{position:absolute;top:10px;left:10px;z-index:10;
+background:rgba(0,0,0,.25);color:rgba(255,255,255,.4);
+border:1px solid rgba(255,255,255,.15);border-radius:50px;padding:5px 12px;
+font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;cursor:pointer;
+transition:all .3s;display:none;letter-spacing:.3px}
+.skip-btn:not(:disabled):hover{color:rgba(255,255,255,.7);background:rgba(0,0,0,.4)}
+.skip-btn:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
+.vclose-btn{position:absolute;top:16px;right:16px;background:rgba(0,0,0,.5);color:#fff;
+border:none;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;
+display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);z-index:10}
+.cp{position:fixed;top:-20px;opacity:0;pointer-events:none;z-index:9999;border-radius:2px}
+.final-screen{display:none;position:fixed;inset:0;background:linear-gradient(160deg,#1A0A0E 0%,#2D0E14 50%,#1A0A0E 100%);
+z-index:300;flex-direction:column;align-items:center;justify-content:flex-start;
+padding:env(safe-area-inset-top,24px) 24px env(safe-area-inset-bottom,32px);overflow-y:auto}
+.final-screen.show{display:flex}
+.final-logo{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:900;color:rgba(255,255,255,.5);
+letter-spacing:3px;text-transform:uppercase;margin-bottom:24px;margin-top:16px}
+.final-fire{font-size:48px;margin-bottom:6px;animation:pulse-ico 1.2s ease-in-out infinite}
+.final-headline{font-family:'Unbounded',sans-serif;font-size:clamp(18px,5vw,26px);font-weight:900;
+color:#fff;text-align:center;line-height:1.2;margin-bottom:5px}
+.final-headline em{font-style:normal;color:#FF6B35}
+.final-sub{font-size:13px;color:rgba(255,255,255,.6);font-weight:700;text-align:center;margin-bottom:16px}
+.final-promo-wrap{background:rgba(255,255,255,.07);border:2px dashed rgba(255,107,53,.5);
+border-radius:16px;padding:12px 20px;text-align:center;cursor:pointer;margin-bottom:14px;
+transition:background .2s;width:100%;max-width:340px}
+.final-promo-wrap:hover{background:rgba(255,255,255,.12)}
+.final-promo-label{font-size:11px;color:rgba(255,255,255,.5);font-weight:800;letter-spacing:1.5px;
+text-transform:uppercase;margin-bottom:4px}
+.final-promo-code{font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;
+color:#FF6B35;letter-spacing:5px}
+.final-promo-hint{font-size:11px;color:rgba(255,255,255,.35);margin-top:4px}
+.final-timer-wrap{text-align:center;margin-bottom:16px}
+.final-timer-label{font-size:11px;color:rgba(255,255,255,.45);font-weight:800;
+text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.final-timer-digits{font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;color:#fff}
+.final-timer-digits .ftd{color:#FF6B35}
+.final-cta{width:100%;max-width:340px;background:linear-gradient(135deg,#E8192C,#FF5C35);
+color:#fff;border:none;border-radius:16px;padding:16px;font-family:'Unbounded',sans-serif;
+font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 8px 28px rgba(232,25,44,.45);
+transition:all .2s;margin-bottom:16px;position:relative;overflow:hidden}
+.final-cta::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+animation:shine 2.5s ease-in-out infinite}
+.final-cta:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(232,25,44,.55)}
+.final-reviews{width:100%;max-width:340px;margin-bottom:8px}
+.final-review{background:rgba(255,255,255,.06);border-radius:12px;padding:12px 14px;margin-bottom:8px;
+border-left:3px solid #FF6B35}
+.final-review-text{font-size:13px;color:rgba(255,255,255,.85);font-weight:700;
+line-height:1.5;margin-bottom:5px;font-style:italic}
+.final-review-author{font-size:11px;color:#FF6B35;font-weight:800}
+.reviews-block{margin:0 0 14px}
+.review-card{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:8px;
+box-shadow:0 2px 10px rgba(0,0,0,.06);border-left:3px solid #E8192C;display:flex;gap:10px;align-items:flex-start}
+.review-ava{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#E8192C,#FF9A3C);
+flex-shrink:0;display:flex;align-items:center;justify-content:center;
+font-size:15px;font-weight:900;color:#fff;font-family:'Unbounded',sans-serif}
+.review-text{font-size:12px;color:#444;font-weight:700;line-height:1.55;font-style:italic;margin-bottom:3px}
+.review-author{font-size:11px;color:#E8192C;font-weight:800}
+.review-result{display:inline-block;background:#FFF0F1;color:#E8192C;font-size:10px;
+font-weight:900;padding:2px 7px;border-radius:20px;margin-left:4px}
+.exit-popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);
+backdrop-filter:blur(6px);z-index:400;justify-content:center;align-items:center;padding:20px}
+.exit-popup.show{display:flex}
+.exit-card{background:#fff;border-radius:22px;padding:28px 22px;max-width:360px;width:100%;
+text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:modal-pop .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes modal-pop{from{opacity:0;transform:scale(.75)}to{opacity:1;transform:scale(1)}}
+.exit-emoji{font-size:44px;margin-bottom:10px;display:block}
+.exit-headline{font-family:'Unbounded',sans-serif;font-size:17px;font-weight:900;
+color:#1A1A2E;margin-bottom:6px;line-height:1.3}
+.exit-sub{font-size:13px;color:#888;font-weight:700;line-height:1.55;margin-bottom:16px}
+.exit-promo{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;
+color:#E8192C;letter-spacing:4px;background:#FFF0F1;border-radius:10px;
+padding:10px;margin-bottom:16px;cursor:pointer}
+.exit-cta{width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;
+border:none;border-radius:13px;padding:15px;font-family:'Unbounded',sans-serif;
+font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(232,25,44,.3);
+margin-bottom:10px;transition:all .2s}
+.exit-cta:hover{transform:translateY(-2px)}
+.exit-dismiss{font-size:12px;color:#bbb;cursor:pointer;font-weight:700;display:block;padding:4px}
+.exit-dismiss:hover{color:#999}
+.pdf-loading{display:none;text-align:center;padding:12px;background:#FFF5F6;border-radius:10px;font-size:13px;font-weight:700;color:#E8192C}
+.pdf-loading.show{display:block}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div>
+<header>
+  <div class="logo">
+    <div class="logo-ico">⚡️</div>
+    <div class="logo-name">ШАГАЙ <span>ДОМА</span></div>
+  </div>
+  <div class="spins">
+    <span class="spins-lbl">Осталось вращений</span>
+    <div class="dots">
+      <div class="dot" id="d1"></div><div class="dot" id="d2"></div>
+      <div class="dot" id="d3"></div><div class="dot" id="d4"></div><div class="dot" id="d5"></div>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="headline">
+    <h1>Крути колесо и<br>выигрывай призы <em>бесплатно!</em></h1>
+    <p>5 попыток · Каждое вращение — шанс на подарок</p>
+  </div>
+  <div class="jbanner">
+    <div class="jico">🏆</div>
+    <div>
+      <div class="jlbl">Главный приз</div>
+      <div class="jmain">Бесплатный абонемент</div>
+      <div class="jsub">Можешь выиграть прямо сейчас!</div>
+    </div>
+  </div>
+  <div class="wheel-wrap">
+    <canvas id="wc" width="640" height="640"></canvas>
+    <div class="ptr"><div class="ptr-ball"></div><div class="ptr-tri"></div></div>
+    <button class="cbtn" id="cbtn" onclick="spin()">
+      <span class="ci">⚡️</span><span class="ct">КРУТИ!</span>
+    </button>
+  </div>
+  <button class="spinbtn" id="sbtn" onclick="spin()">🎯 Крутить колесо!</button>
+  <div class="done-msg" id="doneMsg">Вращения закончились. Спасибо! 🎉</div>
+  <div class="exhausted" id="exhausted">
+    <div style="font-size:52px;margin-bottom:12px">🌙</div>
+    <h2>Попытки на сегодня закончились</h2>
+    <p>Ты уже использовала все 5 вращений сегодня.<br>Возвращайся завтра — тебя ждут новые призы!</p>
+    <div class="comeback">Новые вращения появятся завтра утром 🎯</div>
+  </div>
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="si">
+      <div style="text-align:center">
+        <span class="m-emoji" id="mEmoji"></span>
+        <div><span class="m-tag" id="mTag"></span></div>
+        <div class="m-title" id="mTitle"></div>
+      </div>
+      <div class="promo" id="mPromo" onclick="copyCode()" style="display:none">
+        <div class="pcode" id="mCode"></div>
+        <span class="phint">👆 Нажми, чтобы скопировать</span>
+      </div>
+      <div class="m-desc" id="mDesc"></div>
+      <div class="divider"></div>
+      <div class="adcard" id="adcard">
+        <div class="adcard-body">
+          <div class="adcard-ttl" id="adTtl">🚶‍♀️ О клубе ШАГАЙ ДОМА</div>
+          <p id="mAd"></p>
+        </div>
+      </div>
+      <div class="spins-badge" id="mBadge" style="display:none">🎯 <span id="mBadgeTxt"></span></div>
+      <div class="actions" id="mActions"></div>
+    </div>
+  </div>
+</div>
+
+<div class="voverlay" id="voverlay">
+  <div class="vframe-wrap">
+    <iframe id="vframe" src="" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe>
+    <button class="vclose-btn" id="vcloseBtn" onclick="closeVideo()" style="display:none">✕</button>
+    <button class="skip-btn" id="skipBtn" onclick="skipAd()">Пропустить</button>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script>
+var FORMSPREE_URL='https://formspree.io/f/mvzvawok';
+var BUY_URL='https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel';
+var PROMO490_URL='https://my.walk-walk.ru/promo_box_490?utm_source=website&utm_medium=game&utm_campaign=wheel';
+var URL_1MONTH='https://my.walk-walk.ru/1mount_club_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
+var URL_FOREVER='https://my.walk-walk.ru/alwaysclub_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
+var AD_VIDEO_URL='https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1&mute=0';
+var AD_VIDEO_DIRECT='https://vk.com/video-222534261_456241523';
+var PRIZE_VIDEO_URL='https://vk.com/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1&mute=0';
+var PRIZE_VIDEO_DIRECT='https://vk.com/video-222534261_456239060';
+
+var LS_DATE='shd_wheel_date',LS_SPINS='shd_wheel_spins',LS_SNUM='shd_wheel_spinnum';
+var LS_LAST_PRIZE='shd_wheel_last_prize';
+var MAX_SPINS=5;
+
+function todayStr(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+function loadState(){
+  try{
+    var date=localStorage.getItem(LS_DATE),spins=parseInt(localStorage.getItem(LS_SPINS),10),snum=parseInt(localStorage.getItem(LS_SNUM),10)||0;
+    if(date===todayStr()&&!isNaN(spins)) return {spins:spins,spinNum:snum};
+  }catch(e){}
+  saveState(MAX_SPINS,0);return{spins:MAX_SPINS,spinNum:0};
+}
+function saveState(spins,snum){
+  try{localStorage.setItem(LS_DATE,todayStr());localStorage.setItem(LS_SPINS,spins);localStorage.setItem(LS_SNUM,snum);}catch(e){}
+}
+function saveLastPrize(idx){
+  try{localStorage.setItem(LS_LAST_PRIZE,JSON.stringify({idx:idx,date:todayStr()}));}catch(e){}
+}
+function loadLastPrize(){
+  try{
+    var raw=localStorage.getItem(LS_LAST_PRIZE);if(!raw) return null;
+    var obj=JSON.parse(raw);if(obj.date===todayStr()) return obj.idx;
+  }catch(e){}
+  return null;
+}
+function clearLastPrize(){try{localStorage.removeItem(LS_LAST_PRIZE);}catch(e){}}
+
+var _state=loadState(),spinsLeft=_state.spins,spinNum=_state.spinNum;
+
+var COLORS=[
+  {bg:'#D91B2A',fg:'#fff'},{bg:'#F5A623',fg:'#3D2000'},{bg:'#B01020',fg:'#fff'},
+  {bg:'#FFCF44',fg:'#3D2000'},{bg:'#E84545',fg:'#fff'},{bg:'#F07B1D',fg:'#fff'},
+  {bg:'#9A0E1C',fg:'#fff'},{bg:'#FAB95B',fg:'#3D2000'},
+];
+var SEG=[
+  {label:['Скидка','20%'],emoji:'🏷️',icon:'discount.PNG',prize:'Скидка 20% на абонемент!',promo:'LUCKY',
+   desc:'Укажи промокод при оформлении — и скидка 20% применится автоматически! Промокод действует 48 часов.',
+   w:22,isFinal:true,isDiscount:true},
+  {label:['Рецепты','диетолога'],emoji:'🥗',icon:'menu.png',prize:'Рецепты от диетолога — PDF!',
+   desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
+   w:18,isMenuPdf:true},
+  {label:['Бесплатная','тренировка'],emoji:'🎽',icon:'free.PNG',prize:'Бесплатная тренировка!',
+   desc:'Ты выиграла одну из лучших тренировок клуба ШАГАЙ ДОМА! Нажми кнопку ниже, чтобы начать шагать! 🔥',
+   w:16,isTraining:true},
+  {label:['Бесплатный','абонемент'],emoji:'🏆',icon:'prize.PNG',prize:'🏆 Бесплатный абонемент!',
+   desc:'Невероятно! Ты выиграла супер приз: бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
+   w:0,isJackpot:true},
+  {label:['Промо-бокс'],emoji:'🎁',icon:'promo.PNG',prize:'Промо-бокс за 490 руб!',
+   desc:'Эксклюзивное предложение, которого нет в продаже! Всего 490 руб — несколько наших лучших тренировок, трекеры привычек, меню на день от диетолога.',
+   w:14,isPromo490:true},
+  {label:['Секретный','тариф 1 мес'],emoji:'🕵️',icon:'secret1.PNG',prize:'Секретный тариф — 1 месяц!',
+   desc:'Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.',
+   w:10,is1Month:true},
+  {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',icon:'secretalways.PNG',prize:'Секретный тариф НАВСЕГДА!',
+   desc:'Уникальный тариф, которого нет в продаже — доступ НАВСЕГДА за 8990 руб.! Возможность приобрести вечный абонемент только для счастливчиков в колесе удачи.',
+   w:8,isForever:true},
+  {label:['Крути','ещё раз!'],emoji:'🔄',icon:'again.PNG',prize:'Крути ещё раз!',
+   desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
+   w:14,isRetry:true},
+];
+for(var _i=0;_i<SEG.length;_i++){SEG[_i].bg=COLORS[_i%COLORS.length].bg;SEG[_i].fg=COLORS[_i%COLORS.length].fg;}
+
+var ADS=[
+  {title:'🔥 От -1 до -4 кг уже за первую неделю!',
+   text:'Не диета, не изнурительный зал — просто <strong>ходьба дома под видео</strong>. Наши участницы видят результат уже на первой неделе. <strong>10 000 женщин</strong> со всего мира уже шагают — присоединяйся!',img:'1.JPG'},
+  {title:'🤔 «У меня нет времени на спорт»',
+   text:'Тренировки от <strong>10 до 30 минут</strong> прямо дома — никуда ехать не нужно. Встала, включила видео, прошагала. <strong>10 000 занятых женщин</strong> нашли время — найдёшь и ты!',img:'4.png'},
+  {title:'😟 «Я уже пробовала — не помогло»',
+   text:'Ходьба работает иначе, чем изнурительные тренировки. Она <strong>не создает кортизол в теле</strong>, не вызывает срывов и подходит любому уровню. Просто шаги — и результат тут как тут!',img:'2.JPG'},
+  {title:'💸 «Пока подожду с покупкой»',
+   text:'Один поход в зал стоит дороже, чем <strong>целый месяц</strong> в нашем клубе. Пока ты ждёшь — наши участницы уже худеют. Не откладывай то, что работает!',img:'5.jpg'},
+  {title:'💪 Уже 10 000 женщин со всего мира',
+   text:'Из России, Европы, США, Казахстана — все они шагают дома и видят результат. <strong>Присоединяйся к самому тёплому фитнес-сообществу</strong> и начни свой путь к стройности прямо сейчас!',img:'3.jpg'},
+];
+var FINAL_AD='Это твой <strong>шанс войти в клуб выгодно прямо сейчас!</strong> 350+ тренировок дома, <strong>+10 000 женщин-единомышленниц</strong> со всего мира и твоя новая стройная жизнь. <strong>Промокод LUCKY даёт -20% — действует 48 часов!</strong>';
+
+var busy=false,rot=0,lastCode='',skipTimer=null,prizeTimerInterval=null;
+var N=SEG.length,ARC=2*Math.PI/N;
+var CV=document.getElementById('wc'),ctx=CV.getContext('2d');
+var SZ=640,CX=SZ/2,CY=SZ/2,R=SZ/2-10;
+
+// ── PNG ИКОНКИ — загружаем через new Image(), рисуем через drawImage ──────────
+// drawImage даёт гарантированный цвет на всех платформах (iOS, macOS, Windows).
+var _icons={};
+var _iconsLoaded=0;
+var _uniqueIcons=SEG.map(function(s){return s.icon;}).filter(function(v,i,a){return a.indexOf(v)===i;});
+(function preloadIcons(){
+  if(!_uniqueIcons.length){drawWheel(rot);return;}
+  _uniqueIcons.forEach(function(name){
+    var img=new Image();
+    img.onload=function(){_icons[name]=img;_iconsLoaded++;if(_iconsLoaded>=_uniqueIcons.length) drawWheel(rot);};
+    img.onerror=function(){_icons[name]=null;_iconsLoaded++;if(_iconsLoaded>=_uniqueIcons.length) drawWheel(rot);};
+    img.src=name;
+  });
+})();
+
+function initUI(){
+  var used=MAX_SPINS-spinsLeft;
+  for(var i=1;i<=MAX_SPINS;i++) document.getElementById('d'+i).classList.toggle('off',i<=used);
+  if(spinsLeft<=0){
+    document.querySelector('.wheel-wrap').style.display='none';
+    document.getElementById('sbtn').style.display='none';
+    document.getElementById('exhausted').style.display='block';
+    document.querySelector('.jbanner').style.display='none';
+  } else {
+    var lp=loadLastPrize();
+    if(lp!==null) setTimeout(function(){showModal(lp,true);},400);
+  }
+}
+
+// ── DRAW ──────────────────────────────────────────────────────────────────────
+function drawWheel(r){
+  ctx.clearRect(0,0,SZ,SZ);
+
+  // Проход 1: фон секторов
+  for(var i=0;i<N;i++){
+    var s=SEG[i],sa=r-Math.PI/2+i*ARC,a0=sa-ARC/2,a1=sa+ARC/2;
+    ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,R,a0,a1);ctx.closePath();
+    ctx.fillStyle=s.bg;ctx.fill();
+    var g=ctx.createRadialGradient(CX,CY,R*0.04,CX,CY,R);
+    g.addColorStop(0,'rgba(255,255,255,.2)');g.addColorStop(0.45,'rgba(255,255,255,.04)');g.addColorStop(1,'rgba(0,0,0,.09)');
+    ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,R,a0,a1);ctx.closePath();ctx.fillStyle=g;ctx.fill();
+    ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,R,a0,a1);ctx.closePath();
+    ctx.strokeStyle='rgba(255,255,255,.65)';ctx.lineWidth=3;ctx.stroke();
+  }
+
+  // Проход 2: текст
+  for(var i=0;i<N;i++){
+    var s=SEG[i],sa=r-Math.PI/2+i*ARC;
+    var lines=s.label,tR=R*0.50,fs=Math.max(11,Math.round(R*0.048)),lh=fs*1.25,totalH=(lines.length-1)*lh;
+    ctx.save();
+    ctx.translate(CX+tR*Math.cos(sa),CY+tR*Math.sin(sa));
+    ctx.rotate(sa+Math.PI/2);
+    ctx.font='900 '+fs+'px Nunito,Arial,sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.shadowColor='rgba(0,0,0,0.55)';ctx.shadowBlur=4;ctx.shadowOffsetX=0;ctx.shadowOffsetY=1;
+    ctx.fillStyle='rgba(255,255,255,0.97)';
+    lines.forEach(function(ln,li){ctx.fillText(ln,0,-totalH/2+li*lh);});
+    ctx.restore();
+  }
+
+  // Проход 3: PNG-иконки через drawImage — цветные на всех платформах
+  var iconPx=Math.round(R*0.19);
+  ctx.shadowColor='transparent';ctx.shadowBlur=0;
+  for(var i=0;i<N;i++){
+    var s=SEG[i],sa=r-Math.PI/2+i*ARC;
+    var ex=CX+R*0.76*Math.cos(sa),ey=CY+R*0.76*Math.sin(sa);
+    ctx.save();
+    ctx.translate(ex,ey);
+    ctx.rotate(sa+Math.PI/2);
+    if(s.icon&&_icons[s.icon]) ctx.drawImage(_icons[s.icon],-iconPx/2,-iconPx/2,iconPx,iconPx);
+    ctx.restore();
+  }
+
+  // Обводка
+  ctx.beginPath();ctx.arc(CX,CY,R,0,2*Math.PI);ctx.strokeStyle='rgba(255,255,255,.8)';ctx.lineWidth=6;ctx.stroke();
+  // Центр
+  ctx.beginPath();ctx.arc(CX,CY,36,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();
+  ctx.strokeStyle='rgba(232,25,44,.15)';ctx.lineWidth=3;ctx.stroke();
+}
+
+// Первая отрисовка сразу (иконки догрузятся и перерисуют)
+drawWheel(rot);
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){drawWheel(rot);});
+initUI();
+
+// ── EXIT-INTENT ───────────────────────────────────────────────────────────────
+var exitShown=false,exitEnabled=false;
+var _suppressExit=false;
+function suppressExitFor(ms){
+  _suppressExit=true;
+  clearTimeout(window._suppressTimer);
+  window._suppressTimer=setTimeout(function(){_suppressExit=false;},ms||4000);
+}
+function openPurchaseUrl(url){
+  suppressExitFor(4000);
+  window.open(url,'_blank');
+}
+function enableExitIntent(){exitEnabled=true;}
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden&&exitEnabled&&!exitShown&&!_suppressExit) showExitPopup();
+});
+document.addEventListener('mouseleave',function(e){
+  if(e.clientY<10&&exitEnabled&&!exitShown&&!_suppressExit) showExitPopup();
+});
+(function(){
+  history.pushState(null,'',location.href);
+  window.addEventListener('popstate',function(){
+    if(exitEnabled&&!exitShown&&!_suppressExit){showExitPopup();history.pushState(null,'',location.href);}
+  });
+})();
+function showExitPopup(){exitShown=true;document.getElementById('exitPopup').classList.add('show');}
+function closeExitPopup(){document.getElementById('exitPopup').classList.remove('show');}
+function copyExitPromo(){
+  navigator.clipboard.writeText('LUCKY').catch(function(){});
+  var el=document.querySelector('.exit-promo'),orig=el.textContent;
+  el.textContent='✅ СКОПИРОВАНО!';setTimeout(function(){el.textContent=orig;},2000);
+}
+
+// ── SPIN ──────────────────────────────────────────────────────────────────────
+function pickIdx(){
+  if(spinsLeft===1) return SEG.findIndex(function(s){return s.isFinal;});
+  var pool=[];
+  SEG.forEach(function(s,i){for(var j=0;j<s.w;j++) pool.push(i);});
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function spin(){
+  if(busy||spinsLeft<=0) return;
+  busy=true;btnOff();clearLastPrize();
+  var ti=pickIdx();
+  var targetRot=((-ti*ARC)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  var jitter=(Math.random()-.5)*ARC*0.55;
+  var targetJ=(targetRot+jitter+2*Math.PI)%(2*Math.PI);
+  var curNorm=((rot%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+  var delta=((targetJ-curNorm)+2*Math.PI)%(2*Math.PI);
+  if(delta<0.4) delta+=2*Math.PI;
+  var total=(5+Math.floor(Math.random()*4))*2*Math.PI+delta;
+  var startRot=rot,dur=4200+Math.random()*1100,t0=performance.now();
+  function ease(t){return 1-Math.pow(1-t,3.8);}
+  requestAnimationFrame(function go(now){
+    var t=Math.min((now-t0)/dur,1);
+    rot=startRot+total*ease(t);drawWheel(rot);
+    if(t<1){requestAnimationFrame(go);return;}
+    busy=false;spinNum++;spinsLeft--;
+    saveState(spinsLeft,spinNum);updateDots();enableExitIntent();
+    var afterSpin=function(){
+      if(SEG[ti].isRetry){
+        if(spinsLeft>0){toast('🔄 Крути ещё раз! Удача близко!');btnOn();}
+        else showModal(SEG.findIndex(function(s){return s.isFinal;}));
+      } else {
+        showModal(ti);if(spinsLeft>0) btnOn();
+      }
+      if(spinsLeft===0){
+        document.getElementById('sbtn').style.display='none';
+        document.getElementById('doneMsg').style.display='block';
+        setTimeout(function(){showFinalScreen();},1800);
+      }
+    };
+    if(spinNum===2&&!SEG[ti].isRetry) showAdVideo(afterSpin);
+    else afterSpin();
+  });
+}
+function btnOff(){['sbtn','cbtn'].forEach(function(id){document.getElementById(id).disabled=true;});}
+function btnOn(){['sbtn','cbtn'].forEach(function(id){document.getElementById(id).disabled=false;});}
+function updateDots(){var used=MAX_SPINS-spinsLeft;for(var i=1;i<=MAX_SPINS;i++) document.getElementById('d'+i).classList.toggle('off',i<=used);}
+
+// ── VIDEO ─────────────────────────────────────────────────────────────────────
+function showAdVideo(callback){
+  window._adCallback=callback;
+  var frame=document.getElementById('vframe'),fw=document.querySelector('.vframe-wrap');
+  document.getElementById('skipBtn').style.display='none';
+  document.getElementById('vcloseBtn').style.display='none';
+  document.getElementById('voverlay').classList.add('show');
+  frame.classList.remove('loaded');frame.src='';
+  var oldFb=document.getElementById('vFallback');if(oldFb) oldFb.remove();
+  var fb=buildFallback({title:'Реклама',desc:'Посмотри короткое видео<br>о клубе Шагай Дома',
+    btnText:'▶️ Смотреть видео',btnUrl:AD_VIDEO_DIRECT,showSkip:true,onSkip:skipAd});
+  fw.appendChild(fb);
+  frame.src=AD_VIDEO_URL;
+  frame.onload=function(){
+    try{if(frame.contentDocument&&frame.contentDocument.body&&frame.contentDocument.body.innerHTML.trim()==='') return;}catch(e){}
+    fb.style.display='none';frame.classList.add('loaded');
+  };
+}
+function buildFallback(o){
+  var fb=document.createElement('div');fb.id='vFallback';
+  fb.style.cssText='position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;gap:14px;padding:24px;z-index:5';
+  var t=document.createElement('div');t.style.cssText='font-size:12px;color:rgba(255,255,255,.45);font-weight:700;text-transform:uppercase;letter-spacing:1px';t.textContent=o.title||'';
+  var d=document.createElement('div');d.style.cssText='font-size:15px;color:#fff;font-weight:800;text-align:center;line-height:1.5';d.innerHTML=o.desc||'';
+  var b=document.createElement('button');b.style.cssText='background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:Nunito,sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(232,25,44,.4)';
+  b.textContent=o.btnText||'▶️';b.onclick=function(){window.open(o.btnUrl,'_blank');};
+  fb.appendChild(t);fb.appendChild(d);fb.appendChild(b);
+  if(o.showSkip&&o.onSkip){
+    var sw=document.createElement('div');fb.appendChild(sw);var sec=5;
+    (function tick(){
+      if(sec>0){sw.innerHTML='<span style="font-size:12px;color:rgba(255,255,255,.3);font-weight:700">Пропустить через '+sec+'...</span>';sec--;setTimeout(tick,1000);}
+      else{var sb=document.createElement('button');sb.style.cssText='background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:7px 18px;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;cursor:pointer';sb.textContent='Пропустить ✕';sb.onclick=o.onSkip;sw.innerHTML='';sw.appendChild(sb);var sk=document.getElementById('skipBtn');if(sk){sk.style.display='block';sk.disabled=false;sk.textContent='Пропустить ✕';}}
+    })();
+  }
+  return fb;
+}
+function skipAd(){
+  clearInterval(skipTimer);
+  document.getElementById('vframe').src='';document.getElementById('vframe').classList.remove('loaded');
+  document.getElementById('voverlay').classList.remove('show');
+  var fb=document.getElementById('vFallback');if(fb) fb.remove();
+  if(window._adCallback){window._adCallback();window._adCallback=null;}
+}
+function showPrizeVideo(){
+  var frame=document.getElementById('vframe'),fw=document.querySelector('.vframe-wrap');
+  document.getElementById('skipBtn').style.display='none';document.getElementById('vcloseBtn').style.display='flex';
+  document.getElementById('voverlay').classList.add('show');
+  frame.classList.remove('loaded');frame.src='';
+  var oldFb=document.getElementById('vFallback');if(oldFb) oldFb.remove();
+  var fb=document.createElement('div');fb.id='vFallback';
+  fb.style.cssText='position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;gap:14px;padding:24px;z-index:5';
+  var ico=document.createElement('div');ico.style.fontSize='42px';ico.textContent='🎽';
+  var tt=document.createElement('div');tt.style.cssText='font-size:16px;color:#fff;font-weight:800;text-align:center;line-height:1.5';tt.innerHTML='Твоя бесплатная<br>тренировка готова!';
+  var ht=document.createElement('div');ht.style.cssText='font-size:13px;color:rgba(255,255,255,.45);text-align:center;font-weight:700';ht.textContent='Нажми, чтобы открыть видео';
+  var btn=document.createElement('button');btn.style.cssText='background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:14px;padding:15px 30px;font-family:Nunito,sans-serif;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(232,25,44,.4)';btn.textContent='▶️ Смотреть тренировку';btn.onclick=function(){window.open(PRIZE_VIDEO_DIRECT,'_blank');};
+  fb.appendChild(ico);fb.appendChild(tt);fb.appendChild(ht);fb.appendChild(btn);fw.appendChild(fb);
+  frame.src=PRIZE_VIDEO_URL;
+  frame.onload=function(){try{if(frame.contentDocument&&frame.contentDocument.body&&frame.contentDocument.body.innerHTML.trim()==='') return;}catch(e){} fb.style.display='none';frame.classList.add('loaded');};
+}
+function closeVideo(){
+  document.getElementById('vframe').src='';document.getElementById('vframe').classList.remove('loaded');
+  document.getElementById('voverlay').classList.remove('show');
+  var fb=document.getElementById('vFallback');if(fb) fb.remove();
+}
+function openLightbox(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('show');}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('show');}
+
+function startPrizeTimer(seconds,elId){
+  clearInterval(prizeTimerInterval);var el=document.getElementById(elId);if(!el) return;
+  function fmt(s){
+    if(s>=3600){var h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return '<span class="ts">'+h+'</span>ч <span class="ts">'+(m<10?'0':'')+m+'</span>мин';}
+    var m=Math.floor(s/60),ss=s%60;return '<span class="ts">'+(m<10?'0':'')+m+'</span>:<span class="ts">'+(ss<10?'0':'')+ss+'</span>';
+  }
+  el.innerHTML=fmt(seconds);
+  prizeTimerInterval=setInterval(function(){seconds--;if(seconds<0){clearInterval(prizeTimerInterval);el.innerHTML='<span class="ts">истекло</span>';return;}el.innerHTML=fmt(seconds);},1000);
+}
+function addTimer(parent,seconds,label){
+  var tid='pt_'+Date.now(),block=document.createElement('div');block.className='prize-timer';
+  block.innerHTML='<span class="timer-icon">⏰</span><span class="timer-label">'+label+'</span><span class="timer-sep">·</span><span class="timer-digits" id="'+tid+'">--:--</span>';
+  parent.appendChild(block);setTimeout(function(){startPrizeTimer(seconds,tid);},30);
+}
+function addUpsell(parent,text,btnLabel,fn){
+  var block=document.createElement('div');block.className='upsell-block';
+  block.innerHTML='<div class="upsell-text">'+text+'</div>';
+  var btn=document.createElement('button');btn.className='btn-upsell';btn.textContent=btnLabel;btn.onclick=fn;
+  block.appendChild(btn);parent.appendChild(block);
+}
+function mkBtn(p,l,fn){var b=document.createElement('button');b.className='btn-take';b.innerHTML=l;b.onclick=fn;p.appendChild(b);}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+function showModal(idx,isReturn){
+  clearInterval(prizeTimerInterval);
+  var s=SEG[idx],fin=spinsLeft===0;
+  if(!s.isRetry) saveLastPrize(idx);
+
+  document.getElementById('mEmoji').textContent=s.emoji;
+  document.getElementById('mTag').textContent=isReturn?'👋 Твой приз тебя ждёт!':(fin?'🎊 Последнее вращение!':'🎉 Поздравляем!');
+
+  var tel=document.getElementById('mTitle');tel.textContent=s.prize;tel.className='m-title'+(s.isJackpot||fin?' red':'');
+  var pel=document.getElementById('mPromo');
+  if((s.promo||fin)&&!s.isJackpot){pel.style.display='block';lastCode=fin?'LUCKY':s.promo;document.getElementById('mCode').textContent=lastCode;}
+  else pel.style.display='none';
+  document.getElementById('mDesc').textContent=s.desc;
+
+  var adcard=document.getElementById('adcard'),adTtl=document.getElementById('adTtl'),adP=document.getElementById('mAd');
+  var oldImg=adcard.querySelector('.adcard-img');if(oldImg) oldImg.remove();
+  if(fin){adTtl.textContent='🚶‍♀️ О клубе ШАГАЙ ДОМА';adP.innerHTML=FINAL_AD;}
+  else{
+    var ad=ADS[(spinNum-1)%ADS.length];adTtl.textContent=ad.title;adP.innerHTML=ad.text;
+    if(ad.img){var img=document.createElement('img');img.src=ad.img;img.className='adcard-img';img.alt='';img.title='Нажми чтобы увеличить';(function(src){img.onclick=function(e){e.stopPropagation();openLightbox(src);};})(ad.img);adcard.insertBefore(img,adcard.querySelector('.adcard-body'));}
+  }
+
+  var badge=document.getElementById('mBadge');
+  if(spinsLeft>0&&!isReturn){badge.style.display='inline-flex';document.getElementById('mBadgeTxt').textContent='Ещё '+spinsLeft+' вращени'+(spinsLeft===1?'е':'я');}
+  else badge.style.display='none';
+
+  var acts=document.getElementById('mActions');acts.innerHTML='';
+  if(!s.isRetry&&!s.isJackpot&&(s.isDiscount||s.isFinal||fin||s.is1Month||s.isForever||s.isPromo490)) addReviews(acts);
+
+  if(s.isJackpot){
+    acts.innerHTML='<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:Unbounded,sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>';
+  } else if(s.isMenuPdf){
+    addTimer(acts,15*60,'Забери рецепты, пока предложение активно');
+    var pdl=document.createElement('div');pdl.id='pdfLoading';pdl.className='pdf-loading';pdl.textContent='⏳ Идёт скачивание PDF...';acts.appendChild(pdl);
+    var pdfBtn=document.createElement('button');pdfBtn.className='btn-take';pdfBtn.innerHTML='📥 Скачать рецепты PDF бесплатно!';
+    pdfBtn.onclick=function(){
+      pdfBtn.disabled=true;pdfBtn.innerHTML='⏳ Скачивается...';pdl.classList.add('show');
+      var a=document.createElement('a');a.href='menu.pdf';a.download='menu.pdf';document.body.appendChild(a);a.click();document.body.removeChild(a);
+      setTimeout(function(){pdfBtn.disabled=false;pdfBtn.innerHTML='📥 Скачать рецепты PDF ещё раз';pdl.classList.remove('show');pdl.textContent='✅ Файл скачан! Проверь папку «Загрузки»';pdl.style.display='block';pdl.style.color='#22aa55';pdl.style.background='#F0FFF4';},2000);
+    };
+    acts.appendChild(pdfBtn);
+    addUpsell(acts,'💡 Хочешь худеть ещё быстрее? Попробуй клуб 3 месяца за 2990 руб!','🚶‍♀️ Попробовать клуб за 2990 руб',function(){openPurchaseUrl(BUY_URL);});
+  } else if(s.isTraining){
+    addTimer(acts,20*60,'Тренировка доступна ограниченное время');
+    mkBtn(acts,'▶️ Смотреть тренировку прямо сейчас!',function(){closeModal();showPrizeVideo();});
+    addUpsell(acts,'💡 Понравилась тренировка? В клубе таких 350+ — 3 месяца за 2990 руб!','🏃‍♀️ Вступить в клуб за 2990 руб',function(){openPurchaseUrl(BUY_URL);});
+  } else if(s.isPromo490){
+    addTimer(acts,30*60,'Спецпредложение сгорит через');
+    mkBtn(acts,'🎁 Получить промо-бокс за 490 руб!',function(){openPurchaseUrl(PROMO490_URL);});
+  } else if(s.is1Month){
+    addTimer(acts,25*60,'Секретный тариф действует');
+    mkBtn(acts,'🕵️ Забрать секретный тариф на месяц!',function(){openPurchaseUrl(URL_1MONTH);});
+  } else if(s.isForever){
+    addTimer(acts,20*60,'Уникальное предложение исчезнет через');
+    mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){openPurchaseUrl(URL_FOREVER);});
+  } else if(s.isDiscount||fin){
+    addTimer(acts,48*60*60,'Промокод LUCKY сгорит через');
+    mkBtn(acts,'🛒 Перейти к покупке со скидкой 20%',function(){openPurchaseUrl(BUY_URL);});
+  } else {
+    mkBtn(acts,'✅ Забрать приз!',function(){closeModal();clearLastPrize();});
+  }
+
+  if(spinsLeft>0&&!fin&&!s.isJackpot){
+    var br=document.createElement('button');br.className='btn-respin';
+    br.textContent='🎯 Крутить ещё раз ('+spinsLeft+' вращени'+(spinsLeft===1?'е':'я')+')';
+    br.onclick=function(){clearLastPrize();closeModal();btnOn();};acts.appendChild(br);
+    if(!isReturn){
+      var w=document.createElement('div');w.className='respin-warn';w.textContent='⚠️ Если крутишь снова — текущий приз сгорает!';acts.appendChild(w);
+    }
+  }
+  document.getElementById('overlay').classList.add('show');
+  if(s.isJackpot||fin) confetti();
+}
+
+function closeModal(){clearInterval(prizeTimerInterval);document.getElementById('overlay').classList.remove('show');}
+
+function submitJackpot(){
+  var email=document.getElementById('jackpotEmail').value.trim(),status=document.getElementById('jackpotStatus');
+  if(!email||!email.includes('@')||!email.includes('.')){status.style.color='#E8192C';status.textContent='Пожалуйста, введи корректный email 📧';return;}
+  status.style.color='#aaa';status.textContent='Отправляем...';
+  fetch(FORMSPREE_URL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email:email,prize:'Бесплатный абонемент',source:'Колесо удачи ШагайДома'})})
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.ok){document.getElementById('jackpotEmail').style.display='none';document.querySelector('[onclick="submitJackpot()"]').style.display='none';status.style.color='#22aa55';status.style.fontSize='14px';status.textContent='🎉 Готово! Мы скоро напишем тебе на почту!';clearLastPrize();}
+    else{status.style.color='#E8192C';status.textContent='Что-то пошло не так. Попробуй ещё раз.';}
+  }).catch(function(){status.style.color='#E8192C';status.textContent='Ошибка сети. Напиши нам напрямую.';});
+}
+function copyCode(){
+  navigator.clipboard.writeText(lastCode).catch(function(){});
+  var el=document.getElementById('mCode'),o=el.textContent;
+  el.textContent='✅ Скопировано!';setTimeout(function(){el.textContent=o;},2000);
+}
+function toast(msg){
+  var t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;border-radius:50px;padding:11px 20px;font-family:inherit;font-size:14px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.22);z-index:200;white-space:nowrap;';t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove();},2400);
+}
+function confetti(){
+  var cols=['#E8192C','#FF6B35','#F5A623','#FFD166','#FF4D5E','#fff'];
+  for(var i=0;i<65;i++)(function(i){setTimeout(function(){
+    var el=document.createElement('div');el.className='cp';el.style.left=Math.random()*100+'vw';el.style.background=cols[Math.floor(Math.random()*cols.length)];el.style.borderRadius=Math.random()>.4?'50%':'2px';var sz=6+Math.random()*8;el.style.width=el.style.height=sz+'px';document.body.appendChild(el);
+    el.animate([{top:'-20px',opacity:1,transform:'rotate(0)'},{top:'108vh',opacity:0,transform:'rotate('+(400+Math.random()*360)+'deg) translateX('+(Math.random()-.5)*160+'px)'}],{duration:2000+Math.random()*1500,easing:'cubic-bezier(.2,.8,.4,1)',fill:'forwards'}).onfinish=function(){el.remove();};
+  },i*32);})(i);
+}
+var REVIEWS=[
+  {ava:'К',text:'«Вышла замуж через 8 месяцев и влезла в то же свадебное платье что было на первой свадьбе 20 лет назад»',author:'Катерина Косенко',result:'-16 кг'},
+  {ava:'Г',text:'«Уже 3 года с вами. Никогда не думала что обычная ходьба может так изменить жизнь»',author:'Галина, Рига',result:'-38 кг'},
+  {ava:'Ю',text:'«Просто шагала каждый день под видео — и за полтора года моя жизнь изменилась»',author:'Юлия Тимур',result:'-24 кг'},
+  {ava:'Н',text:'«Была уверена что это очередная ерунда. Теперь агитирую всех подруг — уже троих затащила!»',author:'Наталья, Москва',result:'-11 кг'},
+  {ava:'О',text:'«У меня больная спина, думала спорт вообще не для меня. Шагай Дома стала настоящим спасением»',author:'Ольга Прохорова',result:'-9 кг'},
+  {ava:'И',text:'«Первую неделю не верила, что это работает. На второй неделе влезла в любимые джинсы»',author:'Ирина, Краснодар',result:'-7 кг'},
+  {ava:'М',text:'«Тренируюсь пока дети спят — 20 минут и всё. Муж говорит что я похорошела»',author:'Марина Белова',result:'-14 кг'},
+  {ava:'Е',text:'«Живу в маленькой квартире, думала негде заниматься. Оказывается хватает двух метров!»',author:'Елена, Екатеринбург',result:'-18 кг'},
+  {ava:'Т',text:'«После родов никак не могла сбросить вес. За 3 месяца ушло 12 кг и это без диет»',author:'Татьяна Коваль',result:'-12 кг'},
+  {ava:'А',text:'«Работаю из дома, много сижу. Шагай Дома помогла расшевелиться и перестать есть от скуки»',author:'Анастасия, СПб',result:'-8 кг'},
+  {ava:'В',text:'«Мне 58 лет, думала в моём возрасте уже не похудеть. Клуб доказал обратное!»',author:'Валентина Д.',result:'-21 кг'},
+  {ava:'С',text:'«Скептик по натуре, но результат говорит сам за себя. Рекомендую всем у кого нет времени»',author:'Светлана, Казань',result:'-15 кг'},
+];
+function shuffle(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
+  return a;
+}
+function addReviews(parent){
+  var block=document.createElement('div');block.className='reviews-block';
+  var pick=shuffle(REVIEWS).slice(0,3);
+  pick.forEach(function(r){var card=document.createElement('div');card.className='review-card';card.innerHTML='<div class="review-ava">'+r.ava+'</div><div class="review-body"><div class="review-text">'+r.text+'</div><div class="review-author">'+r.author+'<span class="review-result">'+r.result+'</span></div></div>';block.appendChild(card);});
+  parent.appendChild(block);
+}
+var finalTimerInterval=null;
+function showFinalScreen(){
+  document.getElementById('finalScreen').classList.add('show');
+  document.body.style.overflow='hidden';
+  clearLastPrize();
+  startFinalTimer(48*60*60);
+  // случайные отзывы в финале
+  var fr=document.getElementById('finalReviews');
+  fr.innerHTML='';
+  shuffle(REVIEWS).slice(0,3).forEach(function(r){
+    var d=document.createElement('div');d.className='final-review';
+    d.innerHTML='<div class="final-review-text">'+r.text+'</div><div class="final-review-author">'+r.author+' — '+r.result+'</div>';
+    fr.appendChild(d);
+  });
+}
+function startFinalTimer(seconds){
+  clearInterval(finalTimerInterval);var el=document.getElementById('finalTimerDigits');
+  function fmt(s){var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;return '<span class="ftd">'+(h<10?'0':'')+h+'</span>:<span class="ftd">'+(m<10?'0':'')+m+'</span>:<span class="ftd">'+(ss<10?'0':'')+ss+'</span>';}
+  if(el) el.innerHTML=fmt(seconds);
+  finalTimerInterval=setInterval(function(){seconds--;if(seconds<0){clearInterval(finalTimerInterval);return;}if(el) el.innerHTML=fmt(seconds);},1000);
+}
+function copyFinalPromo(){
+  navigator.clipboard.writeText('LUCKY').catch(function(){});
+  var el=document.getElementById('finalPromoCopied');el.textContent='✅ Скопировано!';setTimeout(function(){el.textContent='👆 Нажми, чтобы скопировать';},2000);
+}
+</script>
+
+<!-- ФИНАЛЬНЫЙ ЭКРАН -->
+<div class="final-screen" id="finalScreen">
+  <div class="final-logo">ШАГАЙ ДОМА</div>
+  <div class="final-fire">🎉</div>
+  <div class="final-headline">Поздравляем!<br>Твой приз <em>готов</em></div>
+  <div class="final-sub">Промокод на скидку 20% — только для тебя</div>
+  <div class="final-promo-wrap" onclick="copyFinalPromo()">
+    <div class="final-promo-label">Твой промокод</div>
+    <div class="final-promo-code">LUCKY</div>
+    <div class="final-promo-hint" id="finalPromoCopied">👆 Нажми, чтобы скопировать</div>
+  </div>
+  <div class="final-timer-wrap">
+    <div class="final-timer-label">Промокод сгорит через</div>
+    <div class="final-timer-digits" id="finalTimerDigits">47:59:59</div>
+  </div>
+  <button class="final-cta" onclick="openPurchaseUrl('https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel_final')">
+    🛒 Купить со скидкой 20% прямо сейчас!
+  </button>
+  <div class="final-reviews" id="finalReviews"></div>
+</div>
+
+<!-- EXIT-INTENT ПОПАП -->
+<div class="exit-popup" id="exitPopup">
+  <div class="exit-card">
+    <span class="exit-emoji">⏰</span>
+    <div class="exit-headline">Подожди!<br>Твой промокод сгорит</div>
+    <div class="exit-sub">Ты заработала скидку 20% на весь клуб.<br>Она действует только 48 часов — не упусти!</div>
+    <div class="exit-promo" onclick="copyExitPromo()">LUCKY</div>
+    <button class="exit-cta" onclick="openPurchaseUrl(BUY_URL);closeExitPopup()">🛒 Купить со скидкой сейчас</button>
+    <span class="exit-dismiss" onclick="closeExitPopup()">Нет, я подожду до завтра</span>
+  </div>
+</div>
+</body>
+</html>
