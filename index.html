@@ -113,8 +113,9 @@ padding:0;margin-bottom:16px;border-left:3px solid #E8192C;overflow:hidden}
 border-radius:50px;padding:5px 13px;font-size:12px;font-weight:900;color:#E8192C;margin-bottom:13px}
 .actions{display:flex;flex-direction:column;gap:10px}
 .btn-take{width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;
-border:none;border-radius:13px;padding:15px;font-family:'Unbounded',sans-serif;
-font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(232,25,44,.3);transition:all .2s}
+border:none;border-radius:13px;padding:14px 12px;font-family:'Unbounded',sans-serif;
+font-size:12px;font-weight:700;line-height:1.4;white-space:normal;cursor:pointer;
+box-shadow:0 6px 18px rgba(232,25,44,.3);transition:all .2s}
 .btn-take:hover{transform:translateY(-2px)}
 .btn-respin{width:100%;background:#fff;color:#666;border:2px solid #E8E8E8;
 border-radius:13px;padding:13px;font-family:'Nunito',sans-serif;font-size:14px;
@@ -206,8 +207,9 @@ text-transform:uppercase;letter-spacing:1px;margin-bottom:9px}
 .fb-item .fb-text{font-size:13px;color:rgba(255,255,255,.85);font-weight:700;line-height:1.4}
 .fb-item .fb-text strong{color:#fff}
 .final-cta{width:100%;max-width:340px;background:linear-gradient(135deg,#E8192C,#FF5C35);
-color:#fff;border:none;border-radius:16px;padding:17px;font-family:'Unbounded',sans-serif;
-font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 8px 28px rgba(232,25,44,.45);
+color:#fff;border:none;border-radius:16px;padding:16px 14px;font-family:'Unbounded',sans-serif;
+font-size:13px;font-weight:700;line-height:1.4;white-space:normal;cursor:pointer;
+box-shadow:0 8px 28px rgba(232,25,44,.45);
 transition:all .2s;margin-bottom:8px;position:relative;overflow:hidden}
 .final-cta::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
 background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
@@ -261,6 +263,18 @@ box-shadow:0 4px 16px rgba(232,25,44,.1);transition:all .2s;animation:modal-pop 
 .prev-prize .pp-lbl{font-size:10px;font-weight:900;color:#E8192C;text-transform:uppercase;letter-spacing:1px}
 .prev-prize .pp-name{font-size:13px;font-weight:800;color:#1A1A2E;line-height:1.3}
 .prev-prize .pp-arrow{margin-left:auto;font-size:18px;color:#E8192C;flex-shrink:0}
+.sale-points{background:#FFF8F5;border-radius:13px;padding:13px 15px;border:1px solid rgba(232,25,44,.12)}
+.sale-points .sp-title{font-size:11px;font-weight:900;color:#E8192C;text-transform:uppercase;letter-spacing:.8px;margin-bottom:9px}
+.sp-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px}
+.sp-item:last-child{margin-bottom:0}
+.sp-item .sp-check{color:#E8192C;font-size:13px;font-weight:900;flex-shrink:0;line-height:1.4}
+.sp-item .sp-text{font-size:13px;color:#555;font-weight:700;line-height:1.45}
+.sp-item .sp-text strong{color:#1A1A2E}
+.price-anchor{text-align:center;padding:10px 14px;background:linear-gradient(135deg,#FFF0F1,#FFF5EC);
+border-radius:12px;border:1px dashed rgba(232,25,44,.3)}
+.price-anchor .pa-old{font-size:13px;color:#aaa;font-weight:800;text-decoration:line-through;margin-right:8px}
+.price-anchor .pa-new{font-family:'Unbounded',sans-serif;font-size:19px;font-weight:900;color:#E8192C}
+.price-anchor .pa-note{display:block;font-size:11px;color:#999;font-weight:700;margin-top:3px}
 </style>
 </head>
 <body>
@@ -419,28 +433,28 @@ var COLORS=[
 var SEG=[
   {label:['Скидка','20%'],emoji:'🏷️',icon:'discount.PNG',prize:'Скидка 20% на абонемент!',promo:'LUCKY',
    desc:'Укажи промокод при оформлении — и скидка 20% применится автоматически! Промокод действует 48 часов.',
-   w:22,isFinal:true,isDiscount:true},
+   w:0,isFinal:true,isDiscount:true}, // только последнее вращение (гарантированно)
   {label:['Рецепты','диетолога'],emoji:'🥗',icon:'menu.png',prize:'Рецепты от диетолога — PDF!',
    desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
-   w:18,isMenuPdf:true},
+   w:120,isMenuPdf:true}, // часто
   {label:['Бесплатная','тренировка'],emoji:'🎽',icon:'free.PNG',prize:'Бесплатная тренировка!',
    desc:'Ты выиграла одну из лучших тренировок клуба ШАГАЙ ДОМА! Нажми кнопку ниже, чтобы начать шагать! 🔥',
-   w:16,isTraining:true},
+   w:250,isTraining:true}, // очень часто
   {label:['Бесплатный','абонемент'],emoji:'🏆',icon:'prize.PNG',prize:'🏆 Бесплатный абонемент!',
    desc:'Невероятно! Ты выиграла супер приз: бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
-   w:0,isJackpot:true},
+   w:1,isJackpot:true}, // ~1 из 1000
   {label:['Интенсив','"Стройные','ноги"'],emoji:'🦵',icon:'promo.PNG',prize:'Бесплатный доступ к интенсиву «Стройные ноги»!',
-   desc:'Ты выиграла бесплатный доступ к новому интенсиву «Стройные и здоровые ноги» — 7 дней тренировок для лёгкости и красоты ног! Нажми кнопку ниже, чтобы забрать доступ.',
-   w:14,isLegsIntensive:true},
+   desc:'Ты выиграла бесплатный доступ к новому интенсиву «Стройные и здоровые ноги» — 7 дней тренировок для лёгкости и красоты ног! Старт — 27 июля. Нажми кнопку ниже, чтобы забрать доступ.',
+   w:10,isLegsIntensive:true}, // ~10 из 1000
   {label:['Секретный','тариф 1 мес'],emoji:'🕵️',icon:'secret1.PNG',prize:'Секретный тариф — 1 месяц!',
    desc:'Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.',
-   w:10,is1Month:true},
+   w:119,is1Month:true}, // часто
   {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',icon:'secretalways.PNG',prize:'Секретный тариф НАВСЕГДА!',
    desc:'Уникальный тариф, которого нет в продаже — доступ НАВСЕГДА за 8990 руб.! Возможность приобрести вечный абонемент только для счастливчиков в колесе удачи.',
-   w:8,isForever:true},
+   w:250,isForever:true}, // очень часто
   {label:['Крути','ещё раз!'],emoji:'🔄',icon:'again.PNG',prize:'Крути ещё раз!',
    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
-   w:14,isRetry:true},
+   w:250,isRetry:true}, // очень часто
 ];
 for(var _i=0;_i<SEG.length;_i++){SEG[_i].bg=COLORS[_i%COLORS.length].bg;SEG[_i].fg=COLORS[_i%COLORS.length].fg;}
 
@@ -800,6 +814,17 @@ function addUpsell(parent,text,btnLabel,fn){
   var btn=document.createElement('button');btn.className='btn-upsell';btn.textContent=btnLabel;btn.onclick=fn;
   block.appendChild(btn);parent.appendChild(block);
 }
+function addSalePoints(parent,title,items){
+  var b=document.createElement('div');b.className='sale-points';
+  var html='<div class="sp-title">'+title+'</div>';
+  items.forEach(function(it){html+='<div class="sp-item"><span class="sp-check">✓</span><span class="sp-text">'+it+'</span></div>';});
+  b.innerHTML=html;parent.appendChild(b);
+}
+function addPriceAnchor(parent,oldPrice,newPrice,note){
+  var b=document.createElement('div');b.className='price-anchor';
+  b.innerHTML=(oldPrice?'<span class="pa-old">'+oldPrice+'</span>':'')+'<span class="pa-new">'+newPrice+'</span>'+(note?'<span class="pa-note">'+note+'</span>':'');
+  parent.appendChild(b);
+}
 function mkBtn(p,l,fn){var b=document.createElement('button');b.className='btn-take';b.innerHTML=l;b.onclick=function(){suppressExitFor(4000);fn();};p.appendChild(b);}
 
 // ── MODAL ─────────────────────────────────────────────────────────────────────
@@ -830,7 +855,7 @@ function showModal(idx,isReturn){
   else badge.style.display='none';
 
   var acts=document.getElementById('mActions');acts.innerHTML='';
-  if(!s.isRetry&&!s.isJackpot&&(s.isDiscount||s.isFinal||fin||s.is1Month||s.isForever||s.isLegsIntensive)) addReviews(acts);
+  if(!s.isRetry&&!s.isJackpot&&(s.isDiscount||s.isFinal||fin||s.isLegsIntensive)) addReviews(acts);
 
   if(s.isJackpot){
     acts.innerHTML='<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:Unbounded,sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>';
@@ -855,12 +880,33 @@ function showModal(idx,isReturn){
     mkBtn(acts,'🦵 Забрать бесплатный доступ к интенсиву!',function(){openPurchaseUrl(LEGS_INTENSIVE_URL);});
   } else if(s.is1Month){
     addTimer(acts,25*60,'Секретный тариф действует','1month');
+    addSalePoints(acts,'🕵️ Что внутри тарифа',[
+      '<strong>350+ тренировок клуба</strong> — весь каталог на месяц',
+      'Попробуй клуб <strong>без долгих обязательств</strong>',
+      '<strong>Секретная цена</strong> — в открытой продаже такого тарифа нет',
+      'Понравится — продлишь на 3, 6 месяцев или навсегда'
+    ]);
     mkBtn(acts,'🕵️ Забрать секретный тариф на месяц!',function(){openPurchaseUrl(URL_1MONTH);});
+    addReviews(acts);
   } else if(s.isForever){
     addTimer(acts,20*60,'Уникальное предложение исчезнет через','forever');
+    addSalePoints(acts,'🔑 Почему это лучший тариф клуба',[
+      '<strong>350+ тренировок + все новинки</strong> — навсегда, без доплат',
+      'Одна оплата — <strong>больше никаких продлений</strong>',
+      'Все будущие интенсивы клуба <strong>уже включены</strong>',
+      'Тарифа нет в продаже — <strong>только для победителей колеса</strong>'
+    ]);
+    addPriceAnchor(acts,'11 960 ₽ за год','8990 ₽ навсегда','Дешевле, чем один год по обычной цене клуба');
     mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){openPurchaseUrl(URL_FOREVER);});
+    addReviews(acts);
   } else if(s.isDiscount||fin){
     addTimer(acts,48*60*60,'Промокод LUCKY сгорит через','lucky');
+    addSalePoints(acts,'🏷️ Что даёт абонемент со скидкой',[
+      '<strong>350+ тренировок</strong> — шагай дома в любое время',
+      'Результат <strong>от -1 до -4 кг</strong> уже за первую неделю',
+      '<strong>10 000 женщин</strong> рядом — самое тёплое сообщество',
+      'Скидка 20% применится по промокоду <strong>LUCKY</strong>'
+    ]);
     mkBtn(acts,'🛒 Перейти к покупке со скидкой 20%',function(){openPurchaseUrl(BUY_URL);});
   } else {
     mkBtn(acts,'✅ Забрать приз!',function(){closeModal();clearLastPrize();});
