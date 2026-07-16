@@ -378,10 +378,10 @@ border-radius:12px;border:1px dashed rgba(232,25,44,.3)}
 
 <script>
 var FORMSPREE_URL='https://formspree.io/f/mvzvawok';
-var BUY_URL='https://walk-walk.ru/?utm_source=fortuna';
-var LEGS_INTENSIVE_URL='https://my.walk-walk.ru/legsfor/?utm_source=fortuna';
-var URL_1MONTH='https://my.walk-walk.ru/1mounthfor?utm_source=website&utm_medium=game&utm_campaign=wheel';
-var URL_FOREVER='https://my.walk-walk.ru/alwaysclub_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
+var BUY_URL='https://walk-walk.ru/';
+var LEGS_INTENSIVE_URL='https://my.walk-walk.ru/legsfor';
+var URL_1MONTH='https://my.walk-walk.ru/mounthfor';
+var URL_FOREVER='https://my.walk-walk.ru/alwaysfor';
 var AD_VIDEO_URL='https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1&mute=0';
 var AD_VIDEO_DIRECT='https://vk.com/video-222534261_456241523';
 var PRIZE_VIDEO_URL='https://vk.com/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1&mute=0';
@@ -445,7 +445,7 @@ var COLORS=[
   {bg:'#9A0E1C',fg:'#fff'},{bg:'#FAB95B',fg:'#3D2000'},
 ];
 var SEG=[
-  {label:['Скидка','20%'],emoji:'🏷️',icon:'discount.PNG',prize:'Скидка 20% на абонемент!',promo:'LUCKY',
+  {label:['Скидка','20%'],emoji:'🏷️',icon:'discount.PNG',prize:'Скидка 20% на абонемент!',promo:'LUCKYWHEEL',
    desc:'Укажи промокод при оформлении — и скидка 20% применится автоматически! Промокод действует 48 часов.',
    w:0,isFinal:true,isDiscount:true}, // только последнее вращение (гарантированно)
   {label:['Рецепты','диетолога'],emoji:'🥗',icon:'menu.png',prize:'Рецепты от диетолога — PDF!',
@@ -962,7 +962,7 @@ function showModal(idx,isReturn){
     mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){openPurchaseUrl(URL_FOREVER);});
     addReviews(acts);
   } else if(s.isDiscount||fin){
-    addTimer(acts,48*60*60,'Промокод LUCKY сгорит через','lucky');
+    addTimer(acts,48*60*60,'Промокод LUCKYWHEEL сгорит через','LUCKYWHEEL');
     addSalePoints(acts,'🏷️ Что даёт абонемент со скидкой',[
       '<strong>350+ тренировок</strong> — шагай дома в любое время',
       'Результат <strong>от -1 до -4 кг</strong> уже за первую неделю',
