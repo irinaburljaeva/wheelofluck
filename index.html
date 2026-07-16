@@ -197,15 +197,10 @@ color:#FF6B35;letter-spacing:5px}
 text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
 .final-timer-digits{font-family:'Unbounded',sans-serif;font-size:26px;font-weight:900;color:#fff}
 .final-timer-digits .ftd{color:#FF6B35}
-.final-benefits{width:100%;max-width:340px;background:rgba(255,255,255,.05);
-border-radius:14px;padding:13px 16px;margin-bottom:14px}
-.final-benefits .fb-title{font-size:11px;font-weight:900;color:rgba(255,255,255,.55);
-text-transform:uppercase;letter-spacing:1px;margin-bottom:9px}
-.fb-item{display:flex;align-items:flex-start;gap:9px;margin-bottom:8px}
-.fb-item:last-child{margin-bottom:0}
-.fb-item .fb-check{color:#FF6B35;font-size:13px;font-weight:900;flex-shrink:0;line-height:1.4}
-.fb-item .fb-text{font-size:13px;color:rgba(255,255,255,.85);font-weight:700;line-height:1.4}
-.fb-item .fb-text strong{color:#fff}
+.final-stats{width:100%;max-width:340px;display:flex;gap:8px;margin-bottom:14px}
+.fs-chip{flex:1;background:rgba(255,255,255,.06);border-radius:13px;padding:11px 6px;text-align:center}
+.fs-chip .fs-num{font-family:'Unbounded',sans-serif;font-size:15px;font-weight:900;color:#FF6B35;line-height:1.1}
+.fs-chip .fs-lbl{font-size:10px;color:rgba(255,255,255,.6);font-weight:700;margin-top:3px;line-height:1.25}
 .final-cta{width:100%;max-width:340px;background:linear-gradient(135deg,#E8192C,#FF5C35);
 color:#fff;border:none;border-radius:16px;padding:16px 14px;font-family:'Unbounded',sans-serif;
 font-size:13px;font-weight:700;line-height:1.4;white-space:normal;cursor:pointer;
@@ -1004,7 +999,7 @@ function showFinalScreen(){
   // случайные отзывы в финале
   var fr=document.getElementById('finalReviews');
   fr.innerHTML='';
-  shuffle(REVIEWS).slice(0,3).forEach(function(r){
+  shuffle(REVIEWS).slice(0,1).forEach(function(r){
     var d=document.createElement('div');d.className='final-review';
     d.innerHTML='<div class="final-review-text">'+r.text+'</div><div class="final-review-author">'+r.author+' — '+r.result+'</div>';
     fr.appendChild(d);
@@ -1046,12 +1041,10 @@ function copyFinalPromo(){
     <div class="final-timer-label">Промокод сгорит через</div>
     <div class="final-timer-digits" id="finalTimerDigits">47:59:59</div>
   </div>
-  <div class="final-benefits">
-    <div class="fb-title">Что даёт абонемент</div>
-    <div class="fb-item"><span class="fb-check">✓</span><span class="fb-text"><strong>350+ тренировок</strong> — шагай дома в любое время</span></div>
-    <div class="fb-item"><span class="fb-check">✓</span><span class="fb-text">Результат <strong>от -1 до -4 кг</strong> уже за первую неделю</span></div>
-    <div class="fb-item"><span class="fb-check">✓</span><span class="fb-text"><strong>10 000 женщин</strong> рядом — самое тёплое сообщество</span></div>
-    <div class="fb-item"><span class="fb-check">✓</span><span class="fb-text">Без диет, зала и оборудования — <strong>хватит 2 метров</strong></span></div>
+  <div class="final-stats">
+    <div class="fs-chip"><div class="fs-num">350+</div><div class="fs-lbl">тренировок дома</div></div>
+    <div class="fs-chip"><div class="fs-num">−1…4 кг</div><div class="fs-lbl">за первую неделю</div></div>
+    <div class="fs-chip"><div class="fs-num">10 000</div><div class="fs-lbl">женщин в клубе</div></div>
   </div>
   <button class="final-cta" onclick="openPurchaseUrl('https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel_final')">
     🛒 Забрать скидку 20% сейчас!
