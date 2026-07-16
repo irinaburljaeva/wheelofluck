@@ -324,7 +324,7 @@ margin-bottom:10px;transition:all .2s}
 <script>
 var FORMSPREE_URL='https://formspree.io/f/mvzvawok';
 var BUY_URL='https://walk-walk.ru/?utm_source=fortuna';
-var PROMO490_URL='https://my.walk-walk.ru/legsfor/';
+var LEGS_INTENSIVE_URL='https://my.walk-walk.ru/legsfor/?utm_source=fortuna';
 var URL_1MONTH='https://my.walk-walk.ru/1mounthfor?utm_source=website&utm_medium=game&utm_campaign=wheel';
 var URL_FOREVER='https://my.walk-walk.ru/alwaysclub_ir?utm_source=website&utm_medium=game&utm_campaign=wheel';
 var AD_VIDEO_URL='https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1&mute=0';
@@ -379,9 +379,9 @@ var SEG=[
   {label:['Бесплатный','абонемент'],emoji:'🏆',icon:'prize.PNG',prize:'🏆 Бесплатный абонемент!',
    desc:'Невероятно! Ты выиграла супер приз: бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
    w:0,isJackpot:true},
-  {label:['Промо-бокс'],emoji:'🎁',icon:'promo.PNG',prize:'Промо-бокс за 490 руб!',
-   desc:'Эксклюзивное предложение, которого нет в продаже! Всего 490 руб — несколько наших лучших тренировок, трекеры привычек, меню на день от диетолога.',
-   w:14,isPromo490:true},
+  {label:['Интенсив','"Стройные','ноги"'],emoji:'🦵',icon:'promo.PNG',prize:'Бесплатный доступ к интенсиву «Стройные ноги»!',
+   desc:'Ты выиграла бесплатный доступ к новому интенсиву «Стройные и здоровые ноги» — 7 дней тренировок для лёгкости и красоты ног! Нажми кнопку ниже, чтобы забрать доступ.',
+   w:14,isLegsIntensive:true},
   {label:['Секретный','тариф 1 мес'],emoji:'🕵️',icon:'secret1.PNG',prize:'Секретный тариф — 1 месяц!',
    desc:'Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.',
    w:10,is1Month:true},
@@ -694,7 +694,7 @@ function showModal(idx,isReturn){
   else badge.style.display='none';
 
   var acts=document.getElementById('mActions');acts.innerHTML='';
-  if(!s.isRetry&&!s.isJackpot&&(s.isDiscount||s.isFinal||fin||s.is1Month||s.isForever||s.isPromo490)) addReviews(acts);
+  if(!s.isRetry&&!s.isJackpot&&(s.isDiscount||s.isFinal||fin||s.is1Month||s.isForever||s.isLegsIntensive)) addReviews(acts);
 
   if(s.isJackpot){
     acts.innerHTML='<div style="background:#FFF5F6;border-radius:13px;padding:16px 14px;margin-bottom:4px"><div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:10px;line-height:1.5">📧 Оставь свою почту — мы активируем твой бесплатный абонемент:</div><input id="jackpotEmail" type="email" placeholder="твоя@почта.ru" style="width:100%;border:2px solid #E8E8E8;border-radius:10px;padding:12px 14px;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s" onfocus="this.style.borderColor=\'#E8192C\'" onblur="this.style.borderColor=\'#E8E8E8\'"><button onclick="submitJackpot()" style="width:100%;background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:11px;padding:14px;font-family:Unbounded,sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 16px rgba(232,25,44,.3)">🏆 Получить бесплатный абонемент!</button><div id="jackpotStatus" style="font-size:12px;text-align:center;margin-top:8px;font-weight:700;color:#aaa"></div></div>';
@@ -713,9 +713,9 @@ function showModal(idx,isReturn){
     addTimer(acts,20*60,'Тренировка доступна ограниченное время');
     mkBtn(acts,'▶️ Смотреть тренировку прямо сейчас!',function(){closeModal();showPrizeVideo();});
     addUpsell(acts,'💡 Понравилась тренировка? В клубе таких 350+ — 3 месяца за 2990 руб!','🏃‍♀️ Вступить в клуб за 2990 руб',function(){openPurchaseUrl(BUY_URL);});
-  } else if(s.isPromo490){
-    addTimer(acts,30*60,'Спецпредложение сгорит через');
-    mkBtn(acts,'🎁 Получить промо-бокс за 490 руб!',function(){openPurchaseUrl(PROMO490_URL);});
+  } else if(s.isLegsIntensive){
+    addTimer(acts,30*60,'Бесплатный доступ активен ещё');
+    mkBtn(acts,'🦵 Забрать бесплатный доступ к интенсиву!',function(){openPurchaseUrl(LEGS_INTENSIVE_URL);});
   } else if(s.is1Month){
     addTimer(acts,25*60,'Секретный тариф действует');
     mkBtn(acts,'🕵️ Забрать секретный тариф на месяц!',function(){openPurchaseUrl(URL_1MONTH);});
