@@ -501,6 +501,7 @@ initUI();
 // ── EXIT-INTENT ───────────────────────────────────────────────────────────────
 var exitShown=false,exitEnabled=false;
 var _suppressExit=false;
+var videoOpen=false;
 function suppressExitFor(ms){
   _suppressExit=true;
   clearTimeout(window._suppressTimer);
@@ -512,15 +513,15 @@ function openPurchaseUrl(url){
 }
 function enableExitIntent(){exitEnabled=true;}
 document.addEventListener('visibilitychange',function(){
-  if(document.hidden&&exitEnabled&&!exitShown&&!_suppressExit) showExitPopup();
+  if(document.hidden&&exitEnabled&&!exitShown&&!_suppressExit&&!videoOpen) showExitPopup();
 });
 document.addEventListener('mouseleave',function(e){
-  if(e.clientY<10&&exitEnabled&&!exitShown&&!_suppressExit) showExitPopup();
+  if(e.clientY<10&&exitEnabled&&!exitShown&&!_suppressExit&&!videoOpen) showExitPopup();
 });
 (function(){
   history.pushState(null,'',location.href);
   window.addEventListener('popstate',function(){
-    if(exitEnabled&&!exitShown&&!_suppressExit){showExitPopup();history.pushState(null,'',location.href);}
+    if(exitEnabled&&!exitShown&&!_suppressExit&&!videoOpen){showExitPopup();history.pushState(null,'',location.href);}
   });
 })();
 function showExitPopup(){exitShown=true;document.getElementById('exitPopup').classList.add('show');}
@@ -581,6 +582,7 @@ function updateDots(){var used=MAX_SPINS-spinsLeft;for(var i=1;i<=MAX_SPINS;i++)
 // ── VIDEO ─────────────────────────────────────────────────────────────────────
 function showAdVideo(callback){
   window._adCallback=callback;
+  videoOpen=true;
   var frame=document.getElementById('vframe'),fw=document.querySelector('.vframe-wrap');
   document.getElementById('skipBtn').style.display='none';
   document.getElementById('vcloseBtn').style.display='none';
@@ -602,11 +604,16 @@ function buildFallback(o){
   var t=document.createElement('div');t.style.cssText='font-size:12px;color:rgba(255,255,255,.45);font-weight:700;text-transform:uppercase;letter-spacing:1px';t.textContent=o.title||'';
   var d=document.createElement('div');d.style.cssText='font-size:15px;color:#fff;font-weight:800;text-align:center;line-height:1.5';d.innerHTML=o.desc||'';
   var b=document.createElement('button');b.style.cssText='background:linear-gradient(135deg,#E8192C,#FF5C35);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:Nunito,sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(232,25,44,.4)';
-  b.textContent=o.btnText||'▶️';b.onclick=function(){window.open(o.btnUrl,'_blank');};
+  var skipped=false;
+  b.textContent=o.btnText||'▶️';b.onclick=function(){
+    window.open(o.btnUrl,'_blank');
+    if(o.showSkip&&o.onSkip&&!skipped){skipped=true;o.onSkip();}
+  };
   fb.appendChild(t);fb.appendChild(d);fb.appendChild(b);
   if(o.showSkip&&o.onSkip){
     var sw=document.createElement('div');fb.appendChild(sw);var sec=5;
     (function tick(){
+      if(skipped) return;
       if(sec>0){sw.innerHTML='<span style="font-size:12px;color:rgba(255,255,255,.3);font-weight:700">Пропустить через '+sec+'...</span>';sec--;setTimeout(tick,1000);}
       else{var sb=document.createElement('button');sb.style.cssText='background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:7px 18px;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;cursor:pointer';sb.textContent='Пропустить ✕';sb.onclick=o.onSkip;sw.innerHTML='';sw.appendChild(sb);var sk=document.getElementById('skipBtn');if(sk){sk.style.display='block';sk.disabled=false;sk.textContent='Пропустить ✕';}}
     })();
@@ -615,12 +622,15 @@ function buildFallback(o){
 }
 function skipAd(){
   clearInterval(skipTimer);
+  videoOpen=false;
+  suppressExitFor(4000);
   document.getElementById('vframe').src='';document.getElementById('vframe').classList.remove('loaded');
   document.getElementById('voverlay').classList.remove('show');
   var fb=document.getElementById('vFallback');if(fb) fb.remove();
   if(window._adCallback){window._adCallback();window._adCallback=null;}
 }
 function showPrizeVideo(){
+  videoOpen=true;
   var frame=document.getElementById('vframe'),fw=document.querySelector('.vframe-wrap');
   document.getElementById('skipBtn').style.display='none';document.getElementById('vcloseBtn').style.display='flex';
   document.getElementById('voverlay').classList.add('show');
@@ -637,6 +647,8 @@ function showPrizeVideo(){
   frame.onload=function(){try{if(frame.contentDocument&&frame.contentDocument.body&&frame.contentDocument.body.innerHTML.trim()==='') return;}catch(e){} fb.style.display='none';frame.classList.add('loaded');};
 }
 function closeVideo(){
+  videoOpen=false;
+  suppressExitFor(4000);
   document.getElementById('vframe').src='';document.getElementById('vframe').classList.remove('loaded');
   document.getElementById('voverlay').classList.remove('show');
   var fb=document.getElementById('vFallback');if(fb) fb.remove();
@@ -664,7 +676,7 @@ function addUpsell(parent,text,btnLabel,fn){
   var btn=document.createElement('button');btn.className='btn-upsell';btn.textContent=btnLabel;btn.onclick=fn;
   block.appendChild(btn);parent.appendChild(block);
 }
-function mkBtn(p,l,fn){var b=document.createElement('button');b.className='btn-take';b.innerHTML=l;b.onclick=fn;p.appendChild(b);}
+function mkBtn(p,l,fn){var b=document.createElement('button');b.className='btn-take';b.innerHTML=l;b.onclick=function(){suppressExitFor(4000);fn();};p.appendChild(b);}
 
 // ── MODAL ─────────────────────────────────────────────────────────────────────
 function showModal(idx,isReturn){
@@ -703,6 +715,7 @@ function showModal(idx,isReturn){
     var pdl=document.createElement('div');pdl.id='pdfLoading';pdl.className='pdf-loading';pdl.textContent='⏳ Идёт скачивание PDF...';acts.appendChild(pdl);
     var pdfBtn=document.createElement('button');pdfBtn.className='btn-take';pdfBtn.innerHTML='📥 Скачать рецепты PDF бесплатно!';
     pdfBtn.onclick=function(){
+      suppressExitFor(4000);
       pdfBtn.disabled=true;pdfBtn.innerHTML='⏳ Скачивается...';pdl.classList.add('show');
       var a=document.createElement('a');a.href='menu.pdf';a.download='menu.pdf';document.body.appendChild(a);a.click();document.body.removeChild(a);
       setTimeout(function(){pdfBtn.disabled=false;pdfBtn.innerHTML='📥 Скачать рецепты PDF ещё раз';pdl.classList.remove('show');pdl.textContent='✅ Файл скачан! Проверь папку «Загрузки»';pdl.style.display='block';pdl.style.color='#22aa55';pdl.style.background='#F0FFF4';},2000);
@@ -732,7 +745,7 @@ function showModal(idx,isReturn){
   if(spinsLeft>0&&!fin&&!s.isJackpot){
     var br=document.createElement('button');br.className='btn-respin';
     br.textContent='🎯 Крутить ещё раз ('+spinsLeft+' вращени'+(spinsLeft===1?'е':'я')+')';
-    br.onclick=function(){clearLastPrize();closeModal();btnOn();};acts.appendChild(br);
+    br.onclick=function(){suppressExitFor(4000);clearLastPrize();closeModal();btnOn();};acts.appendChild(br);
     if(!isReturn){
       var w=document.createElement('div');w.className='respin-warn';w.textContent='⚠️ Если крутишь снова — текущий приз сгорает!';acts.appendChild(w);
     }
@@ -744,6 +757,7 @@ function showModal(idx,isReturn){
 function closeModal(){clearInterval(prizeTimerInterval);document.getElementById('overlay').classList.remove('show');}
 
 function submitJackpot(){
+  suppressExitFor(4000);
   var email=document.getElementById('jackpotEmail').value.trim(),status=document.getElementById('jackpotStatus');
   if(!email||!email.includes('@')||!email.includes('.')){status.style.color='#E8192C';status.textContent='Пожалуйста, введи корректный email 📧';return;}
   status.style.color='#aaa';status.textContent='Отправляем...';
