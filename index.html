@@ -391,6 +391,38 @@ var LS_DATE='shd_wheel_date',LS_SPINS='shd_wheel_spins',LS_SNUM='shd_wheel_spinn
 var LS_LAST_PRIZE='shd_wheel_last_prize';
 var MAX_SPINS=5;
 
+// ── UTM: ловим метки из URL (проброшены с сайта), храним 30 дней ─────────────
+var LS_UTM='shd_wheel_utm';
+function captureUtms(){
+  try{
+    var p=new URLSearchParams(location.search),u={},found=false;
+    ['utm_source','utm_medium','utm_campaign','utm_term'].forEach(function(k){
+      var v=p.get(k);if(v){u[k]=v;found=true;}
+    });
+    if(found){u._ts=Date.now();localStorage.setItem(LS_UTM,JSON.stringify(u));}
+  }catch(e){}
+}
+function getUtms(){
+  try{
+    var raw=localStorage.getItem(LS_UTM);if(!raw) return null;
+    var u=JSON.parse(raw);
+    if(u._ts&&(Date.now()-u._ts)<30*24*3600*1000) return u;
+  }catch(e){}
+  return null;
+}
+// Собирает финальный URL: унаследованные метки соцсети + маркер колеса
+function withUtm(url,label){
+  var u=getUtms()||{};
+  var params=[];
+  params.push('utm_source='+encodeURIComponent(u.utm_source||'wheel'));
+  if(u.utm_medium) params.push('utm_medium='+encodeURIComponent(u.utm_medium));
+  else params.push('utm_medium=wheel');
+  if(u.utm_campaign) params.push('utm_campaign='+encodeURIComponent(u.utm_campaign));
+  params.push('utm_content='+encodeURIComponent(label||'wheel'));
+  return url+(url.indexOf('?')>-1?'&':'?')+params.join('&');
+}
+captureUtms();
+
 function todayStr(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
 function loadState(){
   try{
@@ -447,7 +479,7 @@ var COLORS=[
 var SEG=[
   {label:['Скидка','20%'],emoji:'🏷️',icon:'discount.PNG',prize:'Скидка 20% на абонемент!',promo:'LUCKYWHEEL',
    desc:'Укажи промокод при оформлении — и скидка 20% применится автоматически! Промокод действует 48 часов.',
-   w:1,isFinal:true,isDiscount:true}, // только последнее вращение (гарантированно)
+   w:1,isFinal:true,isDiscount:true}, // + гарантированно на последнем вращении
   {label:['Рецепты','диетолога'],emoji:'🥗',icon:'menu.png',prize:'Рецепты от диетолога — PDF!',
    desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
    w:120,isMenuPdf:true}, // часто
@@ -456,19 +488,19 @@ var SEG=[
    w:250,isTraining:true}, // очень часто
   {label:['Бесплатный','абонемент'],emoji:'🏆',icon:'prize.PNG',prize:'🏆 Бесплатный абонемент!',
    desc:'Невероятно! Ты выиграла супер приз: бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
-   w:0,isJackpot:true}, 
+   w:0,isJackpot:true}, // отключён
   {label:['Интенсив','"Стройные','ноги"'],emoji:'🦵',icon:'promo.PNG',prize:'Бесплатный доступ к интенсиву «Стройные ноги»!',
    desc:'Ты выиграла бесплатный доступ к новому интенсиву «Стройные и здоровые ноги» — 7 дней тренировок для лёгкости и красоты ног! Старт — 27 июля. Нажми кнопку ниже, чтобы забрать доступ.',
-   w:0,isLegsIntensive:true},
+   w:0,isLegsIntensive:true}, // отключён — призы закончились
   {label:['Секретный','тариф 1 мес'],emoji:'🕵️',icon:'secret1.PNG',prize:'Секретный тариф — 1 месяц!',
    desc:'Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.',
-   w:119,is1Month:true}, 
+   w:119,is1Month:true}, // часто
   {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',icon:'secretalways.PNG',prize:'Секретный тариф НАВСЕГДА!',
    desc:'Уникальный тариф, которого нет в продаже — доступ НАВСЕГДА за 8990 руб.! Возможность приобрести вечный абонемент только для счастливчиков в колесе удачи.',
-   w:260,isForever:true}, 
+   w:260,isForever:true}, // очень часто
   {label:['Крути','ещё раз!'],emoji:'🔄',icon:'again.PNG',prize:'Крути ещё раз!',
    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
-   w:250,isRetry:true}, 
+   w:250,isRetry:true}, // очень часто
 ];
 for(var _i=0;_i<SEG.length;_i++){SEG[_i].bg=COLORS[_i%COLORS.length].bg;SEG[_i].fg=COLORS[_i%COLORS.length].fg;}
 
@@ -638,9 +670,9 @@ function suppressExitFor(ms){
   clearTimeout(window._suppressTimer);
   window._suppressTimer=setTimeout(function(){_suppressExit=false;},ms||4000);
 }
-function openPurchaseUrl(url){
+function openPurchaseUrl(url,label){
   suppressExitFor(4000);
-  window.open(url,'_blank');
+  window.open(withUtm(url,label),'_blank');
 }
 function enableExitIntent(){exitEnabled=true;}
 document.addEventListener('visibilitychange',function(){
@@ -932,14 +964,14 @@ function showModal(idx,isReturn){
       setTimeout(function(){pdfBtn.disabled=false;pdfBtn.innerHTML='📥 Скачать рецепты PDF ещё раз';pdl.classList.remove('show');pdl.textContent='✅ Файл скачан! Проверь папку «Загрузки»';pdl.style.display='block';pdl.style.color='#22aa55';pdl.style.background='#F0FFF4';},2000);
     };
     acts.appendChild(pdfBtn);
-    addUpsell(acts,'💡 Хочешь худеть ещё быстрее? Попробуй клуб 3 месяца за 2990 руб!','🚶‍♀️ Попробовать клуб за 2990 руб',function(){openPurchaseUrl(BUY_URL);});
+    addUpsell(acts,'💡 Хочешь худеть ещё быстрее? Попробуй клуб 3 месяца за 2990 руб!','🚶‍♀️ Попробовать клуб за 2990 руб',function(){openPurchaseUrl(BUY_URL,'wheel_pdf_upsell');});
   } else if(s.isTraining){
     addTimer(acts,20*60,'Тренировка доступна ограниченное время','training');
     mkBtn(acts,'▶️ Смотреть тренировку прямо сейчас!',function(){closeModal();showPrizeVideo();});
-    addUpsell(acts,'💡 Понравилась тренировка? В клубе таких 350+ — 3 месяца за 2990 руб!','🏃‍♀️ Вступить в клуб за 2990 руб',function(){openPurchaseUrl(BUY_URL);});
+    addUpsell(acts,'💡 Понравилась тренировка? В клубе таких 350+ — 3 месяца за 2990 руб!','🏃‍♀️ Вступить в клуб за 2990 руб',function(){openPurchaseUrl(BUY_URL,'wheel_training_upsell');});
   } else if(s.isLegsIntensive){
     addTimer(acts,30*60,'Бесплатный доступ активен ещё','legs');
-    mkBtn(acts,'🦵 Забрать бесплатный доступ к интенсиву!',function(){openPurchaseUrl(LEGS_INTENSIVE_URL);});
+    mkBtn(acts,'🦵 Забрать бесплатный доступ к интенсиву!',function(){openPurchaseUrl(LEGS_INTENSIVE_URL,'wheel_legs');});
   } else if(s.is1Month){
     addTimer(acts,25*60,'Секретный тариф действует','1month');
     addSalePoints(acts,'🕵️ Что внутри тарифа',[
@@ -948,7 +980,7 @@ function showModal(idx,isReturn){
       '<strong>Секретная цена</strong> — в открытой продаже такого тарифа нет',
       'Понравится — продлишь на 3, 6 месяцев или навсегда'
     ]);
-    mkBtn(acts,'🕵️ Забрать секретный тариф на месяц!',function(){openPurchaseUrl(URL_1MONTH);});
+    mkBtn(acts,'🕵️ Забрать секретный тариф на месяц!',function(){openPurchaseUrl(URL_1MONTH,'wheel_1month');});
     addReviews(acts);
   } else if(s.isForever){
     addTimer(acts,20*60,'Уникальное предложение исчезнет через','forever');
@@ -959,7 +991,7 @@ function showModal(idx,isReturn){
       'Тарифа нет в продаже — <strong>только для победителей колеса</strong>'
     ]);
     addPriceAnchor(acts,'11 960 ₽ за год','8990 ₽ навсегда','Дешевле, чем один год по обычной цене клуба');
-    mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){openPurchaseUrl(URL_FOREVER);});
+    mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){openPurchaseUrl(URL_FOREVER,'wheel_forever');});
     addReviews(acts);
   } else if(s.isDiscount||fin){
     addTimer(acts,48*60*60,'Промокод LUCKYWHEEL сгорит через','lucky');
@@ -969,7 +1001,7 @@ function showModal(idx,isReturn){
       '<strong>10 000 женщин</strong> рядом — самое тёплое сообщество',
       'Скидка 20% применится по промокоду <strong>LUCKYWHEEL</strong>'
     ]);
-    mkBtn(acts,'🛒 Перейти к покупке со скидкой 20%',function(){openPurchaseUrl(BUY_URL);});
+    mkBtn(acts,'🛒 Перейти к покупке со скидкой 20%',function(){openPurchaseUrl(BUY_URL,'wheel_discount');});
   } else {
     mkBtn(acts,'✅ Забрать приз!',function(){closeModal();clearLastPrize();});
   }
@@ -1113,7 +1145,7 @@ function copyFinalPromo(){
     <div class="fs-chip"><div class="fs-num">−1…4 кг</div><div class="fs-lbl">за первую неделю</div></div>
     <div class="fs-chip"><div class="fs-num">10 000</div><div class="fs-lbl">женщин в клубе</div></div>
   </div>
-  <button class="final-cta" onclick="openPurchaseUrl('https://walk-walk.ru/?utm_source=website&utm_medium=game&utm_campaign=wheel_final')">
+  <button class="final-cta" onclick="openPurchaseUrl('https://walk-walk.ru/','wheel_final')">
     🛒 Забрать скидку 20% сейчас!
   </button>
   <div class="final-guarantee">🔒 Оплата картой любого банка · Доступ сразу после оплаты</div>
@@ -1127,7 +1159,7 @@ function copyFinalPromo(){
     <div class="exit-headline" id="exitHeadline">Подожди!<br>Твой промокод сгорит</div>
     <div class="exit-sub" id="exitSub">Ты заработала скидку 20% на весь клуб.<br>Она действует только 48 часов — не упусти!</div>
     <div class="exit-promo" onclick="copyExitPromo()">LUCKYWHEEL</div>
-    <button class="exit-cta" id="exitCta" onclick="openPurchaseUrl(BUY_URL);closeExitPopup()">🛒 Купить со скидкой сейчас</button>
+    <button class="exit-cta" id="exitCta" onclick="openPurchaseUrl(BUY_URL,'wheel_exit');closeExitPopup()">🛒 Купить со скидкой сейчас</button>
     <span class="exit-dismiss" onclick="closeExitPopup()">Нет, я подожду до завтра</span>
   </div>
 </div>
