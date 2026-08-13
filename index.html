@@ -499,9 +499,9 @@ var SEG=[
   {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',icon:'secretalways.PNG',prize:'Секретный тариф НАВСЕГДА!',
    desc:'Уникальный тариф, которого нет в продаже — доступ НАВСЕГДА за 8990 руб.! Возможность приобрести вечный абонемент только для счастливчиков в колесе удачи.',
    w:260,isForever:true}, // очень часто
-  {label:['НАВСЕГДА','VIP'],emoji:'💎',icon:'vip.PNG',prize:'Тариф НАВСЕГДА VIP!',
-   desc:'Уникальная возможность, которой ещё не было в продаже — тариф НАВСЕГДА VIP за 19890 руб.! Включает бесплатное участие во всех новых марафонах и интенсивах клуба.',
-   w:15,isForeverVip:true}, // редко — эксклюзив
+  {label:['Секретный','тариф','НАВСЕГДА VIP'],emoji:'💎',icon:'vip.PNG',prize:'Секретный тариф НАВСЕГДА VIP!',
+   desc:'Абсолютный эксклюзив: тариф, которого никогда не было в открытой продаже! Секретный доступ НАВСЕГДА VIP за 19890 руб. — только для избранных счастливчиков в колесе удачи.',
+   w:250,isForeverVip:true}, // очень часто — но подаём как редчайший эксклюзив
   {label:['Крути','ещё раз!'],emoji:'🔄',icon:'again.PNG',prize:'Крути ещё раз!',
    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
    w:250,isRetry:true}, // очень часто
@@ -695,6 +695,7 @@ function showExitPopup(){
   exitShown=true;
   // Если сегодня выигран конкретный приз (не скидка) — напоминаем о нём вместо LUCKY
   var lp=loadLastPrize();
+  document.getElementById('exitTimerWrap').style.display='none';
   if(lp!==null&&SEG[lp]&&!SEG[lp].isRetry&&!SEG[lp].isJackpot&&!SEG[lp].isDiscount&&!SEG[lp].isFinal){
     var s=SEG[lp];
     document.getElementById('exitEmoji').textContent=s.emoji;
@@ -704,6 +705,9 @@ function showExitPopup(){
     var cta=document.getElementById('exitCta');
     cta.innerHTML='🎁 Забрать мой приз';
     cta.onclick=function(){closeExitPopup();showModal(lp,true);};
+  } else {
+    document.getElementById('exitTimerWrap').style.display='block';
+    setTimeout(function(){startPrizeTimer(secsLeft(getDeadline('lucky',48*60*60)),'exitTimerDigits');},30);
   }
   document.getElementById('exitPopup').classList.add('show');
 }
@@ -968,11 +972,27 @@ function showModal(idx,isReturn){
       setTimeout(function(){pdfBtn.disabled=false;pdfBtn.innerHTML='📥 Скачать рецепты PDF ещё раз';pdl.classList.remove('show');pdl.textContent='✅ Файл скачан! Проверь папку «Загрузки»';pdl.style.display='block';pdl.style.color='#22aa55';pdl.style.background='#F0FFF4';},2000);
     };
     acts.appendChild(pdfBtn);
-    addUpsell(acts,'💡 Хочешь худеть ещё быстрее? Попробуй клуб 3 месяца за 2990 руб!','🚶‍♀️ Попробовать клуб за 2990 руб',function(){openPurchaseUrl(BUY_URL,'wheel_pdf_upsell');});
+    addSalePoints(acts,'🔑 Раз уж ты здесь — секретный тариф НАВСЕГДА',[
+      '<strong>350+ тренировок клуба</strong> — доступ раз и навсегда',
+      'Результат <strong>от -1 до -4 кг</strong> уже за первую неделю',
+      'Одна оплата — <strong>больше никаких продлений</strong>',
+      'Тарифа нет в открытой продаже — <strong>только для участников колеса</strong>'
+    ]);
+    addPriceAnchor(acts,'11 960 ₽ за год','8990 ₽ навсегда','Дешевле, чем один год по обычной цене клуба');
+    mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА за 8990 ₽',function(){openPurchaseUrl(URL_FOREVER,'wheel_pdf_upsell');});
+    addReviews(acts);
   } else if(s.isTraining){
     addTimer(acts,20*60,'Тренировка доступна ограниченное время','training');
     mkBtn(acts,'▶️ Смотреть тренировку прямо сейчас!',function(){closeModal();showPrizeVideo();});
-    addUpsell(acts,'💡 Понравилась тренировка? В клубе таких 350+ — 3 месяца за 2990 руб!','🏃‍♀️ Вступить в клуб за 2990 руб',function(){openPurchaseUrl(BUY_URL,'wheel_training_upsell');});
+    addSalePoints(acts,'🔑 Понравилась тренировка? Есть кое-что получше',[
+      '<strong>350+ таких тренировок</strong> — доступ раз и навсегда',
+      'Результат <strong>от -1 до -4 кг</strong> уже за первую неделю',
+      'Одна оплата — <strong>больше никаких продлений</strong>',
+      'Секретный тариф <strong>не продаётся в открытую</strong> — только для участников колеса'
+    ]);
+    addPriceAnchor(acts,'11 960 ₽ за год','8990 ₽ навсегда','Дешевле, чем один год по обычной цене клуба');
+    mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА за 8990 ₽',function(){openPurchaseUrl(URL_FOREVER,'wheel_training_upsell');});
+    addReviews(acts);
   } else if(s.isLegsIntensive){
     addTimer(acts,30*60,'Бесплатный доступ активен ещё','legs');
     mkBtn(acts,'💧 Забрать бесплатный доступ к интенсиву!',function(){openPurchaseUrl(LEGS_INTENSIVE_URL,'wheel_legs');});
@@ -998,15 +1018,19 @@ function showModal(idx,isReturn){
     mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){openPurchaseUrl(URL_FOREVER,'wheel_forever');});
     addReviews(acts);
   } else if(s.isForeverVip){
-    addTimer(acts,20*60,'Уникальное VIP-предложение исчезнет через','forevervip');
-    addSalePoints(acts,'💎 Почему это лучший тариф клуба',[
+    var vipBadge=document.createElement('div');
+    vipBadge.style.cssText='text-align:center;font-size:11px;font-weight:900;color:#E8192C;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px';
+    vipBadge.innerHTML='🔒 Впервые открыт для избранных';
+    acts.insertBefore(vipBadge,acts.firstChild);
+    addTimer(acts,20*60,'Секретное VIP-предложение исчезнет через','forevervip');
+    addSalePoints(acts,'💎 Тариф, которого никогда не было в продаже',[
       '<strong>350+ тренировок + все новинки</strong> — навсегда, без доплат',
-      '<strong>Бесплатное участие во всех новых марафонах и интенсивах</strong> — без доплат',
+      '<strong>Бесплатное участие во всех новых марафонах и интенсивах</strong> — без доплат, навсегда',
       'Одна оплата — <strong>больше никаких продлений</strong>',
-      'Тарифа нет в продаже — <strong>только для избранных победителей колеса</strong>'
+      'Этого тарифа <strong>нет и не будет в открытой продаже</strong> — только для тех, кому повезло в колесе'
     ]);
-    addPriceAnchor(acts,null,'19 890 ₽ навсегда VIP','Включает все будущие марафоны и интенсивы бесплатно');
-    mkBtn(acts,'💎 Забрать тариф НАВСЕГДА VIP!',function(){openPurchaseUrl(URL_FOREVER_VIP,'wheel_forever_vip');});
+    addPriceAnchor(acts,null,'19 890 ₽ навсегда VIP','Секретная цена — доступна только сегодня и только тебе');
+    mkBtn(acts,'💎 Забрать секретный тариф НАВСЕГДА VIP!',function(){openPurchaseUrl(URL_FOREVER_VIP,'wheel_forever_vip');});
     addReviews(acts);
   } else if(s.isDiscount||fin){
     addTimer(acts,48*60*60,'Промокод LUCKYWHEEL сгорит через','lucky');
@@ -1174,6 +1198,7 @@ function copyFinalPromo(){
     <div class="exit-headline" id="exitHeadline">Подожди!<br>Твой промокод сгорит</div>
     <div class="exit-sub" id="exitSub">Ты заработала скидку 20% на весь клуб.<br>Она действует только 48 часов — не упусти!</div>
     <div class="exit-promo" onclick="copyExitPromo()">LUCKYWHEEL</div>
+    <div class="prize-timer" id="exitTimerWrap" style="display:none;margin:0 auto 16px"><span class="timer-icon">⏰</span><span class="timer-label">Сгорит через</span><span class="timer-sep">·</span><span class="timer-digits" id="exitTimerDigits">--:--</span></div>
     <button class="exit-cta" id="exitCta" onclick="openPurchaseUrl(BUY_URL,'wheel_exit');closeExitPopup()">🛒 Купить со скидкой сейчас</button>
     <span class="exit-dismiss" onclick="closeExitPopup()">Нет, я подожду до завтра</span>
   </div>
