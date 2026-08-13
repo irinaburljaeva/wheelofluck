@@ -929,6 +929,22 @@ function addPriceAnchor(parent,oldPrice,newPrice,note){
 }
 function mkBtn(p,l,fn){var b=document.createElement('button');b.className='btn-take';b.innerHTML=l;b.onclick=function(){suppressExitFor(4000);fn();};p.appendChild(b);}
 
+// Мягкий апсейл тарифа НАВСЕГДА в бесплатных призах.
+// Показываем компактно и только если тариф ещё не выпадал сегодня как приз —
+// иначе выглядит как подстроенная реклама и вызывает раздражение.
+function foreverAlreadyWon(){
+  var lp=loadLastPrize();
+  if(window._foreverSeen) return true;
+  return lp!==null&&SEG[lp]&&(SEG[lp].isForever||SEG[lp].isForeverVip);
+}
+function addForeverTeaser(parent,label){
+  if(foreverAlreadyWon()) return;
+  addUpsell(parent,
+    '💡 Кстати: в колесе прячется секретный тариф НАВСЕГДА — 350+ тренировок за одну оплату, без продлений. Если не выпадет — можешь забрать по ссылке:',
+    '🔑 Посмотреть тариф НАВСЕГДА',
+    function(){openPurchaseUrl(URL_FOREVER,label);});
+}
+
 // ── MODAL ─────────────────────────────────────────────────────────────────────
 function showModal(idx,isReturn){
   clearInterval(prizeTimerInterval);
@@ -972,27 +988,11 @@ function showModal(idx,isReturn){
       setTimeout(function(){pdfBtn.disabled=false;pdfBtn.innerHTML='📥 Скачать рецепты PDF ещё раз';pdl.classList.remove('show');pdl.textContent='✅ Файл скачан! Проверь папку «Загрузки»';pdl.style.display='block';pdl.style.color='#22aa55';pdl.style.background='#F0FFF4';},2000);
     };
     acts.appendChild(pdfBtn);
-    addSalePoints(acts,'🔑 Раз уж ты здесь — секретный тариф НАВСЕГДА',[
-      '<strong>350+ тренировок клуба</strong> — доступ раз и навсегда',
-      'Результат <strong>от -1 до -4 кг</strong> уже за первую неделю',
-      'Одна оплата — <strong>больше никаких продлений</strong>',
-      'Тарифа нет в открытой продаже — <strong>только для участников колеса</strong>'
-    ]);
-    addPriceAnchor(acts,'11 960 ₽ за год','8990 ₽ навсегда','Дешевле, чем один год по обычной цене клуба');
-    mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА за 8990 ₽',function(){openPurchaseUrl(URL_FOREVER,'wheel_pdf_upsell');});
-    addReviews(acts);
+    addForeverTeaser(acts,'wheel_pdf_upsell');
   } else if(s.isTraining){
     addTimer(acts,20*60,'Тренировка доступна ограниченное время','training');
     mkBtn(acts,'▶️ Смотреть тренировку прямо сейчас!',function(){closeModal();showPrizeVideo();});
-    addSalePoints(acts,'🔑 Понравилась тренировка? Есть кое-что получше',[
-      '<strong>350+ таких тренировок</strong> — доступ раз и навсегда',
-      'Результат <strong>от -1 до -4 кг</strong> уже за первую неделю',
-      'Одна оплата — <strong>больше никаких продлений</strong>',
-      'Секретный тариф <strong>не продаётся в открытую</strong> — только для участников колеса'
-    ]);
-    addPriceAnchor(acts,'11 960 ₽ за год','8990 ₽ навсегда','Дешевле, чем один год по обычной цене клуба');
-    mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА за 8990 ₽',function(){openPurchaseUrl(URL_FOREVER,'wheel_training_upsell');});
-    addReviews(acts);
+    addForeverTeaser(acts,'wheel_training_upsell');
   } else if(s.isLegsIntensive){
     addTimer(acts,30*60,'Бесплатный доступ активен ещё','legs');
     mkBtn(acts,'💧 Забрать бесплатный доступ к интенсиву!',function(){openPurchaseUrl(LEGS_INTENSIVE_URL,'wheel_legs');});
@@ -1007,6 +1007,7 @@ function showModal(idx,isReturn){
     mkBtn(acts,'🕵️ Забрать секретный тариф на месяц!',function(){openPurchaseUrl(URL_1MONTH,'wheel_1month');});
     addReviews(acts);
   } else if(s.isForever){
+    window._foreverSeen=true;
     addTimer(acts,20*60,'Уникальное предложение исчезнет через','forever');
     addSalePoints(acts,'🔑 Почему это лучший тариф клуба',[
       '<strong>350+ тренировок + все новинки</strong> — навсегда, без доплат',
@@ -1018,6 +1019,7 @@ function showModal(idx,isReturn){
     mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){openPurchaseUrl(URL_FOREVER,'wheel_forever');});
     addReviews(acts);
   } else if(s.isForeverVip){
+    window._foreverSeen=true;
     var vipBadge=document.createElement('div');
     vipBadge.style.cssText='text-align:center;font-size:11px;font-weight:900;color:#E8192C;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px';
     vipBadge.innerHTML='🔒 Впервые открыт для избранных';
