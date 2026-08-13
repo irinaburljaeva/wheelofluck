@@ -379,9 +379,10 @@ border-radius:12px;border:1px dashed rgba(232,25,44,.3)}
 <script>
 var FORMSPREE_URL='https://formspree.io/f/mvzvawok';
 var BUY_URL='https://walk-walk.ru/';
-var LEGS_INTENSIVE_URL='https://my.walk-walk.ru/legsfor';
+var LEGS_INTENSIVE_URL='https://my.walk-walk.ru/antiotekfor_1416';
 var URL_1MONTH='https://my.walk-walk.ru/mounthfor';
 var URL_FOREVER='https://my.walk-walk.ru/alwaysfor';
+var URL_FOREVER_VIP='https://my.walk-walk.ru/alwaysfor_vip';
 var AD_VIDEO_URL='https://vk.com/video_ext.php?oid=-222534261&id=456241523&hd=2&autoplay=1&mute=0';
 var AD_VIDEO_DIRECT='https://vk.com/video-222534261_456241523';
 var PRIZE_VIDEO_URL='https://vk.com/video_ext.php?oid=-222534261&id=456239060&hd=2&autoplay=1&mute=0';
@@ -489,8 +490,8 @@ var SEG=[
   {label:['Бесплатный','абонемент'],emoji:'🏆',icon:'prize.PNG',prize:'🏆 Бесплатный абонемент!',
    desc:'Невероятно! Ты выиграла супер приз: бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
    w:0,isJackpot:true}, // отключён
-  {label:['Интенсив','"Стройные','ноги"'],emoji:'🦵',icon:'promo.PNG',prize:'Бесплатный доступ к интенсиву «Стройные ноги»!',
-   desc:'Ты выиграла бесплатный доступ к новому интенсиву «Стройные и здоровые ноги» — 7 дней тренировок для лёгкости и красоты ног! Старт — 27 июля. Нажми кнопку ниже, чтобы забрать доступ.',
+  {label:['Антиотёчность','4.0'],emoji:'💧',icon:'promo.PNG',prize:'Бесплатное участие в интенсиве «Антиотёчность 4.0»!',
+   desc:'Ты выиграла бесплатное участие в новом интенсиве «Антиотёчность 4.0»! Нажми кнопку ниже, чтобы забрать доступ.',
    w:0,isLegsIntensive:true}, // отключён — призы закончились
   {label:['Секретный','тариф 1 мес'],emoji:'🕵️',icon:'secret1.PNG',prize:'Секретный тариф — 1 месяц!',
    desc:'Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.',
@@ -498,6 +499,9 @@ var SEG=[
   {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',icon:'secretalways.PNG',prize:'Секретный тариф НАВСЕГДА!',
    desc:'Уникальный тариф, которого нет в продаже — доступ НАВСЕГДА за 8990 руб.! Возможность приобрести вечный абонемент только для счастливчиков в колесе удачи.',
    w:260,isForever:true}, // очень часто
+  {label:['НАВСЕГДА','VIP'],emoji:'💎',icon:'vip.PNG',prize:'Тариф НАВСЕГДА VIP!',
+   desc:'Уникальная возможность, которой ещё не было в продаже — тариф НАВСЕГДА VIP за 19890 руб.! Включает бесплатное участие во всех новых марафонах и интенсивах клуба.',
+   w:15,isForeverVip:true}, // редко — эксклюзив
   {label:['Крути','ещё раз!'],emoji:'🔄',icon:'again.PNG',prize:'Крути ещё раз!',
    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
    w:250,isRetry:true}, // очень часто
@@ -971,7 +975,7 @@ function showModal(idx,isReturn){
     addUpsell(acts,'💡 Понравилась тренировка? В клубе таких 350+ — 3 месяца за 2990 руб!','🏃‍♀️ Вступить в клуб за 2990 руб',function(){openPurchaseUrl(BUY_URL,'wheel_training_upsell');});
   } else if(s.isLegsIntensive){
     addTimer(acts,30*60,'Бесплатный доступ активен ещё','legs');
-    mkBtn(acts,'🦵 Забрать бесплатный доступ к интенсиву!',function(){openPurchaseUrl(LEGS_INTENSIVE_URL,'wheel_legs');});
+    mkBtn(acts,'💧 Забрать бесплатный доступ к интенсиву!',function(){openPurchaseUrl(LEGS_INTENSIVE_URL,'wheel_legs');});
   } else if(s.is1Month){
     addTimer(acts,25*60,'Секретный тариф действует','1month');
     addSalePoints(acts,'🕵️ Что внутри тарифа',[
@@ -992,6 +996,17 @@ function showModal(idx,isReturn){
     ]);
     addPriceAnchor(acts,'11 960 ₽ за год','8990 ₽ навсегда','Дешевле, чем один год по обычной цене клуба');
     mkBtn(acts,'🔑 Забрать тариф НАВСЕГДА!',function(){openPurchaseUrl(URL_FOREVER,'wheel_forever');});
+    addReviews(acts);
+  } else if(s.isForeverVip){
+    addTimer(acts,20*60,'Уникальное VIP-предложение исчезнет через','forevervip');
+    addSalePoints(acts,'💎 Почему это лучший тариф клуба',[
+      '<strong>350+ тренировок + все новинки</strong> — навсегда, без доплат',
+      '<strong>Бесплатное участие во всех новых марафонах и интенсивах</strong> — без доплат',
+      'Одна оплата — <strong>больше никаких продлений</strong>',
+      'Тарифа нет в продаже — <strong>только для избранных победителей колеса</strong>'
+    ]);
+    addPriceAnchor(acts,null,'19 890 ₽ навсегда VIP','Включает все будущие марафоны и интенсивы бесплатно');
+    mkBtn(acts,'💎 Забрать тариф НАВСЕГДА VIP!',function(){openPurchaseUrl(URL_FOREVER_VIP,'wheel_forever_vip');});
     addReviews(acts);
   } else if(s.isDiscount||fin){
     addTimer(acts,48*60*60,'Промокод LUCKYWHEEL сгорит через','lucky');
