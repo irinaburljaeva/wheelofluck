@@ -393,11 +393,13 @@ var LS_LAST_PRIZE='shd_wheel_last_prize';
 var MAX_SPINS=5;
 
 // ── UTM: ловим метки из URL (проброшены с сайта), храним 30 дней ─────────────
+// utm_content теперь занят рекламной архитектурой — ловим и пробрасываем как есть.
+// Метка кнопки колеса живёт в utm_term.
 var LS_UTM='shd_wheel_utm';
 function captureUtms(){
   try{
     var p=new URLSearchParams(location.search),u={},found=false;
-    ['utm_source','utm_medium','utm_campaign','utm_term'].forEach(function(k){
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_group'].forEach(function(k){
       var v=p.get(k);if(v){u[k]=v;found=true;}
     });
     if(found){u._ts=Date.now();localStorage.setItem(LS_UTM,JSON.stringify(u));}
@@ -411,7 +413,7 @@ function getUtms(){
   }catch(e){}
   return null;
 }
-// Собирает финальный URL: унаследованные метки соцсети + маркер колеса
+// Собирает финальный URL: унаследованные метки соцсети/рекламы + метка кнопки колеса в utm_term
 function withUtm(url,label){
   var u=getUtms()||{};
   var params=[];
@@ -419,7 +421,9 @@ function withUtm(url,label){
   if(u.utm_medium) params.push('utm_medium='+encodeURIComponent(u.utm_medium));
   else params.push('utm_medium=wheel');
   if(u.utm_campaign) params.push('utm_campaign='+encodeURIComponent(u.utm_campaign));
-  params.push('utm_content='+encodeURIComponent(label||'wheel'));
+  if(u.utm_content) params.push('utm_content='+encodeURIComponent(u.utm_content));
+  if(u.utm_group) params.push('utm_group='+encodeURIComponent(u.utm_group));
+  params.push('utm_term='+encodeURIComponent(label||'wheel'));
   return url+(url.indexOf('?')>-1?'&':'?')+params.join('&');
 }
 captureUtms();
@@ -480,31 +484,31 @@ var COLORS=[
 var SEG=[
   {label:['Скидка','20%'],emoji:'🏷️',icon:'discount.PNG',prize:'Скидка 20% на абонемент!',promo:'LUCKYWHEEL',
    desc:'Укажи промокод при оформлении — и скидка 20% применится автоматически! Промокод действует 48 часов.',
-   w:1,isFinal:true,isDiscount:true}, 
+   w:1,isFinal:true,isDiscount:true}, // + гарантированно на последнем вращении
   {label:['Рецепты','диетолога'],emoji:'🥗',icon:'menu.png',prize:'Рецепты от диетолога — PDF!',
    desc:'Вкусные рецепты, которые не отложатся на талии! Скачай бесплатный PDF и готовь с удовольствием 🥗',
-   w:120,isMenuPdf:true},
+   w:120,isMenuPdf:true}, // часто
   {label:['Бесплатная','тренировка'],emoji:'🎽',icon:'free.PNG',prize:'Бесплатная тренировка!',
    desc:'Ты выиграла одну из лучших тренировок клуба ШАГАЙ ДОМА! Нажми кнопку ниже, чтобы начать шагать! 🔥',
-   w:249,isTraining:true}, 
+   w:249,isTraining:true},
   {label:['Бесплатный','абонемент'],emoji:'🏆',icon:'prize.PNG',prize:'🏆 Бесплатный абонемент!',
    desc:'Невероятно! Ты выиграла супер приз: бесплатный абонемент! Оставь свою почту — мы активируем доступ.',
-   w:1,isJackpot:true}, 
+   w:1,isJackpot:true},
   {label:['Антиотёчность','4.0'],emoji:'💧',icon:'promo.PNG',prize:'Бесплатное участие в интенсиве «Антиотёчность 4.0»!',
    desc:'Ты выиграла бесплатное участие в новом интенсиве «Антиотёчность 4.0»! Нажми кнопку ниже, чтобы забрать доступ.',
-   w:5, isLegsIntensive:true}, 
+   w:5,isLegsIntensive:true},
   {label:['Секретный','тариф 1 мес'],emoji:'🕵️',icon:'secret1.PNG',prize:'Секретный тариф — 1 месяц!',
    desc:'Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.',
-   w:119,is1Month:true},
+   w:119,is1Month:true}, // часто
   {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',icon:'secret always.PNG',prize:'Секретный тариф НАВСЕГДА!',
    desc:'Уникальный тариф, которого нет в продаже — доступ НАВСЕГДА за 8990 руб.! Возможность приобрести вечный абонемент только для счастливчиков в колесе удачи.',
-   w:260,isForever:true}, 
+   w:260,isForever:true}, // очень часто
   {label:['НАВСЕГДА','VIP'],emoji:'💎',icon:'forevervip.PNG',prize:'Секретный тариф НАВСЕГДА VIP!',
    desc:'Абсолютный эксклюзив, которого никогда не было в продаже! Бессрочный доступ ко всем тренировкам + ВСЕ НОВЫЕ ИНТЕНСИВЫ И МАРАФОНЫ клуба бесплатно — за одну оплату 19890 руб.',
-   w:245,isForeverVip:true}, 
+   w:245,isForeverVip:true},
   {label:['Крути','ещё раз!'],emoji:'🔄',icon:'again.PNG',prize:'Крути ещё раз!',
    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
-   w:250,isRetry:true}, 
+   w:250,isRetry:true}, // очень часто
 ];
 for(var _i=0;_i<SEG.length;_i++){SEG[_i].bg=COLORS[_i%COLORS.length].bg;SEG[_i].fg=COLORS[_i%COLORS.length].fg;}
 
