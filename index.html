@@ -939,8 +939,8 @@ function addPriceAnchor(parent,oldPrice,newPrice,note){
 }
 function mkBtn(p,l,fn){var b=document.createElement('button');b.className='btn-take';b.innerHTML=l;b.onclick=function(){suppressExitFor(4000);fn();};p.appendChild(b);}
 
-// Мягкий апсейл тарифа НАВСЕГДА в бесплатных призах.
-// Показываем компактно и только если тариф ещё не выпадал сегодня как приз —
+// Мягкий апсейл тарифа НАВСЕГДА VIP в бесплатных призах.
+// Показываем компактно и только если вечный тариф ещё не выпадал сегодня как приз —
 // иначе выглядит как подстроенная реклама и вызывает раздражение.
 function foreverAlreadyWon(){
   var lp=loadLastPrize();
@@ -950,9 +950,9 @@ function foreverAlreadyWon(){
 function addForeverTeaser(parent,label){
   if(foreverAlreadyWon()) return;
   addUpsell(parent,
-    '💡 Кстати: в колесе прячется секретный тариф НАВСЕГДА — 350+ тренировок за одну оплату, без продлений. Если не выпадет — можешь забрать по ссылке:',
-    '🔑 Посмотреть тариф НАВСЕГДА',
-    function(){openPurchaseUrl(URL_FOREVER,label);});
+    '💡 Кстати: в колесе прячется секретный тариф НАВСЕГДА VIP — все тренировки плюс все новые интенсивы и марафоны, за одну оплату. Если не выпадет — можешь посмотреть по ссылке:',
+    '💎 Посмотреть тариф НАВСЕГДА VIP',
+    function(){openPurchaseUrl(URL_FOREVER_VIP,label);});
 }
 
 // ── MODAL ─────────────────────────────────────────────────────────────────────
