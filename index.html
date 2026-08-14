@@ -496,11 +496,11 @@ var SEG=[
   {label:['Секретный','тариф 1 мес'],emoji:'🕵️',icon:'secret1.PNG',prize:'Секретный тариф — 1 месяц!',
    desc:'Закрытый тариф, которого нет в открытой продаже! Купи абонемент в ШАГАЙ ДОМА всего на 1 месяц, чтобы попробовать клуб.',
    w:119,is1Month:true}, // часто
-  {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',icon:'secretalways.PNG',prize:'Секретный тариф НАВСЕГДА!',
+  {label:['Секретный','тариф','НАВСЕГДА'],emoji:'🔑',icon:'secret always.PNG',prize:'Секретный тариф НАВСЕГДА!',
    desc:'Уникальный тариф, которого нет в продаже — доступ НАВСЕГДА за 8990 руб.! Возможность приобрести вечный абонемент только для счастливчиков в колесе удачи.',
    w:260,isForever:true}, // очень часто
-  {label:['Секретный','тариф','НАВСЕГДА VIP'],emoji:'💎',icon:'vip.PNG',prize:'Секретный тариф НАВСЕГДА VIP!',
-   desc:'Абсолютный эксклюзив: тариф, которого никогда не было в открытой продаже! Секретный доступ НАВСЕГДА VIP за 19890 руб. — только для избранных счастливчиков в колесе удачи.',
+  {label:['НАВСЕГДА','VIP'],emoji:'💎',icon:'forevervip.PNG',prize:'Секретный тариф НАВСЕГДА VIP!',
+   desc:'Абсолютный эксклюзив, которого никогда не было в продаже! Бессрочный доступ ко всем тренировкам + ВСЕ НОВЫЕ ИНТЕНСИВЫ И МАРАФОНЫ клуба бесплатно — за одну оплату 19890 руб.',
    w:250,isForeverVip:true}, // очень часто — но подаём как редчайший эксклюзив
   {label:['Крути','ещё раз!'],emoji:'🔄',icon:'again.PNG',prize:'Крути ещё раз!',
    desc:'Не повезло — но удача совсем близко! Крути снова 🎯',
@@ -640,7 +640,8 @@ function drawWheel(r){
     ctx.restore();
   }
 
-  // Проход 3: PNG-иконки через drawImage — цветные на всех платформах
+  // Проход 3: PNG-иконки через drawImage — цветные на всех платформах.
+  // Если PNG не загрузился (например, файла нет) — рисуем эмодзи сектора.
   var iconPx=Math.round(R*0.19);
   ctx.shadowColor='transparent';ctx.shadowBlur=0;
   for(var i=0;i<N;i++){
@@ -650,6 +651,11 @@ function drawWheel(r){
     ctx.translate(ex,ey);
     ctx.rotate(sa+Math.PI/2);
     if(s.icon&&_icons[s.icon]) ctx.drawImage(_icons[s.icon],-iconPx/2,-iconPx/2,iconPx,iconPx);
+    else if(s.emoji){
+      ctx.font=Math.round(iconPx*0.85)+'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(s.emoji,0,0);
+    }
     ctx.restore();
   }
 
@@ -1010,9 +1016,9 @@ function showModal(idx,isReturn){
     window._foreverSeen=true;
     addTimer(acts,20*60,'Уникальное предложение исчезнет через','forever');
     addSalePoints(acts,'🔑 Почему это лучший тариф клуба',[
-      '<strong>350+ тренировок + все новинки</strong> — навсегда, без доплат',
+      '<strong>350+ тренировок + все новые тренировки</strong> — навсегда, без доплат',
       'Одна оплата — <strong>больше никаких продлений</strong>',
-      'Все будущие интенсивы клуба <strong>уже включены</strong>',
+      'Шагай в своём темпе <strong>хоть каждый день, всю жизнь</strong>',
       'Тарифа нет в продаже — <strong>только для победителей колеса</strong>'
     ]);
     addPriceAnchor(acts,'11 960 ₽ за год','8990 ₽ навсегда','Дешевле, чем один год по обычной цене клуба');
@@ -1026,13 +1032,13 @@ function showModal(idx,isReturn){
     acts.insertBefore(vipBadge,acts.firstChild);
     addTimer(acts,20*60,'Секретное VIP-предложение исчезнет через','forevervip');
     addSalePoints(acts,'💎 Тариф, которого никогда не было в продаже',[
-      '<strong>350+ тренировок + все новинки</strong> — навсегда, без доплат',
-      '<strong>Бесплатное участие во всех новых марафонах и интенсивах</strong> — без доплат, навсегда',
-      'Одна оплата — <strong>больше никаких продлений</strong>',
+      '<strong>Бессрочный доступ ко всем 350+ тренировкам</strong> — навсегда',
+      '⭐ Главное отличие VIP: <strong>ВСЕ НОВЫЕ ИНТЕНСИВЫ И МАРАФОНЫ клуба — бесплатно, навсегда</strong>. Каждый новый запуск уже твой, без единой доплаты',
+      'Одна оплата — <strong>больше никаких продлений и покупок</strong>',
       'Этого тарифа <strong>нет и не будет в открытой продаже</strong> — только для тех, кому повезло в колесе'
     ]);
-    addPriceAnchor(acts,null,'19 890 ₽ навсегда VIP','Секретная цена — доступна только сегодня и только тебе');
-    mkBtn(acts,'💎 Забрать секретный тариф НАВСЕГДА VIP!',function(){openPurchaseUrl(URL_FOREVER_VIP,'wheel_forever_vip');});
+    addPriceAnchor(acts,null,'19 890 ₽ навсегда VIP','Все будущие интенсивы и марафоны уже включены в цену');
+    mkBtn(acts,'💎 Забрать НАВСЕГДА VIP со всеми интенсивами!',function(){openPurchaseUrl(URL_FOREVER_VIP,'wheel_forever_vip');});
     addReviews(acts);
   } else if(s.isDiscount||fin){
     addTimer(acts,48*60*60,'Промокод LUCKYWHEEL сгорит через','lucky');
