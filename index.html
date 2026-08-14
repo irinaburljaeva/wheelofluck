@@ -482,7 +482,7 @@ var COLORS=[
   {bg:'#9A0E1C',fg:'#fff'},{bg:'#FAB95B',fg:'#3D2000'},
 ];
 var SEG=[
-  {label:['Скидка','20%'],emoji:'🏷️',icon:'discount.PNG',prize:'Скидка 20% на абонемент!',promo:'LUCKYWHEEL',
+  {label:['Скидка','20%'],emoji:'🏷️',icon:'discount.PNG',prize:'Скидка 20% на абонемент!',promo:'SKIDKA',
    desc:'Укажи промокод при оформлении — и скидка 20% применится автоматически! Промокод действует 48 часов.',
    w:1,isFinal:true,isDiscount:true}, // + гарантированно на последнем вращении
   {label:['Рецепты','диетолога'],emoji:'🥗',icon:'menu.png',prize:'Рецепты от диетолога — PDF!',
@@ -524,7 +524,7 @@ var ADS=[
   {title:'💪 Уже 10 000 женщин со всего мира',
    text:'Из России, Европы, США, Казахстана — все они шагают дома и видят результат. <strong>Присоединяйся к самому тёплому фитнес-сообществу</strong> и начни свой путь к стройности прямо сейчас!',img:'3.jpg'},
 ];
-var FINAL_AD='Это твой <strong>шанс войти в клуб выгодно прямо сейчас!</strong> 350+ тренировок дома, <strong>+10 000 женщин-единомышленниц</strong> со всего мира и твоя новая стройная жизнь. <strong>Промокод LUCKYWHEEL даёт -20% — действует 48 часов!</strong>';
+var FINAL_AD='Это твой <strong>шанс войти в клуб выгодно прямо сейчас!</strong> 350+ тренировок дома, <strong>+10 000 женщин-единомышленниц</strong> со всего мира и твоя новая стройная жизнь. <strong>Промокод SKIDKA даёт -20% — действует 48 часов!</strong>';
 
 var busy=false,rot=0,lastCode='',skipTimer=null,prizeTimerInterval=null;
 var N=SEG.length,ARC=2*Math.PI/N;
@@ -723,7 +723,7 @@ function showExitPopup(){
 }
 function closeExitPopup(){document.getElementById('exitPopup').classList.remove('show');}
 function copyExitPromo(){
-  navigator.clipboard.writeText('LUCKYWHEEL').catch(function(){});
+  navigator.clipboard.writeText('SKIDKA').catch(function(){});
   var el=document.querySelector('.exit-promo'),orig=el.textContent;
   el.textContent='✅ СКОПИРОВАНО!';setTimeout(function(){el.textContent=orig;},2000);
 }
@@ -966,7 +966,7 @@ function showModal(idx,isReturn){
 
   var tel=document.getElementById('mTitle');tel.textContent=s.prize;tel.className='m-title'+(s.isJackpot||fin?' red':'');
   var pel=document.getElementById('mPromo');
-  if((s.promo||fin)&&!s.isJackpot){pel.style.display='block';lastCode=fin?'LUCKYWHEEL':s.promo;document.getElementById('mCode').textContent=lastCode;}
+  if((s.promo||fin)&&!s.isJackpot){pel.style.display='block';lastCode=fin?'SKIDKA':s.promo;document.getElementById('mCode').textContent=lastCode;}
   else pel.style.display='none';
   document.getElementById('mDesc').textContent=s.desc;
 
@@ -1045,12 +1045,12 @@ function showModal(idx,isReturn){
     mkBtn(acts,'💎 Забрать НАВСЕГДА VIP со всеми интенсивами!',function(){openPurchaseUrl(URL_FOREVER_VIP,'wheel_forever_vip');});
     addReviews(acts);
   } else if(s.isDiscount||fin){
-    addTimer(acts,48*60*60,'Промокод LUCKYWHEEL сгорит через','lucky');
+    addTimer(acts,48*60*60,'Промокод SKIDKA сгорит через','lucky');
     addSalePoints(acts,'🏷️ Что даёт абонемент со скидкой',[
       '<strong>350+ тренировок</strong> — шагай дома в любое время',
       'Результат <strong>от -1 до -4 кг</strong> уже за первую неделю',
       '<strong>10 000 женщин</strong> рядом — самое тёплое сообщество',
-      'Скидка 20% применится по промокоду <strong>LUCKYWHEEL</strong>'
+      'Скидка 20% применится по промокоду <strong>SKIDKA</strong>'
     ]);
     mkBtn(acts,'🛒 Перейти к покупке со скидкой 20%',function(){openPurchaseUrl(BUY_URL,'wheel_discount');});
   } else {
@@ -1163,7 +1163,7 @@ function startFinalTimer(seconds){
   finalTimerInterval=setInterval(function(){seconds--;if(seconds<0){clearInterval(finalTimerInterval);if(el) el.innerHTML='<span class="ftd">истёк</span>';return;}if(el) el.innerHTML=fmt(seconds);},1000);
 }
 function copyFinalPromo(){
-  navigator.clipboard.writeText('LUCKYWHEEL').catch(function(){});
+  navigator.clipboard.writeText('SKIDKA').catch(function(){});
   var el=document.getElementById('finalPromoCopied');el.textContent='✅ Скопировано!';setTimeout(function(){el.textContent='👆 Нажми, чтобы скопировать';},2000);
 }
 </script>
@@ -1184,7 +1184,7 @@ function copyFinalPromo(){
   </div>
   <div class="final-promo-wrap" onclick="copyFinalPromo()">
     <div class="final-promo-label">Твой промокод</div>
-    <div class="final-promo-code">LUCKYWHEEL</div>
+    <div class="final-promo-code">SKIDKA</div>
     <div class="final-promo-hint" id="finalPromoCopied">👆 Нажми, чтобы скопировать</div>
   </div>
   <div class="final-timer-wrap">
@@ -1209,7 +1209,7 @@ function copyFinalPromo(){
     <span class="exit-emoji" id="exitEmoji">⏰</span>
     <div class="exit-headline" id="exitHeadline">Подожди!<br>Твой промокод сгорит</div>
     <div class="exit-sub" id="exitSub">Ты заработала скидку 20% на весь клуб.<br>Она действует только 48 часов — не упусти!</div>
-    <div class="exit-promo" onclick="copyExitPromo()">LUCKYWHEEL</div>
+    <div class="exit-promo" onclick="copyExitPromo()">SKIDKA</div>
     <div class="prize-timer" id="exitTimerWrap" style="display:none;margin:0 auto 16px"><span class="timer-icon">⏰</span><span class="timer-label">Сгорит через</span><span class="timer-sep">·</span><span class="timer-digits" id="exitTimerDigits">--:--</span></div>
     <button class="exit-cta" id="exitCta" onclick="openPurchaseUrl(BUY_URL,'wheel_exit');closeExitPopup()">🛒 Купить со скидкой сейчас</button>
     <span class="exit-dismiss" onclick="closeExitPopup()">Нет, я подожду до завтра</span>
